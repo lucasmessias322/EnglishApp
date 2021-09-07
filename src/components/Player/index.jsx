@@ -67,10 +67,10 @@ function Player(props) {
         }
     }
 
-    // useEffect(() => {
-    //     VelocidadeLnta()
-    //     VelocidadeRpida()
-    // })
+    useEffect(() => {
+        VelocidadeLnta()
+        VelocidadeRpida()
+    })
 
     useEffect(() => {
         VelocidadeLnta()
