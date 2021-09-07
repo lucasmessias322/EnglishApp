@@ -74,11 +74,11 @@ function Player(props) {
 
     useEffect(() => {
         VelocidadeLnta()
-    }, [Slow, thema])
+    }, [Slow])
 
     useEffect(() => {
         VelocidadeRpida()
-    }, [Fast, thema])
+    }, [Fast])
 
 
     return (
