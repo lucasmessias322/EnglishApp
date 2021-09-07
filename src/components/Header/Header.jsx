@@ -39,6 +39,9 @@ function Header(props) {
                     offColor={"#9A0041"}
                     uncheckedIcon
                     checkedIcon
+                    height={20}
+                    width={55}
+                    handleDiameter={25}
                     onChange={handleChange}
                     checked={switchBtn.checked}
                 />
