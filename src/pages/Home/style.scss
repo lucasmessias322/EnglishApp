@@ -1,0 +1,231 @@
+@import "../../Sass_Variables/Variables.scss";
+
+div.Home-Page {
+    background-image: $HomeBgc;
+    width: 100%;
+    
+    background-size: cover;
+
+    div.container {
+        text-align: center;
+        margin: auto;
+        max-width: 800px;
+        section.cta {
+            text-align: center;
+
+            div {
+                height: 400px;
+                background-size: contain;
+                // background-repeat: no-repeat;
+
+                div {
+                    h2 {
+                        color: white;
+                        font-size: 35px;
+
+                        span {
+                            color: #008bd9;
+                            font-weight: bold;
+                        }
+                    }
+
+                    a {
+                        text-decoration: none;
+
+                        button {
+                            height: 50px;
+                            outline: none;
+                            width: 250px;
+                            background-color: #ff006b;
+                            border: 0;
+
+                            border-radius: 10px;
+                            color: white;
+                            font-size: 20px;
+                            box-shadow: 0px 10px 60px #830037;
+
+                            &:hover {
+                                transform: scale(1.1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        section.site-information {
+            width: 97%;
+            margin: auto;
+
+            p {
+                color: white;
+                font-size: 20px;
+                margin: auto;
+                text-align: center;
+            }
+
+            form {
+                margin: auto;
+                text-align: left;
+                width: 100%;
+                max-width: 600px;
+
+                input {
+                    border: none;
+                    outline: none;
+                    width: 100%;
+                    height: 40px;
+                    padding: 10px;
+                    border-radius: 5px;
+                    margin: 5px;
+                    font-size: 17px;
+                    color: rgb(90, 90, 90);
+                }
+
+                textarea {
+                    outline: none;
+                    border: none;
+                    width: 100%;
+                    height: 200px;
+                    border-radius: 5px;
+                    padding: 10px;
+                    font-size: 17px;
+                    overflow: auto;
+                    resize: none;
+                    margin: 5px;
+                    color: rgb(90, 90, 90);
+                }
+
+                button {
+                    outline: none;
+                    border: none;
+                    width: 150px;
+                    height: 40px;
+                    background: #ff006b;
+                    box-shadow: 0px 10px 60px #830037;
+                    border-radius: 50px 100px;
+                    font-size: 20px;
+                    color: white;
+
+                    &:hover {
+                        transform: scale(1.1);
+                        box-shadow: 0px 10px 60px #830037;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 500px) {
+    div.Home-Page {
+        background-image: $HomeBgc;
+        width: 100%;
+        div.container {
+
+        section.cta {
+            text-align: center;
+
+            div {
+                height: 350px;
+                background-size: contain;
+                // background-repeat: no-repeat;
+
+                div {
+                    h2 {
+                        color: white;
+                        font-size: 27px;
+
+                        span {
+                            color: #008bd9;
+                            font-weight: bold;
+                        }
+                    }
+
+                    a {
+                        text-decoration: none;
+
+                        button {
+                            height: 50px;
+                            outline: none;
+                            width: 250px;
+                            background-color: #ff006b;
+                            border: 0;
+                            border-radius: 20px;
+                            color: white;
+                            font-size: 20px;
+                            box-shadow: 0px 10px 60px #830037;
+
+                            &:hover {
+                                transform: scale(1.1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        section.site-information {
+            width: 96%;
+            margin: auto;
+
+            p {
+                color: white;
+                font-size: 13px;
+                max-width: 700px;
+                margin: auto;
+                text-align: center;
+            }
+
+            form {
+                margin: auto;
+                text-align: left;
+                width: 96%;
+
+                input {
+                    border: none;
+                    outline: none;
+                    width: 100%;
+                    height: 40px;
+                    padding: 10px;
+                    border-radius: 5px;
+                    margin: 5px;
+                    font-size: 17px;
+                    color: rgb(90, 90, 90);
+                }
+
+                textarea {
+                    outline: none;
+                    border: none;
+                    width: 100%;
+                    height: 150px;
+                    border-radius: 5px;
+                    padding: 10px;
+                    font-size: 17px;
+                    overflow: auto;
+                    resize: none;
+                    margin: 5px;
+                    color: rgb(90, 90, 90);
+                }
+
+                button {
+                    outline: none;
+                    border: none;
+                    width: 150px;
+                    height: 40px;
+                    background: #ff006b;
+                    box-shadow: 0px 10px 60px #830037;
+                    border-radius: 20px 100px;
+                    font-size: 20px;
+                    color: white;
+
+                    &:hover {
+                        transform: scale(1.1);
+                        box-shadow: 0px 10px 60px #830037;
+                    }
+                }
+            }
+        }
+    }
+}
+}

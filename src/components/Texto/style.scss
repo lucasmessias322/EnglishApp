@@ -1,0 +1,14 @@
+div.Texto-container {
+    margin: auto;
+    text-align: center;
+    max-width: 700px;
+    width: 100%;
+    p {
+        color: white;
+        font-size: clamp(0.5em, 0.8em + 1vw, 1.2em);
+        padding: 0px 5px;
+    }
+    .SelectedP {
+        color: rgb(255, 252, 57);
+    }
+}

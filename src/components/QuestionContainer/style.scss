@@ -1,0 +1,61 @@
+div.QuestionContainer {
+    h2.perguntasH2 {
+        color: white;
+        font-size: 20px;
+        text-align: center;
+        background-color: #ff006b;
+        padding: 10px;
+        border-radius: 5px;
+        width: 90%;
+        margin: auto;
+    }
+
+    div.perguntas {
+        display: none;
+    }
+
+    div.questionario-component {
+        margin-top: 50px;
+        width: 95%;
+        max-width: 500px;
+        margin: 0 auto;
+        text-align: center;
+
+        .opcoes-container {
+            margin-top: 20px;
+            border-radius: 10px;
+            width: 100%;
+            height: 300px;
+            background-color: #ff006b;
+            padding: 20px;
+            box-shadow: 0 0 40px #520024;
+
+            span.pergunta {
+                color: white;
+                font-size: 18px;
+                font-weight: bold;
+            }
+            ul {
+                width: 95%;
+                max-width: 400px;
+                margin: 0 auto;
+
+                li {
+                    color: white;
+                    box-shadow: 0 0 10px #270111;
+                    width: 100%;
+                    list-style: none;
+                    // height: 45px;
+                    margin-bottom: 7px;
+                    padding: 13px;
+                    border-radius: 5px;
+                    font-size: 15px;
+
+                    &:hover {
+                        transform: scale(1.1);
+                    }
+                }
+            }
+        }
+    }
+}
