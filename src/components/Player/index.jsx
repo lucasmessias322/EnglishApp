@@ -26,7 +26,7 @@ function Player(props) {
         } else {
 
             Audio.current.play()
-            Audio.current.playbackRate = 3;
+            // Audio.current.playbackRate = 3;
             setNumber(AudioIndex);
         }
     }, [AudioIndex])

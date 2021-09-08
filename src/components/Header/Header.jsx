@@ -1,16 +1,17 @@
-import React, { useContext,useRef, useState } from 'react'
+import React, { useContext, useRef, useState, useEffect } from 'react'
 import { AppContext } from '../../data/Store';
-import { FaBars} from 'react-icons/fa';
+import { FaBars } from 'react-icons/fa';
 import HeaderLinkMenu from '../HeaderLinkMenu';
 import DadosDoTexto from '../../Api/Textos'
 import Switch from "react-switch";
+
 import { HeaderComponents } from './style.js'
 
 function Header(props) {
     const menu = useRef(null)
     const [switchBtn, setSwitchBtn] = useState({ checked: false })
     const { thema, setThema } = useContext(AppContext);
-
+  
     function AtivarMenu() {
         const Menu = menu.current
         if (Menu.classList == 'MenuDisable') {
@@ -22,12 +23,41 @@ function Header(props) {
 
     function handleChange(checked) {
         setSwitchBtn({ checked })
-        setThema(switchBtn.checked)
-        console.log(thema);
+
+        //quando o botao Switch for mudado ele muda tambem no localstorage
+        SetModeTheme()
     }
 
+    //seta o thema no localStorage
+    async function SetModeTheme() {
+        if (switchBtn.checked === true) {
+            await localStorage.setItem('Theme', "light__mode")
+
+        } else if (switchBtn.checked === false) {
+            await localStorage.setItem('Theme', "dark__mode")
+        }
+    }
+
+    // recupera o thema do localStorage
+    async function RecuperarTema() {
+       if (localStorage.getItem('Theme') === "light__mode") {
+            setSwitchBtn({ checked: false })
+            setThema(true)
+
+        } else if (localStorage.getItem('Theme') === "dark__mode") {
+            setSwitchBtn({ checked: true })
+            setThema(false)
+        }
+    };
+
+
+    useEffect(() => {
+        RecuperarTema()
+    },[switchBtn.checked]);
+
+
     return (
-        <HeaderComponents thema={thema}>
+        <HeaderComponents thema={thema} >
             <header>
                 <div className="logo-end-Menu">
                     <FaBars className='Fabars' onClick={AtivarMenu} />
@@ -39,8 +69,8 @@ function Header(props) {
                     offColor={"#9A0041"}
                     uncheckedIcon
                     checkedIcon
-                    height={20}
-                    width={55}
+                    height={15}
+                    width={50}
                     handleDiameter={25}
                     onChange={handleChange}
                     checked={switchBtn.checked}
@@ -56,7 +86,7 @@ function Header(props) {
                     <HeaderLinkMenu key={i} texto={i} TitleMenu={DadosDoTexto[i].title} />
                 )}
             </menu>
-        </HeaderComponents>
+        </HeaderComponents >
     )
 }
 
