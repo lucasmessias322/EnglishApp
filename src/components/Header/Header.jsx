@@ -7,10 +7,11 @@ import Switch from "react-switch";
 
 import { HeaderComponents } from './style.js'
 
-function Header(props) {
+function Header({DadosDoTexto, TitleOfText}) {
     const menu = useRef(null)
     const [switchBtn, setSwitchBtn] = useState({ checked: false })
     const { thema, setThema } = useContext(AppContext);
+
   
     function AtivarMenu() {
         const Menu = menu.current
@@ -78,12 +79,12 @@ function Header(props) {
 
             </header>
             <div className="title-Text">
-                <h4>{props.TitleOfText}</h4>
+                <h4>{TitleOfText}</h4>
             </div>
 
             <menu className="MenuDisable" ref={menu}>
-                {DadosDoTexto.map((elem, i) =>
-                    <HeaderLinkMenu key={i} texto={i} TitleMenu={DadosDoTexto[i].title} />
+                {DadosDoTexto?.map((elem, i) =>
+                    <HeaderLinkMenu key={i} texto={i} TitleMenu={DadosDoTexto[i].titulo} />
                 )}
             </menu>
         </HeaderComponents >
