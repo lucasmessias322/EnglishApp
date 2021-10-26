@@ -2,17 +2,16 @@ import React, { useContext, useRef, useState, useEffect } from 'react'
 import { AppContext } from '../../data/Store';
 import { FaBars } from 'react-icons/fa';
 import HeaderLinkMenu from '../HeaderLinkMenu';
-import DadosDoTexto from '../../Api/Textos'
 import Switch from "react-switch";
 
 import { HeaderComponents } from './style.js'
 
-function Header({DadosDoTexto, TitleOfText}) {
+function Header({ DadosDoTexto, TitleOfText, TituloDaPagina, children, switchButtom, MemorizeTable, MenuBars = true }) {
     const menu = useRef(null)
     const [switchBtn, setSwitchBtn] = useState({ checked: false })
     const { thema, setThema } = useContext(AppContext);
 
-  
+
     function AtivarMenu() {
         const Menu = menu.current
         if (Menu.classList == 'MenuDisable') {
@@ -41,7 +40,7 @@ function Header({DadosDoTexto, TitleOfText}) {
 
     // recupera o thema do localStorage
     async function RecuperarTema() {
-       if (localStorage.getItem('Theme') === "light__mode") {
+        if (localStorage.getItem('Theme') === "light__mode") {
             setSwitchBtn({ checked: false })
             setThema(true)
 
@@ -54,17 +53,17 @@ function Header({DadosDoTexto, TitleOfText}) {
 
     useEffect(() => {
         RecuperarTema()
-    },[switchBtn.checked]);
+    }, [switchBtn.checked]);
 
 
     return (
         <HeaderComponents thema={thema} >
             <header>
                 <div className="logo-end-Menu">
-                    <FaBars className='Fabars' onClick={AtivarMenu} />
-                    <h3>English Plus+</h3>
+                    {MenuBars ? <FaBars className='Fabars' onClick={AtivarMenu} /> : ""}
+                    <h3 >{TituloDaPagina ? `${TituloDaPagina} - 50 palavras `: "English Plus+"} </h3>
                 </div>
-                <Switch
+                {switchButtom ? "" : <Switch
                     className='Switchbtn'
                     onColor={"#004393"}
                     offColor={"#9A0041"}
@@ -75,18 +74,24 @@ function Header({DadosDoTexto, TitleOfText}) {
                     handleDiameter={25}
                     onChange={handleChange}
                     checked={switchBtn.checked}
-                />
+                />}
 
             </header>
-            <div className="title-Text">
-                <h4>{TitleOfText}</h4>
-            </div>
 
-            <menu className="MenuDisable" ref={menu}>
-                {DadosDoTexto?.map((elem, i) =>
-                    <HeaderLinkMenu key={i} texto={i} TitleMenu={DadosDoTexto[i].titulo} />
-                )}
-            </menu>
+            {TitleOfText ? <div className="title-Text">
+                <h4>{TitleOfText}</h4>
+            </div> : ""}
+
+            {MemorizeTable ? <div className="BaralhoTypes">
+                <h2>Question</h2>
+                <h2>Response</h2>
+            </div> : ""}
+
+
+
+            {MenuBars ? <menu className="MenuDisable" ref={menu}>
+                {children}
+            </menu> : ""}
         </HeaderComponents >
     )
 }

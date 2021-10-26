@@ -1,40 +1,26 @@
-import React from 'react';
-import {
-    BrowserRouter,
-    Switch,
-    Route
-} from "react-router-dom";
+import React from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-import Home from './pages/Home/index';
-import Texto1 from './pages/Textos/index.jsx';
-// import Texto2 from './pages/Texto2/index.jsx';
-// import Texto3 from './pages/Texto3';
-
+import Home from "./pages/Home/index";
+import Texto1 from "./pages/Textos/index.jsx";
+import Dashboard from "./pages/Dashboard/index";
+import Memorize from "./pages/Memorize/index";
+import Baralho from "./pages/Baralho/index";
+import Exame from "./pages/Exame/index";
 
 function Routes() {
-    return (
-        <BrowserRouter>
-            <Switch>
-                <Route exact path="/"   >
-                    <Home />
-                </Route>
-
-                <Route exact path="/textos"   >
-                    <Texto1 />
-                </Route>
-
-                {/* <Route exact path="/texto2"   >
-                    <Texto2 />
-                </Route>
-
-                <Route exact path="/texto3"   >
-                    <Texto3/>
-                </Route> */}
-
-            </Switch>
-        </BrowserRouter>
-
-    )
+  return (
+    <BrowserRouter>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/textos" component={Texto1} />
+        <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/memorize" component={Memorize} />
+        <Route exact path="/baralho/:id" component={Baralho} />
+        <Route exact path="/exame/:id" component={Exame} />
+      </Switch>
+    </BrowserRouter>
+  );
 }
 
-export default Routes
+export default Routes;

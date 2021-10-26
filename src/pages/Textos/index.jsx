@@ -1,14 +1,12 @@
-import React, { useContext, useEffect } from 'react'
-import TextoLayout from '../../components/TextoLayout/TextoLayout';
+import React, { useContext, useEffect } from "react";
+import TextoLayout from "../../components/TextoLayout/TextoLayout";
 // import { DadosDoTexto, FraseAFraseDoTexto } from './Texto1DataAudio.js';
-import { AppContext } from '../../data/Store';
+import { AppContext } from "../../data/Store";
 
 function Textos() {
-    const { texto, setTexto } = useContext(AppContext);
+  const { texto, setTexto } = useContext(AppContext);
 
-    return (
-        <TextoLayout texto={texto} />
-    )
+  return <TextoLayout texto={texto} />;
 }
 
-export default Textos
+export default Textos;
