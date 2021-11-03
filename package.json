@@ -1,6 +1,6 @@
 {
   "name": "textosemingles",
-  "version": "0.1.0",
+  "version": "v14.17.3",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
