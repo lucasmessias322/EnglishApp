@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const ExameContain = styled.div`
   background-color: #111b29;
-  padding-bottom: 700px;
+  min-height: 100vh;
 
   .questionAndResponseCard {
     margin: 0px 10px;

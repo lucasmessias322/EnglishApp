@@ -5,8 +5,9 @@ import { BaralhoContain } from "./style";
 import { FaClipboardList } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-function Baralho({ match }) {
+function Baralho({ match }: String) {
   const [dataBaralho, setBaralho] = useState([]);
+  console.log("o match é" + match);
 
   useEffect(() => {
     getBaralho(match.params.id).then((baralho) => setBaralho(baralho));
@@ -28,7 +29,7 @@ function Baralho({ match }) {
       <br />
       <table id="table" border="1">
         {dataBaralho.items?.map((elem, i) => (
-          <tr>
+          <tr key={elem.id}>
             <td>{elem.questao}</td>
             <td>{elem.resposta}</td>
           </tr>

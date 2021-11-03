@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const DashboardContainer = styled.div`
-  padding-bottom: 0px;
+   min-height: 100vh;
 
   .containLogoOrUserImage {
     background-color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};

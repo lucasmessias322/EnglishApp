@@ -1,12 +1,15 @@
 import React, { useContext } from "react";
 import { AppContext } from "../../data/Store";
+import { AuthContext } from "../../data/auth";
 import { FaBrain, FaTextHeight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Header from "../../components/Header/Header";
 
 import { DashboardContainer } from "./style";
+
 function Dashboard() {
   const { thema, setThema } = useContext(AppContext);
+  const { sigOut } = useContext(AuthContext);
 
   return (
     <DashboardContainer thema={thema}>

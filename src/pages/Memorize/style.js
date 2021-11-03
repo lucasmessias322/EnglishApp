@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const MemorizeContain = styled.div`
   background-color: ${(props) => (props.thema ? "#ffff" : "#111B29")};
-  padding-bottom: 700px;
+  min-height: 100vh;
 
   div.ListaBaralhos {
     width: 100%;
