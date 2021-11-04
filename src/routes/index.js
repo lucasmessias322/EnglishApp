@@ -3,10 +3,10 @@ import Route from "./Route";
 import Login from "../pages/Login";
 import Cadastro from "../pages/Cadastro";
 import Dashboard from "../pages/Dashboard";
-import Memorize from "./pages/Memorize/index";
-import Baralho from "./pages/Baralho/index.jsx";
-import Exame from "./pages/Exame/index";
-import Texto1 from "./pages/Textos/index.jsx";
+import Memorize from "../pages/Memorize/index";
+import Baralho from "../pages/Baralho/index.jsx";
+import Exame from "../pages/Exame/index";
+import Texto1 from "../pages/Textos/index.jsx";
 
 export default function Routes() {
   return (
