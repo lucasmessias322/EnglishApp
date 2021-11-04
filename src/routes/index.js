@@ -15,11 +15,11 @@ export default function Routes() {
       <Route exact path="/cadastro" component={Cadastro} />
       <Route exact path="/dashboard" component={Dashboard} isPrivate />
 
-      <Route exact path="/textos" component={Texto1} />
-      <Route exact path="/dashboard" component={Dashboard} />
-      <Route exact path="/memorize" component={Memorize} />
-      <Route exact path="/baralho/:id" component={Baralho} />
-      <Route exact path="/exame/:id" component={Exame} />
+      <Route exact path="/textos" component={Texto1} isPrivate/>
+      <Route exact path="/dashboard" component={Dashboard} isPrivate/>
+      <Route exact path="/memorize" component={Memorize} isPrivate/>
+      <Route exact path="/baralho/:id" component={Baralho} isPrivate />
+      <Route exact path="/exame/:id" component={Exame} isPrivate/>
     </Switch>
   );
 }

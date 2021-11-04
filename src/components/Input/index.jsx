@@ -13,7 +13,7 @@ function Input(props) {
           <FaLock color="white" size={20} />
         )}
       </div>
-      <input value={props.value} onChange={props.onChange} type={props.Type} placeholder={props.placeholder}/>
+      <input required={true} value={props.value} onChange={props.onChange} type={props.Type} placeholder={props.placeholder}/>
     </C.InputText>
   );
 }

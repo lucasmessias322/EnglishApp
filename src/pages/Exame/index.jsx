@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Header from "../../components/Header/Header";
+import { AppContext } from "../../data/Store";
 import { getBaralho } from "../../service/Api";
 import { ExameContain } from "./style";
 import { FaChevronLeft, FaChevronRight, FaVolumeDown } from "react-icons/fa";
+import { Speak } from "../../components/Speaker";
 
 function Exame({ match }) {
+  const {thema} = useContext(AppContext);
   const [dataBaralho, setBaralho] = useState([]);
   const [currentBaralho, setCurrentBaralho] = useState(0);
   const [nextBaralho, setNextBaralho] = useState(currentBaralho + 1);
@@ -49,7 +52,7 @@ function Exame({ match }) {
   // console.log(dataBaralho.items[0]);
 
   return (
-    <ExameContain>
+    <ExameContain thema={thema}>
       <Header
         switchButtom={true}
         TituloDaPagina={toogle ? dataBaralho.titulo : "Carregando.."}
@@ -57,8 +60,11 @@ function Exame({ match }) {
       <br /> <br /> <br /> <br /> <br /> <br />
       <div className="questionAndResponseCard">
         <div className="question">
-          <div className="play">
-            <FaVolumeDown size={20} />
+          <div
+            className="play"
+            onClick={() => Speak(dataBaralho.items[currentBaralho].questao)}
+          >
+            <FaVolumeDown color="white" size={20} />
           </div>
           <h2>
             {toogle

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const DashboardContainer = styled.div`
-   min-height: 100vh;
+  min-height: 100vh;
 
   .containLogoOrUserImage {
     background-color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
@@ -19,7 +19,7 @@ export const DashboardContainer = styled.div`
 
     p {
       color: white;
-      font-size: 20px;
+      font-size: 16px;
       font-weight: bold;
     }
   }
@@ -31,7 +31,7 @@ export const DashboardContainer = styled.div`
       margin: 0 auto;
       text-align: center;
       max-width: 500px;
-      color:${(props) => (props.thema ? "#FF006B" : "#0053B6")};
+      color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
       font-weight: bold;
     }
 
@@ -60,7 +60,8 @@ export const DashboardContainer = styled.div`
               text-align: center;
               border-radius: 10px;
               padding: 10px;
-              background-color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
+              background-color: ${(props) =>
+                props.thema ? "#FF006B" : "#0053B6"};
             }
 
             p {
@@ -79,12 +80,12 @@ export const DashboardContainer = styled.div`
   }
 
   .whyInglesIsImportant {
-    max-width: 600px;
+    max-width: 800px;
     padding: 10px;
     padding-top: 100px;
 
     h2 {
-      color:${(props) => (props.thema ? "#FF006B" : "#0053B6")};
+      color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
       font-weight: bold;
     }
 
@@ -97,10 +98,20 @@ export const DashboardContainer = styled.div`
 
   footer {
     margin-top: 100px;
-    background-color:${(props) => (props.thema ? "#FF006B" : "#0053B6")};
-    padding: 10px;
 
-    color: white;
+    .footer-informations {
+      background-color: ${(props) => (props.thema ? "#FF006B" : "#005AC5")};
+      padding: 15px;
+    }
+
+    .footer-copyright {
+      background-color: ${(props) => (props.thema ? "#B9004E" : "#00499F")};
+      padding: 15px;
+      color: white;
+      span {
+        font-size: 15px;
+      }
+    }
   }
 
   @media (max-width: 500px) {
@@ -140,7 +151,8 @@ export const DashboardContainer = styled.div`
                 text-align: center;
                 border-radius: 10px;
                 padding: 10px;
-                background-color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
+                background-color: ${(props) =>
+                  props.thema ? "#FF006B" : "#0053B6"};
               }
 
               p {
@@ -178,3 +190,4 @@ export const DashboardContainer = styled.div`
     }
   }
 `;
+

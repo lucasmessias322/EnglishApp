@@ -51,14 +51,14 @@ function Cadastro() {
           />
 
           <Input
-            Type="Password"
+            Type="text"
             User={false}
             placeholder="Sua senha aqui..."
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <Input
-            Type="Password"
+            Type="text"
             User={false}
             placeholder="Digite sua senha Novamente"
             value={passwordConfirmation}

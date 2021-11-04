@@ -38,9 +38,6 @@ export const ButtonSubmit = styled.button`
   border-radius: 10px;
   cursor: pointer;
 
-  &:hover {
-    transform: scale(1.1);
-  }
 `;
 
 export const H4 = styled.h5`

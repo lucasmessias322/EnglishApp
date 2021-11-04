@@ -18,6 +18,7 @@ export const HeaderComponents = styled.div`
 
     div.logo-end-Menu {
       display: flex;
+      
       .Fabars {
         color: white;
         font-size: 30px;
@@ -34,8 +35,18 @@ export const HeaderComponents = styled.div`
         span {
           color: white;
           font-size: 15px;
-
         }
+      }
+    }
+
+    div.left {
+      display: flex;
+      align-items: center;
+
+      .OutButton {
+        color: white;
+        font-size: 20px;
+        margin-left: 15px;
       }
     }
   }
@@ -54,13 +65,14 @@ export const HeaderComponents = styled.div`
     justify-content: space-between;
     color: white;
     position: fixed;
-    background-color: #003861;
+    background-color:  ${(props) => (props.thema ? "#E90062" : "#003861")};
     padding: 10px 0px;
     margin-top: 0px;
 
     h2 {
       width: 100%;
       text-align: center;
+      font-size: 18px;
     }
   }
 

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const ExameContain = styled.div`
-  background-color: #111b29;
+  background-color: ${(props) => (props.thema ? "#FFF" : "#111b29")};
   min-height: 100vh;
 
   .questionAndResponseCard {
@@ -9,13 +9,13 @@ export const ExameContain = styled.div`
     .question {
       padding: 10px;
       display: flex;
-      color: white;
-      border-bottom: 1px solid white;
+      color: ${(props) => (props.thema ? "#000" : "#FFF")};
+      border-bottom: 1px solid ${(props) => (props.thema ? "#000" : "#FFF")};;
 
       .play {
         width: 30px;
         height: 30px;
-        background-color: #0074ff;
+        background-color: ${(props) => (props.thema ? "#FF006B" : "#0074ff")};
         border-radius: 100%;
         padding: 5px;
 
@@ -35,7 +35,7 @@ export const ExameContain = styled.div`
   .response {
     padding: 20px 10px;
     display: flex;
-    color: white;
+    color: ${(props) => (props.thema ? "#000" : "#FFF")};
 
     .play {
       width: 30px;
@@ -58,7 +58,7 @@ export const ExameContain = styled.div`
   .exameControl-contain {
     width: 100%;
     padding: 10px;
-    border: 0.5px solid #0074ff;
+    border: 0.5px solid  ${(props) => (props.thema ? "#FF006B" : "#0074ff")};
     position: fixed;
     display: flex;
     bottom: 0;
@@ -66,20 +66,20 @@ export const ExameContain = styled.div`
     align-items: baseline;
 
     span {
-      color: #0074ff;
+      color: ${(props) => (props.thema ? "#FF006B" : "#0074ff")};
       font-weight: bold;
       margin: 0px 20px;
     }
 
     h2 {
-      color: white;
+      color: ${(props) => (props.thema ? "#000" : "#FFF")};
     }
   }
 
   @media (max-width: 500px) {
     .exameControl-contain {
       h2 {
-        color: white;
+        
         font-size: 20px;
       }
     }

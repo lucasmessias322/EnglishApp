@@ -1,24 +1,26 @@
 import React, { useContext } from "react";
 import { AppContext } from "../../data/Store";
 import { AuthContext } from "../../data/auth";
-import { FaBrain, FaTextHeight } from "react-icons/fa";
+import { FaBrain, FaTextHeight, FaAngleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Header from "../../components/Header/Header";
-
-import { DashboardContainer } from "./style";
+import CardResponse from "../../components/CardResponse";
+import * as C from "./style";
 
 function Dashboard() {
   const { thema, setThema } = useContext(AppContext);
-  const { sigOut } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
+
+  console.log(user.nome);
 
   return (
-    <DashboardContainer thema={thema}>
+    <C.DashboardContainer thema={thema}>
       <Header switchButtom={false} MenuBars={false}></Header>
       <div className="containLogoOrUserImage">
         <div className="logo">
           <img src="/assets/logo.png" alt="logo" draggable={false} />
         </div>
-        <p>Bem vindo(a), oque você quer fazer?</p>
+        <p>Bem vindo(a) {user.nome}, oque você quer fazer?</p>
       </div>
 
       <div className="whatYouWantToDo">
@@ -61,11 +63,42 @@ function Dashboard() {
           inglês é a língua mais utilizada no mundo.
         </p>
       </div>
+      <br /><br />
+
+      <CardResponse Pergunta="Porque aprender ingles com textos?">
+        <p>
+          Além de ajudar muito na compreensão oral, estudar usando um texto com
+          áudio em inglês também traz outras três vantagens:
+        </p>
+        <br />
+        <li>
+          <b>Ajuda a ampliar seu vocabulário;</b>
+        </li>
+        <li>
+          <b>Ajuda na compreensão escrita (entender o que você lê);</b>
+        </li>
+        <li>
+          <b>Ajuda a melhorar sua pronúncia*;</b>
+        </li>
+        <li>
+          <b>Ajuda a reduzir o sotaque e falar mais como um nativo.</b>
+        </li>
+      </CardResponse>
+
+      <CardResponse Pergunta="Porque aprender ingles Memorizando palavras?">
+        <p>
+          Memorizar palavras em ingles nos ajuda a Enriquecer nosso vocabulario,
+          Permitindo que possamos formular frases..
+        </p>
+      </CardResponse>
 
       <footer>
-        <span>Todos os direitos reservados a English Plus+</span>
+        <div className="footer-informations"></div>
+        <div className="footer-copyright">
+          <span>Todos os direitos reservados a English Plus+</span>
+        </div>
       </footer>
-    </DashboardContainer>
+    </C.DashboardContainer>
   );
 }
 
