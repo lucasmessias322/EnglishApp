@@ -8,13 +8,14 @@ export const MemorizeContain = styled.div`
     width: 100%;
     padding-top: 60px;
 
-    a {
-      text-decoration: none;
-      li {
-        padding: 15px 10px;
-        border-bottom: 0.1px solid gray;
-        display: flex;
-        justify-content: space-between;
+    li {
+      padding: 15px 10px;
+      border-bottom: 0.1px solid gray;
+      display: flex;
+      justify-content: space-between;
+
+      a {
+        text-decoration: none;
 
         div {
           display: flex;
@@ -32,16 +33,16 @@ export const MemorizeContain = styled.div`
           }
         }
       }
+    }
 
-      .starCircle {
-        color: white;
-        border-radius: 100%;
-        background-color: ${(props) => (props.thema ? "#ff006b" : "#006aff")};
-        border: 5px solid ${(props) => (props.thema ? "#ff006b" : "#006aff")};
+    .starCircle {
+      color: white;
+      border-radius: 100%;
+      background-color: ${(props) => (props.thema ? "#ff006b" : "#006aff")};
+      border: 5px solid ${(props) => (props.thema ? "#ff006b" : "#006aff")};
 
-        &:hover {
-          transform: scale(1.1);
-        }
+      &:hover {
+        transform: scale(1.1);
       }
     }
   }

@@ -59,10 +59,10 @@ function Exame({ match }) {
       ></Header>
       <br /> <br /> <br /> <br /> <br /> <br />
       <div className="questionAndResponseCard">
-        <div className="question">
+        <div className="question"  onClick={() => Speak(dataBaralho.items[currentBaralho].questao)}>
           <div
             className="play"
-            onClick={() => Speak(dataBaralho.items[currentBaralho].questao)}
+           
           >
             <FaVolumeDown color="white" size={20} />
           </div>
@@ -115,13 +115,7 @@ function Exame({ match }) {
             <FaChevronRight
               size={20}
               onClick={() =>
-                Speak(
-                  dataBaralho.items[
-                    currentBaralho == dataBaralho.items.length - 1
-                      ? currentBaralho
-                      : currentBaralho + 1
-                  ].questao
-                )
+                Speak(dataBaralho.items[currentBaralho == dataBaralho.items.length - 1? currentBaralho: currentBaralho + 1].questao, 0.8)
               }
             />
           </span>

@@ -44,8 +44,11 @@ export const H4 = styled.h5`
   color: #fff;
 
   span {
-    color: #ff006b;
+    a{
+       color: #ff006b;
     cursor: pointer;
+    }
+   
   }
 `;
 

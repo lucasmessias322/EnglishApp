@@ -31,7 +31,7 @@ function Baralho({ match }) {
       <table id="table" border="1">
         {dataBaralho.items?.map((elem, i) => (
           <tr key={elem.id}>
-            <td onClick={() => Speak(elem.questao)}>
+            <td onClick={() => Speak(elem.questao, 0.8)}>
               <div>
                 <div className="play">
                   <FaVolumeDown

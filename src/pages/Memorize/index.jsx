@@ -4,10 +4,13 @@ import { MemorizeContain } from "./style";
 import { AppContext } from "../../data/Store";
 import ItemBaralho from "./ItemBaralho";
 import { getMemorizes } from "../../service/Api";
+import { AuthContext } from "../../data/auth";
 
 function Memorize() {
   const { thema } = useContext(AppContext);
+  const { user } = useContext(AuthContext);
   const [baralhos, setBaralhos] = useState([]);
+  
 
   useEffect(() => {
     getMemorizes().then((response) => setBaralhos(response));
@@ -26,7 +29,7 @@ function Memorize() {
             id={elem.id}
             titulo={elem.titulo}
             qtdPalavras={elem.items.length}
-            
+           
             to={`/baralho/${elem._id}`}
           />
         ))}
