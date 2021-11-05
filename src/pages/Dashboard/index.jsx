@@ -16,7 +16,7 @@ function Dashboard() {
   return (
     <C.DashboardContainer thema={thema}>
       <Header switchButtom={false} MenuBars={false}></Header>
-      <C.ContainLogoOrUserImage>
+      <C.ContainLogoOrUserImage thema={thema}>
         <div className="logo">
           <img src="/assets/logo.png" alt="logo" draggable={false} />
         </div>
@@ -32,7 +32,7 @@ function Dashboard() {
         <div className="Do-contain">
           <span>Você pode aprende com: </span>
 
-          <C.CardasContain>
+          <C.CardasContain thema={thema}>
             <div className="card">
               <Link to="/memorize">
                 <div>
@@ -45,7 +45,7 @@ function Dashboard() {
             <div className="card">
               <Link to="/textos">
                 <div>
-                  <FaTextHeight size={100} color="white" />
+                  <FaTextHeight thema={thema} size={100} color="white" />
                 </div>
                 <p>Com textos em ingles....</p>
               </Link>
@@ -55,7 +55,7 @@ function Dashboard() {
         </div>
       </div>
 
-      <C.whyInglesIsImportant>
+      <C.whyInglesIsImportant thema={thema}>
         <h2>Porque aprender ingles é importante?</h2>
         <p>
           Aprendendo o idioma, é possível obter diferencial no mercado, ter mais
@@ -66,7 +66,7 @@ function Dashboard() {
       </C.whyInglesIsImportant>
       <br /><br />
 
-      <CardResponse Pergunta="Porque aprender ingles com textos?">
+      <CardResponse Pergunta="Porque aprender ingles com textos?" thema={thema}>
         <p>
           Além de ajudar muito na compreensão oral, estudar usando um texto com
           áudio em inglês também traz outras três vantagens:
@@ -86,14 +86,14 @@ function Dashboard() {
         </li>
       </CardResponse>
 
-      <CardResponse Pergunta="Porque aprender ingles Memorizando palavras?">
+      <CardResponse Pergunta="Porque aprender ingles Memorizando palavras?" thema={thema}>
         <p>
           Memorizar palavras em ingles nos ajuda a Enriquecer nosso vocabulario,
           Permitindo que possamos formular frases..
         </p>
       </CardResponse>
 
-      <C.Footer>
+      <C.Footer thema={thema}>
         <div className="footer-informations"></div>
         <div className="footer-copyright">
           <span>Todos os direitos reservados a English Plus+</span>
