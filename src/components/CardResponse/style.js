@@ -10,6 +10,10 @@ export const CardResponse = styled.div`
     justify-content: space-between;
     border-bottom: 0.5px solid grey;
   }
+
+  @media (max-width: 500px){
+    font-size: 15px;
+  }
 `;
 
 export const Response = styled.div`

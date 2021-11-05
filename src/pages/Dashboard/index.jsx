@@ -16,12 +16,12 @@ function Dashboard() {
   return (
     <C.DashboardContainer thema={thema}>
       <Header switchButtom={false} MenuBars={false}></Header>
-      <div className="containLogoOrUserImage">
+      <C.ContainLogoOrUserImage>
         <div className="logo">
           <img src="/assets/logo.png" alt="logo" draggable={false} />
         </div>
         <p>Bem vindo(a) {user.nome}, oque você quer fazer?</p>
-      </div>
+      </C.ContainLogoOrUserImage>
 
       <div className="whatYouWantToDo">
         <p>
@@ -32,7 +32,7 @@ function Dashboard() {
         <div className="Do-contain">
           <span>Você pode aprende com: </span>
 
-          <div className="cardas-contain">
+          <C.CardasContain>
             <div className="card">
               <Link to="/memorize">
                 <div>
@@ -50,11 +50,12 @@ function Dashboard() {
                 <p>Com textos em ingles....</p>
               </Link>
             </div>
-          </div>
+          </C.CardasContain>
+
         </div>
       </div>
 
-      <div className="whyInglesIsImportant">
+      <C.whyInglesIsImportant>
         <h2>Porque aprender ingles é importante?</h2>
         <p>
           Aprendendo o idioma, é possível obter diferencial no mercado, ter mais
@@ -62,7 +63,7 @@ function Dashboard() {
           intercâmbios e trocas culturais riquíssimas. Isso ocorre porque o
           inglês é a língua mais utilizada no mundo.
         </p>
-      </div>
+      </C.whyInglesIsImportant>
       <br /><br />
 
       <CardResponse Pergunta="Porque aprender ingles com textos?">
@@ -92,12 +93,12 @@ function Dashboard() {
         </p>
       </CardResponse>
 
-      <footer>
+      <C.Footer>
         <div className="footer-informations"></div>
         <div className="footer-copyright">
           <span>Todos os direitos reservados a English Plus+</span>
         </div>
-      </footer>
+      </C.Footer>
     </C.DashboardContainer>
   );
 }

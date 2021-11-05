@@ -15,6 +15,7 @@ function Header({
   switchButtom,
   MemorizeTable,
   MenuBars = true,
+  QtdItems
 }) {
   const menu = useRef(null);
   const [switchBtn, setSwitchBtn] = useState({ checked: false });
@@ -68,7 +69,7 @@ function Header({
           {MenuBars ? <FaBars className="Fabars" onClick={AtivarMenu} /> : ""}
           <h3>
             {TituloDaPagina
-              ? `${TituloDaPagina} - 50 palavras `
+              ? `${TituloDaPagina} - ${QtdItems} palavras `
               : "English Plus+"}{"  "}
           </h3>
         </div>

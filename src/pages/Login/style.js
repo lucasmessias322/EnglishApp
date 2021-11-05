@@ -37,10 +37,6 @@ export const ButtonSubmit = styled.button`
   color: white;
   border-radius: 10px;
   cursor: pointer;
-
-  &:hover {
-    transform: scale(1.1);
-  }
 `;
 
 export const H4 = styled.h5`
@@ -63,7 +59,4 @@ export const ButtonNoAcount = styled.button`
   color: white;
   font-size: 15px;
   cursor: pointer;
-  &:hover {
-    transform: scale(1.1);
-  }
 `;

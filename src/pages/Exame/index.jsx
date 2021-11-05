@@ -7,7 +7,7 @@ import { FaChevronLeft, FaChevronRight, FaVolumeDown } from "react-icons/fa";
 import { Speak } from "../../components/Speaker";
 
 function Exame({ match }) {
-  const {thema} = useContext(AppContext);
+  const { thema } = useContext(AppContext);
   const [dataBaralho, setBaralho] = useState([]);
   const [currentBaralho, setCurrentBaralho] = useState(0);
   const [nextBaralho, setNextBaralho] = useState(currentBaralho + 1);
@@ -87,15 +87,45 @@ function Exame({ match }) {
         )}
       </div>
       <div className="exameControl-contain">
+
+        {dataBaralho.items && currentBaralho == 0 ?
+        ""
+        :
         <span onClick={() => Backward()}>
-          <FaChevronLeft size={20} />
-        </span>
+          <FaChevronLeft
+            size={20}
+            onClick={() =>
+              Speak(
+                dataBaralho.items[
+                  currentBaralho == 0 ? currentBaralho : currentBaralho - 1
+                ].questao
+              )
+            }
+          />
+        </span>}
+
+
         <h2 onClick={() => setOcultarPalavra((e) => !e)}>
           {ocultarPalavra ? "Mostrar Resposta" : "Ocultar palavra"}
         </h2>
-        <span onClick={() => Forward()}>
-          <FaChevronRight size={20} />
-        </span>
+
+        {dataBaralho.items && currentBaralho == dataBaralho.items.length - 1 ? ""
+          : 
+          <span onClick={() => Forward()}>
+            <FaChevronRight
+              size={20}
+              onClick={() =>
+                Speak(
+                  dataBaralho.items[
+                    currentBaralho == dataBaralho.items.length - 1
+                      ? currentBaralho
+                      : currentBaralho + 1
+                  ].questao
+                )
+              }
+            />
+          </span>
+        }
       </div>
     </ExameContain>
   );

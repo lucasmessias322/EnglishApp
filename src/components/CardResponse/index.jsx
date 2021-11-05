@@ -8,7 +8,7 @@ function CardResponse(props) {
   return (
     <C.CardResponse>
       <div className="card">
-        <h3>{props.Pergunta}</h3>
+        <h4>{props.Pergunta}</h4>
         <div>
           {toogle ? (
             <FaAngleDown size={25} onClick={() => setToogle((e) => !e)} />

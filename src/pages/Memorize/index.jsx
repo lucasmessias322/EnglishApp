@@ -17,7 +17,7 @@ function Memorize() {
 
   return (
     <MemorizeContain thema={thema}>
-      <Header TituloDaPagina=""></Header>
+      <Header  MenuBars={false} TituloDaPagina=""></Header>
 
       <div className="ListaBaralhos">
         {baralhos?.map((elem, i) => (
@@ -25,7 +25,8 @@ function Memorize() {
             key={elem.id}
             id={elem.id}
             titulo={elem.titulo}
-            qtdPalavras={elem.quantidadeDePalavras}
+            qtdPalavras={elem.items.length}
+            
             to={`/baralho/${elem._id}`}
           />
         ))}
