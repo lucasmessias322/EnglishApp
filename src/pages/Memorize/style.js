@@ -10,7 +10,7 @@ export const MemorizeContain = styled.div`
 
     li {
       padding: 15px 10px;
-      border-bottom: 0.1px solid gray;
+      border-bottom: 0.1px solid  ${(props) => (props.thema ? "grey" : "rgba(255, 255, 255, 0.2)")};
       display: flex;
       justify-content: space-between;
 

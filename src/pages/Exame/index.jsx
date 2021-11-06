@@ -49,8 +49,6 @@ function Exame({ match }) {
     }
   }
 
-  // console.log(dataBaralho.items[0]);
-
   return (
     <ExameContain thema={thema}>
       <Header
@@ -62,9 +60,7 @@ function Exame({ match }) {
       <div className="questionAndResponseCard">
         <div className="question"  onClick={() => Speak(dataBaralho.items[currentBaralho].questao)}>
           <div
-            className="play"
-           
-          >
+            className="play">
             <FaVolumeDown color="white" size={20} />
           </div>
           <h2>
@@ -104,7 +100,6 @@ function Exame({ match }) {
             }
           />
         </span>}
-
 
         <h2 onClick={() => setOcultarPalavra((e) => !e)}>
           {ocultarPalavra ? "Mostrar Resposta" : "Ocultar palavra"}

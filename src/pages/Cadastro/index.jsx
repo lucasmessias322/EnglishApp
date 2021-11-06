@@ -27,9 +27,7 @@ function Cadastro() {
     ) {
       signUp(email, password, name)
     }
-
   }
-
   return (
     <C.Container>
       <C.FormContainer>
@@ -49,7 +47,6 @@ function Cadastro() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-
           <Input
             Type="text"
             User={false}
@@ -74,7 +71,7 @@ function Cadastro() {
           <Link to="/">FAZER LOGIN</Link>
         </span>
       </C.H4>
-      <C.ButtonNoAcount>Entrar como convidado</C.ButtonNoAcount>
+      {/* <C.ButtonNoAcount>Entrar como convidado</C.ButtonNoAcount> */}
     </C.Container>
   );
 }

@@ -49,7 +49,7 @@ function Login() {
           <Link to="/cadastro">REGISTRE-SE AQUI</Link>
         </span>
       </C.H4>
-      <C.ButtonNoAcount>Entrar como convidado</C.ButtonNoAcount>
+      {/* <C.ButtonNoAcount>Entrar como convidado</C.ButtonNoAcount> */}
     </C.Container>
   );
 }

@@ -23,7 +23,7 @@ function TextoLayout({ texto }) {
 
     return (
         <TextoLayoutContainer thema={thema}>
-            <meta name="theme-color" content={thema ? "#FF006B" : "#0053B6"} />
+            
             <Header  DadosDoTexto={DataTexto} TitleOfText={DataTexto[texto].titulo} >
                 {DataTexto.map((elem, i) =>
                     <HeaderLinkMenu key={i} texto={i} TitleMenu={DataTexto[i].titulo} />
