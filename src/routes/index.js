@@ -11,6 +11,7 @@ import Texto1 from "../pages/Textos/index.jsx";
 export default function Routes() {
   return (
     <Switch>
+      
       <Route exact path="/" component={Login} />
       <Route exact path="/cadastro" component={Cadastro} />
       <Route exact path="/dashboard" component={Dashboard} isPrivate />

@@ -7,17 +7,17 @@ import Store from "./data/Store.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import AuthProvider from "./data/auth";
 import {AppContext} from './data/Store'
+import MetaTheme from './components/MetaThemeColor';
 
 function App() {
-  const { thema, setThema } = useContext(AppContext);
   const [state, setState] = useState(data);
-
+  
   return (
     <AuthProvider>
       <Store>
         <DataContext.Provider value={{ state, setState }}>
-        <meta name="theme-color" content={thema ? "#FF006B" : "#0053B6"} />
           <BrowserRouter>
+           <MetaTheme />
             <Routes />
           </BrowserRouter>
         </DataContext.Provider>
