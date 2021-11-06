@@ -2,148 +2,151 @@ import styled from "styled-components";
 
 export const DashboardContainer = styled.div`
   min-height: 100vh;
-  .whatYouWantToDo {
-    padding-top: 40px;
-    p {
-      font-size: 16px;
-      margin: 0 auto;
-      text-align: center;
-      max-width: 500px;
-      color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
-      font-weight: bold;
-    }
-    .Do-contain {
-      padding: 15px;
-      padding-top: 100px;
+  footer {
+    padding: 15px 10px;
+    background-color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
 
-      span {
-        font-weight: 1000;
-        font-size: 20px;
-        color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
-      }
+    span {
+      color: white;
     }
+  }
+`;
+
+export const SectionOne = styled.div`
+  padding: 20px;
+  height: 400px;
+  background-image: url("${(props) => props.thema ? "/assets/Rectangle 4.svg" : "/assets/Rectangle 4 dark.svg"}");
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-bottom: 20px;
+
+  @media (max-width: 500px) {
+    /* padding-top: 45px; */
+    background-image: url("${(props) => props.thema ? "/assets/Rectangle (mobile) 4.svg" : "/assets/Rectangle (mobile) 4 dark.svg"}");
+    background-size: contain;
+    height: 100vw;
+    background-repeat: no-repeat;
+  }
+`;
+
+export const LogoAndImageLogo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center flex-end;
+  width: 100%;
+  padding: 10px 15px;
+  text-align: center;
+
+  img {
+    width: 10vw;
+    object-fit: contain;
+    margin: auto;
+  }
+  h1 {
+    color: white;
+    font-size: 35px;
+
+    span {
+      color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
+    }
+  }
+  p {
+    padding-top: 10px;
+    color: white;
   }
 
   @media (max-width: 500px) {
-    .whatYouWantToDo {
-      padding-top: 40px;
-      p {
-        padding: 0px 5px;
-        font-size: 16px;
-      }
-
-      .Do-contain {
-        padding: 15px;
-        padding-top: 50px;
-
-        span {
-          font-weight: 1000;
-          font-size: 20px;
-          color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
-        }
-      }
+    img {
+      width: 24vw;
+      object-fit: contain;
+      margin: auto;
+    }
+    p {
+      font-size: 14px;
     }
   }
 `;
 
-export const ContainLogoOrUserImage = styled.div`
-  background-color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
-  padding-top: 65px;
-  padding-bottom: 20px;
+export const ThingsToDo = styled.div`
   text-align: center;
 
-  .logo {
-    padding: 20px;
-    img {
-      width: 150px;
-      object-fit: cover;
-    }
+  h3 {
+    color: ${(props) => (props.thema ? "#FF006B": "#0053B6" )};
   }
 
-  p {
-    padding: 5px;
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
+  div.CardsContain {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
   }
-`;
 
-export const CardasContain = styled.div`
-  padding-top: 20px;
-  display: flex;
-
-  div.card {
-    width: 200px;
-    margin-right: 15px;
-    a {
-      text-decoration: none;
-
-      div {
-        text-align: center;
-        border-radius: 10px;
-        padding: 10px;
-        background-color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
-      }
-
-      p {
-        font-weight: bold;
-        text-align: left;
-        color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
-      }
-    }
-
-    &:hover {
-      transform: scale(1.1);
+  @media (min-width: 500px) {
+    h3 {
+      font-size: 25px;
+      padding-bottom: 20px;
     }
   }
 `;
+export const Card = styled.div`
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+  margin: 5px;
+  &:hover {
+    transform: scale(1.1);
+  }
 
-export const whyInglesIsImportant = styled.div`
-  max-width: 800px;
   padding: 10px;
-  padding-top: 100px;
+  background-color: ${(props) => (props.thema ?  "#FF006B": "#0053B6")};
+  cursor: pointer;
 
-  h2 {
-    color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
+  a {
+    text-decoration: none;
+    p {
+      font-size: 14px;
+      padding-top: 10px;
+      color: white;
+    }
+  }
+
+  @media (min-width: 501px) {
+    width: 200px;
+    height: 200px;
+    padding: 35px 10px;
+    margin: 15px;
+
+    a {
+      p {
+        font-size: 18px;
+      }
+    }
+  }
+`;
+
+export const WhyLearning = styled.div`
+  padding: 40px 10px;
+
+  h3 {
+    font-size: 18px;
+    color: ${(props) => (props.thema ?  "#FF006B": "#0053B6")};
   }
 
   p {
     padding-top: 10px;
-    color: black;
+    font-size: 14px;
   }
 
-  @media (max-width: 500px) {
-    max-width: 600px;
-    padding: 10px;
-    padding-top: 50px;
+  @media (min-width: 500px) {
+    padding: 60px 30px;
 
-    h2 {
-      font-size: 18px;
-      color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
+    h3 {
+      font-size: 25px;
     }
 
     p {
-      font-size: 14px;
       padding-top: 10px;
-      color: black;
-    }
-  }
-`;
-
-export const Footer = styled.div`
-  margin-top: 100px;
-
-  .footer-informations {
-    background-color: ${(props) => (props.thema ? "#FF006B" : "#005AC5")};
-    padding: 15px;
-  }
-
-  .footer-copyright {
-    background-color: ${(props) => (props.thema ? "#B9004E" : "#00499F")};
-    padding: 15px;
-    color: white;
-    span {
-      font-size: 15px;
+      font-size: 16px;
+      max-width: 600px;
     }
   }
 `;

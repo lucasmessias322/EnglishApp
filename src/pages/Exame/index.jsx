@@ -54,8 +54,9 @@ function Exame({ match }) {
   return (
     <ExameContain thema={thema}>
       <Header
-        switchButtom={true}
+        switchButtom={false}
         TituloDaPagina={toogle ? dataBaralho.titulo : "Carregando.."}
+        QtdItems={dataBaralho.items ? dataBaralho.items.length : "vazio"}
       ></Header>
       <br /> <br /> <br /> <br /> <br /> <br />
       <div className="questionAndResponseCard">

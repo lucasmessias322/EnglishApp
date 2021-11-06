@@ -23,7 +23,7 @@ function Baralho({ match }) {
       <Header
         // MenuBars={false}
         MemorizeTable={true}
-        switchButtom={true}
+        switchButtom={false}
         TituloDaPagina={dataBaralho.titulo}
         QtdItems={dataBaralho.items ? dataBaralho.items.length : "vazio"}
       ></Header>
