@@ -3,6 +3,8 @@ import FraseComponet from '../../components/FraseComponet';
 // import './style.scss'
 import { FraseAFraseComponent } from './style.js'
 import { AppContext } from '../../data/Store';
+
+
 function FraseAFrase({ DataFraseAFrase }) {
     const { thema } = useContext(AppContext);
 
@@ -14,7 +16,7 @@ function FraseAFrase({ DataFraseAFrase }) {
                 {DataFraseAFrase.map((item, i) =>
                     <FraseComponet
                     key={i}
-                        FraseInIngles={`${i + 1}.` + item.FraseInIngles}
+                        FraseInIngles={item.FraseInIngles}
                         FraseInPortuguese={item.FraseInPortuguese} />
                 )}
             </div>

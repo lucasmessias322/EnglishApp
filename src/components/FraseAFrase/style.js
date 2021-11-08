@@ -13,20 +13,7 @@ export const FraseAFraseComponent = styled.div`
 
     div.content-frases {
         list-style: none;
-        li {
-            margin: 10px;
-            margin-bottom: 15px;
-            h3 {
-                margin: 5px;
-                color: ${props => props.thema ? "#ff5ad1": "#9FDDFF"};
-                font-size: 22px;
-            }
-            p {
-                font-size: 16px;
-                margin-left: 16px;
-                color: white;
-            }
-        }
+        
     }
 
     
@@ -38,7 +25,7 @@ export const FraseAFraseComponent = styled.div`
                 }
                 p {
                     font-size: 15px;
-                    margin-left: 15px;
+                    /* margin-left: 15px; */
                 }
             }
         }

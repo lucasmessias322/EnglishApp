@@ -10,13 +10,12 @@ function Memorize() {
   const { thema } = useContext(AppContext);
   const { user } = useContext(AuthContext);
   const [baralhos, setBaralhos] = useState([]);
-  
+
 
   useEffect(() => {
     getMemorizes().then((response) => setBaralhos(response));
   }, []);
 
-  console.log(baralhos);
 
   return (
     <MemorizeContain thema={thema}>
@@ -29,7 +28,6 @@ function Memorize() {
             id={elem.id}
             titulo={elem.titulo}
             qtdPalavras={elem.items.length}
-           
             to={`/baralho/${elem._id}`}
           />
         ))}
