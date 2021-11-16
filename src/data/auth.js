@@ -67,8 +67,7 @@ export default function AuthProvider({ children }) {
           .set({
             nome: nome,
             avatarUrl: null,
-           
-           
+            baralhosDoUsuario: []
           })
           .then(() => {
             let data = {
@@ -76,6 +75,7 @@ export default function AuthProvider({ children }) {
               nome: nome,
               email: value.user.email,
               avatarUrl: null,
+              baralhosDoUsuario: []
               
               
             };

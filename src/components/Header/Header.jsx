@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useState, useEffect } from "react";
 import { AppContext } from "../../data/Store";
 import { AuthContext } from "../../data/auth";
-import { FaBars, FaSignOutAlt } from "react-icons/fa";
+import { FaBars, FaSignOutAlt, FaPlus } from "react-icons/fa";
 import HeaderLinkMenu from "../HeaderLinkMenu";
 import Switch from "react-switch";
 
@@ -16,12 +16,14 @@ function Header({
   MemorizeTable,
   MenuBars = true,
   QtdItems,
-  Logo = true
+  Logo = true,
+  BaralhoPage = false,
+  adicionarNovoItem
 }) {
   const menu = useRef(null);
   const [switchBtn, setSwitchBtn] = useState({ checked: false });
   const { thema, setThema } = useContext(AppContext);
-  const { sigOut} = useContext(AuthContext);
+  const { sigOut } = useContext(AuthContext);
 
   function AtivarMenu() {
     const Menu = menu.current;
@@ -71,7 +73,9 @@ function Header({
           <h3>
             {TituloDaPagina
               ? `${TituloDaPagina} - ${QtdItems} palavras `
-              : Logo? "English Plus+" : ""}
+              : Logo
+              ? "English Plus+"
+              : ""}
           </h3>
         </div>
 
@@ -79,23 +83,34 @@ function Header({
           {switchButtom ? (
             ""
           ) : (
-            <Switch
-              className="Switchbtn"
-              onColor={"#004393"}
-              offColor={"#9A0041"}
-              uncheckedIcon
-              checkedIcon
-              height={15}
-              width={50}
-              handleDiameter={25}
-              onChange={handleChange}
-              checked={switchBtn.checked}
-            />
+            <>
+              <Switch
+                className="Switchbtn"
+                onColor={"#004393"}
+                offColor={"#9A0041"}
+                uncheckedIcon
+                checkedIcon
+                height={15}
+                width={50}
+                handleDiameter={25}
+                onChange={handleChange}
+                checked={switchBtn.checked}
+              />
+
+              {BaralhoPage ? (
+                <FaPlus
+                onClick={() => adicionarNovoItem()}
+                  size={20}
+                  color="white"
+                  style={{ margin: "0 0 5px 15px" }}
+                />
+              ) : (
+                ""
+              )}
+            </>
           )}
 
-         
-            <FaSignOutAlt className='OutButton' onClick={() => sigOut()}  />
-         
+          <FaSignOutAlt className="OutButton" onClick={() => sigOut()} />
         </div>
       </header>
 

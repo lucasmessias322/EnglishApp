@@ -30,3 +30,23 @@ export function getBaralho(id) {
 
   return getmemorize;
 }
+
+export function postBaralho(value) {
+  let postBaralho = api.post("/memorize", value).then((response) => {
+    
+  });
+
+  return postBaralho;
+}
+
+export function DeletarBaralho(id) {
+  let deletarBaralho = api.delete("/memorize/" + id);
+
+  return deletarBaralho;
+}
+
+export function updateBaralhoItems(id, newValues) {
+  let deletarBaralho = api.put("/memorize/" + id, newValues);
+
+  return deletarBaralho;
+}
