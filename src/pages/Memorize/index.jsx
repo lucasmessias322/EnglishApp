@@ -32,14 +32,18 @@ function Memorize() {
   }
 
   function excluirBaralho(id) {
-    DeletarBaralho(id)
-      .then(() => setAlteracao((e) => !e))
-      .catch((error) => console.log("Erro ao deletar baralho: " + error));
+    let Prompt = window.confirm("Tem certeza que deseja excluir esse Baralho?");
+
+    if (Prompt === true) {
+      DeletarBaralho(id)
+        .then(() => setAlteracao((e) => !e))
+        .catch((error) => console.log("Erro ao deletar baralho: " + error));
+    }
   }
 
   return (
     <C.MemorizeContain thema={thema}>
-      <Header  MenuBars={false} TituloDaPagina=""></Header>
+      <Header MenuBars={false} TituloDaPagina=""></Header>
 
       <C.CriarBaralhoContain toogleAddbaralho={toogleAddbaralho}>
         <C.CardCriarBaralho>

@@ -6,17 +6,18 @@ export const BaralhoContain = styled.div`
 
   #table {
     width: 100%;
-    color:${(props) => (props.thema ?  "#000": "#FFF")};
+    color: ${(props) => (props.thema ? "#000" : "#FFF")};
     border-collapse: collapse;
 
     tr {
       td {
         padding: 10px 5px;
+
         .response {
           padding-left: 15px;
         }
 
-        div {
+        .container {
           display: flex;
           align-items: center;
 
@@ -27,7 +28,8 @@ export const BaralhoContain = styled.div`
           .play {
             width: 25px;
             height: 25px;
-            background-color: ${(props) => (props.thema ? "#FF006B" : "#0074ff")};
+            background-color: ${(props) =>
+              props.thema ? "#FF006B" : "#0074ff"};
             border-radius: 100%;
             padding: 5px;
             margin-right: 20px;
@@ -36,6 +38,12 @@ export const BaralhoContain = styled.div`
               transform: scale(1.1);
             }
           }
+        }
+
+        .resposonseContainer {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
         }
       }
     }
@@ -57,4 +65,20 @@ export const BaralhoContain = styled.div`
       transform: scale(1.1);
     }
   }
+`;
+
+export const RoundButton = styled.div`
+            width: 25px;
+            height: 25px;
+            background-color: ${(props) =>
+              props.thema ? "#FF006B" : "#0074ff"};
+            border-radius: 100%;
+            padding: 5px;
+            margin-right: 20px;
+
+            &:hover {
+              transform: scale(1.1);
+            }
+          }
+        
 `;

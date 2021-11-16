@@ -18,6 +18,8 @@ export const HeaderComponents = styled.div`
 
     div.logo-end-Menu {
       display: flex;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       .Fabars {
         color: white;
@@ -31,9 +33,6 @@ export const HeaderComponents = styled.div`
         margin: 5px 0;
         padding: 0;
         font-weight: bold;
-
-        overflow: hidden;
-        text-overflow: ellipsis;
 
         span {
           color: white;

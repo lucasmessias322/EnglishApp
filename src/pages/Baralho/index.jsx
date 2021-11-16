@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import Header from "../../components/Header/Header";
-import { getBaralho, updateBaralhoItems } from "../../service/Api";
-import { BaralhoContain } from "./style";
-import { FaClipboardList, FaVolumeDown, FaVolumeUp } from "react-icons/fa";
+import { getBaralho, updateBaralhoItems, DeletarBaralho } from "../../service/Api";
+import * as C from "./style";
+import {
+  FaClipboardList,
+  FaVolumeDown,
+  FaVolumeUp,
+  FaTrash,
+} from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { AppContext } from "../../data/Store";
 import { Speak } from "../../components/Speaker";
@@ -29,12 +34,15 @@ function Baralho({ match }) {
 
   useEffect(() => {
     if (Pergunta !== "" && Resposta !== "") {
-      setNewItem([{ questao: Pergunta, resposta: Resposta }]);
+      setNewItem([
+        { _id: dataBaralho._id, questao: Pergunta, resposta: Resposta },
+      ]);
     }
   }, [alteracao, Pergunta, Resposta]);
 
   function SalvarNovoItem() {
     let data = {
+      _id: dataBaralho._id,
       titulo: dataBaralho.titulo,
       items: dataBaralho.items.concat(newItem),
     };
@@ -52,8 +60,24 @@ function Baralho({ match }) {
     }
   }
 
+  function deletarItem(id) {
+    alert(id);
+
+    // let data = {
+    //   _id: dataBaralho._id,
+    //   titulo: dataBaralho.titulo,
+    //   items: dataBaralho.items.concat(newItem),
+    // };
+
+    // updateBaralhoItems(dataBaralho._id, data).then(() => {
+    //   setAlteracao((e) => !e);
+    //   setPergunta("");
+    //   setResposta("");
+    // });
+  }
+
   return (
-    <BaralhoContain thema={thema}>
+    <C.BaralhoContain thema={thema}>
       <AddNewItem
         Pergunta={Pergunta}
         setPergunta={setPergunta}
@@ -77,19 +101,28 @@ function Baralho({ match }) {
         {dataBaralho.items?.map((elem, i) => (
           <tr key={elem.id}>
             <td onClick={() => Speak(elem.questao, 0.8)}>
-              <div>
-                <div className="play">
+              <div className="container">
+                <C.RoundButton thema={thema}>
                   <FaVolumeDown
                     className="volumeDow-icon"
                     color="white"
                     size={15}
                   />
-                </div>
+                </C.RoundButton>
+
                 <span>{elem.questao}</span>
               </div>
             </td>
             <td>
-              <span className="response">{elem.resposta}</span>
+              <div className="resposonseContainer">
+                <span className="response">{elem.resposta}</span>
+                <C.RoundButton
+                  thema={thema}
+                  onClick={() => deletarItem(elem._id)}
+                >
+                  <FaTrash className="volumeDow-icon" color="white" size={15} />
+                </C.RoundButton>
+              </div>
             </td>
           </tr>
         ))}
@@ -99,7 +132,7 @@ function Baralho({ match }) {
           <FaClipboardList size={30} color="white" />
         </div>
       </Link>
-    </BaralhoContain>
+    </C.BaralhoContain>
   );
 }
 
