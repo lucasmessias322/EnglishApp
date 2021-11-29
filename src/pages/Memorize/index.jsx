@@ -31,15 +31,15 @@ function Memorize() {
       .catch(() => alert("erro ao cadastrar baralho"));
   }
 
-  function excluirBaralho(id) {
-    let Prompt = window.confirm("Tem certeza que deseja excluir esse Baralho?");
+  // function excluirBaralho(id) {
+  //   let Prompt = window.confirm("Tem certeza que deseja excluir esse Baralho?");
 
-    if (Prompt === true) {
-      DeletarBaralho(id)
-        .then(() => setAlteracao((e) => !e))
-        .catch((error) => console.log("Erro ao deletar baralho: " + error));
-    }
-  }
+  //   if (Prompt === true) {
+  //     DeletarBaralho(id)
+  //       .then(() => setAlteracao((e) => !e))
+  //       .catch((error) => console.log("Erro ao deletar baralho: " + error));
+  //   }
+  // }
 
   return (
     <C.MemorizeContain thema={thema}>
@@ -79,19 +79,19 @@ function Memorize() {
             titulo={elem.titulo}
             qtdPalavras={elem.items.length}
             hidden={false}
-            excluirBaralho={excluirBaralho}
+            // excluirBaralho={excluirBaralho}
             to={`/baralho/${elem._id}`}
           />
         ))}
       </C.ListaBaralhos>
 
-      <C.AddCardContain thema={thema}>
+      {/* <C.AddCardContain thema={thema}>
         <div className="linhar">
           <C.AddCard size={50} onClick={() => setToogleAddbaralho(true)}>
             <FaPlus size={25} color="white" />
           </C.AddCard>
         </div>
-      </C.AddCardContain>
+      </C.AddCardContain> */}
     </C.MemorizeContain>
   );
 }

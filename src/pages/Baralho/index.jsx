@@ -90,7 +90,7 @@ function Baralho({ match }) {
       <Header
         // MenuBars={false}
         adicionarNovoItem={adicionarNovoItem}
-        BaralhoPage={true}
+        BaralhoPage={false}
         MemorizeTable={true}
         switchButtom={false}
         TituloDaPagina={dataBaralho.titulo}
@@ -116,12 +116,12 @@ function Baralho({ match }) {
             <td>
               <div className="resposonseContainer">
                 <span className="response">{elem.resposta}</span>
-                <C.RoundButton
+                {/* <C.RoundButton
                   thema={thema}
                   onClick={() => deletarItem(elem._id)}
                 >
                   <FaTrash className="volumeDow-icon" color="white" size={15} />
-                </C.RoundButton>
+                </C.RoundButton> */}
               </div>
             </td>
           </tr>
