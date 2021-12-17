@@ -57,15 +57,14 @@ function MemorizeComponent() {
 
   async function adcionarnovoBaralhot() {
     if (nomeNewBaralho !== "") {
-      let memorizer= {
-        memorize: {
-          items: [],
-          titulo: nomeNewBaralho,
-          _id: `${Math.random() * 100}`,
-        },
+      let memorizer = {
+        memorize: [
+          { items: [], titulo: nomeNewBaralho, _id: `${Math.random() * 100}` },
+        ],
       };
 
       const userStorage: any = getStorage("currentUserData");
+
       userStorage.memorize.push(memorizer);
 
       setStorage("currentUserData", userStorage);
