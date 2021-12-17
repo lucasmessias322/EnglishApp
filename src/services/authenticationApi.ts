@@ -3,8 +3,7 @@ import axios from "axios";
 export const api = axios.create({
   baseURL: "https://authenticatedapi.herokuapp.com",
   headers: {
-    "Access-Control-Allow-Origin": "*",
-    "Content-Type": "application/json",
+      
   },
 });
 
@@ -42,8 +41,7 @@ export async function editUserData(
 ) {
   const dataCnfigs = {
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json",
+      
       Authorization: `Bearer ${token}`,
     },
   };
