@@ -7,6 +7,7 @@ import * as C from "./style";
 import { FaPlus, FaTemperatureLow } from "react-icons/fa";
 import {
   config,
+  editByfecth,
   editUserData,
   getUserdata,
 } from "../../services/authenticationApi";
@@ -58,9 +59,9 @@ function MemorizeComponent() {
   async function adcionarnovoBaralhot() {
     if (nomeNewBaralho !== "") {
       let memorizer = {
-        memorize: [
-          { items: [], titulo: nomeNewBaralho, _id: `${Math.random() * 100}` },
-        ],
+        items: [],
+        titulo: nomeNewBaralho,
+        _id: `${Math.random() * 100}`,
       };
 
       const userStorage: any = getStorage("currentUserData");
@@ -69,7 +70,7 @@ function MemorizeComponent() {
 
       setStorage("currentUserData", userStorage);
 
-      await editUserData(userStorage._id, memorizer, config(token))
+      editByfecth(userStorage.memorize, token)
         .then((response) => {
           setAlteracao(true);
           console.log(response);
@@ -77,6 +78,15 @@ function MemorizeComponent() {
         .catch((err) => {
           console.error(err);
         });
+
+      // await editUserData(userStorage._id, memorizer, config(token))
+      // .then((response) => {
+      //   setAlteracao(true);
+      //   console.log(response);
+      // })
+      // .catch((err) => {
+      //   console.error(err);
+      // });
     }
   }
 

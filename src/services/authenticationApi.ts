@@ -38,18 +38,18 @@ export async function editUserData(id: string, data: any, config: any) {
   return editdata;
 }
 
-// export function editByfecth(data, token){
-//   let Fetch = fetch(`https://authenticatedapi.herokuapp.com/auth/edit/${data}`, {
-//         mode: 'no-cors',
-//         method: "PATCH",
-//         headers: {
-//           "Access-Control-Allow-Origin": "*",
-//           "Content-Type": "application/json",
-//           Authorization:`Bearer ${token}`,
+export function editByfecth(data: any, token: any){
+  let Fetch = fetch(`https://authenticatedapi.herokuapp.com/auth/edit/${data}`, {
+     
+        method: "PATCH",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+          Authorization:`Bearer ${token}`,
 
-//         },
-//         body: `{\n\t"memorize": ${data}`,
-//       })
+        },
+        body: `{\n\t"memorize": ${data}`,
+      })
 
-//       return Fetch
-// }
+      return Fetch
+}
