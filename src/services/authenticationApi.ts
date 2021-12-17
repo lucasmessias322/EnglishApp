@@ -44,7 +44,7 @@ export function editByfecth(id: any, data: any, token: any) {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    body: `{\n\t"memorize": ${data}`,
+    body: `{\n\t"memorize": ${data}\n}`,
   });
 
   return Fetch;
