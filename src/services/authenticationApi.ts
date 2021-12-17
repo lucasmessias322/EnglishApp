@@ -37,16 +37,12 @@ export function getUserdata(userId: string, config: object) {
 export async function editUserData(
   id: string,
   data: any,
-  token: any
+  config: any
 ) {
   const dataCnfigs = {
     body: `{\n\t"memorize": ${data}`,
-    headers: {
-      
-      Authorization: `Bearer ${token}`,
-    },
   };
-  const editdata = api.patch(`/auth/edit/${id}`, dataCnfigs);
+  const editdata = api.patch(`/auth/edit/${id}`, dataCnfigs, config);
 
   return editdata;
 }

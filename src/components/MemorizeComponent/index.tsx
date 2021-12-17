@@ -73,7 +73,7 @@ function MemorizeComponent() {
 
       setStorage("currentUserData", userStorage);
 
-      await editUserData(userStorage._id, memorizer, token)
+      await editUserData(userStorage._id, memorizer, config(token))
         .then((response) => {
           setAlteracao(true);
           console.log(response);
