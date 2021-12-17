@@ -39,7 +39,7 @@ export async function editUserData(
   data: any,
   config: any
 ) {
-  const editdata = api.patch(`/auth/edit/${id}`, JSON.stringify(data), config);
+  const editdata = api.patch(`/auth/edit/${id}`, data, config);
 
   return editdata;
 }
