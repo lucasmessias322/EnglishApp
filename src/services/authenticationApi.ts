@@ -2,9 +2,7 @@ import axios from "axios";
 
 export const api = axios.create({
   baseURL: "https://authenticatedapi.herokuapp.com",
-  headers: {
-      
-  },
+  headers: {},
 });
 
 export const config = (token: string) => {
@@ -34,11 +32,7 @@ export function getUserdata(userId: string, config: object) {
   return userData;
 }
 
-export async function editUserData(
-  id: string,
-  data: any,
-  config: any
-) {
+export async function editUserData(id: string, data: any, config: any) {
   const editdata = api.patch(`/auth/edit/${id}`, data, config);
 
   return editdata;
