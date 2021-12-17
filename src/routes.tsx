@@ -10,6 +10,8 @@ import Textos from "./Pages/Textos";
 import Memorize from "./Pages/Memorize";
 import Baralho from "./Pages/Baralho";
 import Exame from "./Pages/Exame";
+import UserBaralho from "./Pages/UserBaralho";
+import UserExame from "./Pages/UserExame";
 
 const Routes = () => {
   return (
@@ -22,6 +24,8 @@ const Routes = () => {
         <PrivateRoute path="/memorize" component={Memorize} />
         <PrivateRoute path="/baralho/:id" component={Baralho} />
         <PrivateRoute path="/exame/:id" component={Exame} />
+        <PrivateRoute path="/userbaralho/:id" component={UserBaralho} />
+        <PrivateRoute path="/userexame/:id" component={UserExame} />
       </Switch>
     </BrowserRouter>
   )

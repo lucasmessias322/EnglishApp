@@ -7,15 +7,12 @@ import { getBaralho } from "../../services/Api";
 import * as C from "./style";
 import {
   FaClipboardList,
-  FaVolumeDown,
-  FaVolumeUp,
-  FaTrash,
+  FaVolumeDown
 } from "react-icons/fa";
 import Shuffle from "../../components/RandomArray";
 
 function Baralho({ match }: any) {
   const { thema, currentUserData} = useContext(AppContext);
-  const [alteracao, setAlteracao] = useState(false);
   const [dataBaralho, setBaralho] = useState({
     _id: "vf",
     titulo: "Carregando...",
@@ -33,7 +30,7 @@ function Baralho({ match }: any) {
   useEffect(() => {
     getBaralho(match.params.id).then((baralho) => setBaralho(baralho));
     
-  }, [alteracao]);
+  }, []);
 
   let RandomDataItems:any = dataBaralho.items ? dataBaralho.items : ["0"];
   Shuffle(RandomDataItems);

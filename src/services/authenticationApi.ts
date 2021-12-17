@@ -1,11 +1,20 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://localhost:8081"
-})
+  baseURL: "https://authenticatedapi.herokuapp.com",
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "application/json",
+  },
+});
 
 export const config = (token: string) => {
-  return { headers: { Authorization: `Bearer ${token}` } };
+  return {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
 };
 
 export function postLogin(data: object) {
@@ -14,14 +23,47 @@ export function postLogin(data: object) {
 }
 
 export function postRegister(data: object) {
-  const registerUser = api.post("/auth/register", data)
-  return registerUser
+  const registerUser = api.post("/auth/register", data);
+  return registerUser;
 }
 
-export function getUserdata(userId:string, config:object) {
+export function getUserdata(userId: string, config: object) {
   let userData = api
     .get(`/user/${userId}`, config)
     .then((response) => response.data)
     .catch((error) => console.log(error));
-     return userData;
+  return userData;
 }
+
+export async function editUserData(
+  id: string,
+  data: any,
+  token: any
+) {
+  const dataCnfigs = {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const editdata = api.patch(`/auth/edit/${id}`, data, dataCnfigs);
+
+  return editdata;
+}
+
+// export function editByfecth(data, token){
+//   let Fetch = fetch(`https://authenticatedapi.herokuapp.com/auth/edit/${data}`, {
+//         mode: 'no-cors',
+//         method: "PATCH",
+//         headers: {
+//           "Access-Control-Allow-Origin": "*",
+//           "Content-Type": "application/json",
+//           Authorization:`Bearer ${token}`,
+
+//         },
+//         body: `{\n\t"memorize": ${data}`,
+//       })
+
+//       return Fetch
+// }

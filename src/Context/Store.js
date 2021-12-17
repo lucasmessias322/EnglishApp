@@ -1,7 +1,7 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import useStorage from '../utils/useStorage';
 import { Redirect} from 'react-router-dom';
-import { isVoidExpression } from 'typescript';
+import { config, getUserdata } from '../services/authenticationApi';
 
 const initialState = {
     number: 0,
@@ -9,7 +9,20 @@ const initialState = {
     thema: true,
     texto: 0,
     baralhoItems: Object,
-    currentUserData: Object,
+    currentUserData: {
+        email: "",
+        name: "",
+        memorize: [{
+            _id: "",
+            titulo: "",
+            items: [{
+                _id: "",
+                questions: "",
+                response: ""
+            }]
+        }],
+        _id: ""
+    },
     setCurrentUserData: Function,
     setToken: Function,
     logout: Function,
@@ -39,6 +52,14 @@ function Store(props) {
         localStorage.removeItem('currentUserData');
         <Redirect to="/"/>
     }
+
+
+    // useEffect(() => {
+    //     if(currentUserData !== null){
+    //        getUserdata(currentUserData._id, config(token)).then(response => setCurrentUserData(response))
+           
+    //     }
+    // },[currentUserData])
 
 
     return (
