@@ -64,7 +64,7 @@ function MemorizeComponent() {
       };
 
       const userStorage: any = getStorage("currentUserData");
-      const memorizer = `"memorize": ${userStorage.memorize}`;
+      const memorizer = userStorage.memorize;
       console.log("memorize: ", memorizer);
       console.log(memorizer);
       
