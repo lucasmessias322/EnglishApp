@@ -40,12 +40,13 @@ export async function editUserData(
   token: any
 ) {
   const dataCnfigs = {
+    body: `{\n\t"memorize": ${data}`,
     headers: {
       
       Authorization: `Bearer ${token}`,
     },
   };
-  const editdata = api.patch(`/auth/edit/${id}`, data, dataCnfigs);
+  const editdata = api.patch(`/auth/edit/${id}`, dataCnfigs);
 
   return editdata;
 }
