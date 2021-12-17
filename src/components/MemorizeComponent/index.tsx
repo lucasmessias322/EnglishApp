@@ -70,7 +70,7 @@ function MemorizeComponent() {
 
       setStorage("currentUserData", userStorage);
 
-      editByfecth(userStorage.memorize, token)
+      editByfecth(userStorage._id, userStorage.memorize, token)
         .then((response) => {
           setAlteracao(true);
           console.log(response);
