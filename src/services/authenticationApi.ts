@@ -40,7 +40,7 @@ export async function editUserData(id: string, data: any, config: any) {
 
 export function editByfecth(data: any, token: any){
   let Fetch = fetch(`https://authenticatedapi.herokuapp.com/auth/edit/${data}`, {
-     
+        mode: "no-cors",
         method: "PATCH",
         headers: {
           Authorization:`Bearer ${token}`,
