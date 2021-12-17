@@ -39,10 +39,7 @@ export async function editUserData(
   data: any,
   config: any
 ) {
-  const dataCnfigs = {
-    body: `{\n\t"memorize": ${data}`,
-  };
-  const editdata = api.patch(`/auth/edit/${id}`, dataCnfigs, config);
+  const editdata = api.patch(`/auth/edit/${id}`, JSON.stringify(data), config);
 
   return editdata;
 }
