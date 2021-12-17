@@ -43,8 +43,6 @@ export function editByfecth(data: any, token: any){
      
         method: "PATCH",
         headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
           Authorization:`Bearer ${token}`,
 
         },
