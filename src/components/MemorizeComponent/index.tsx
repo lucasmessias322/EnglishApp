@@ -11,7 +11,7 @@ import {
   editUserData,
   getUserdata,
 } from "../../services/authenticationApi";
-
+import axios from "axios";
 function MemorizeComponent() {
   const { thema, token } = useContext(AppContext);
   const [currentUser, setCurrentUser] = useState<any>({
@@ -59,49 +59,48 @@ function MemorizeComponent() {
   async function adcionarnovoBaralhot() {
     if (nomeNewBaralho !== "") {
       let memorizer = {
-        items: [],
         titulo: nomeNewBaralho,
-        _id: `${Math.random() * 100}`,
+        items: [],
       };
 
       const userStorage: any = getStorage("currentUserData");
-
       userStorage.memorize.push(memorizer);
 
       setStorage("currentUserData", userStorage);
 
-      console.log("locl", userStorage)
+      const options: any = {
+        method: "PATCH",
+        url: `http://localhost:8081/auth/edit/${userStorage._id}`,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        data: `{\n"memorize": ${JSON.stringify(userStorage.memorize)}\n}`,
+      };
 
-      editByfecth(userStorage._id, userStorage.memorize, token)
-        .then((response) => {
-          setAlteracao(true);
+      axios
+        .request(options)
+        .then(function (response) {
           console.log(response);
+          setAlteracao(true)
         })
-        .catch((err) => {
-          console.error(err);
+        .catch(function (error) {
+          console.error(error);
         });
-
-      // await editUserData(userStorage._id, memorizer, config(token))
-      // .then((response) => {
-      //   setAlteracao(true);
-      //   console.log(response);
-      // })
-      // .catch((err) => {
-      //   console.error(err);
-      // });
     }
   }
 
-  // useEffect(() => {
-  //   if (alteracao) {
-  //     getUserdata("61bbb16bdc8190ff6e8cc847", config(token)).then(
-  //       (response) => {
-  //         setStorage("currentUserData", response.user);
-  //         setAlteracao(false);
-  //       }
-  //     );
-  //   }
-  // }, [alteracao]);
+  useEffect(() => {
+    if (alteracao) {
+      const userStorage: any = getStorage("currentUserData");
+      getUserdata(userStorage._id, config(token)).then(
+        (response) => {
+          setStorage("currentUserData", response.user);
+          setAlteracao(false);
+        }
+      );
+    }
+  }, [alteracao]);
 
   useEffect(() => {
     getMemorizes().then((response) => setBaralhos(response));
@@ -113,13 +112,7 @@ function MemorizeComponent() {
     console.log(userStorage);
   }, [alteracao]);
 
-  useEffect(() => {
-    const userStorage: any = getStorage("currentUserData");
-    // const mm: any = {...userStorage, titulo: "ola lus"};
-    // console.log(mm);
 
-    console.log(userStorage.memorize);
-  }, []);
 
   return (
     <C.MemorizeContain thema={thema}>
