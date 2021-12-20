@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://localhost:8081",
+  baseURL: "https://textoingles-api.herokuapp.com/",
   headers: {},
 });
 
@@ -32,23 +32,18 @@ export function getUserdata(userId: string, config: object) {
   return userData;
 }
 
-export async function editUserData(id: string, data: any, config: any) {
-  const editdata = api.patch(`/auth/edit/${id}`, data, config);
-
-  return editdata;
-}
-
-export function editByfecth(id: any, data: any, token: any) {
+export function editByfecth(id: string, data: any, token: string) {
   const options: any = {
     method: "PATCH",
-    url: `http://localhost:8081/auth/edit/${id}`,
+    url: `https://textoingles-api.herokuapp.com/auth/edit/${id}`,
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    data: data,
+    data: `{\n"memorize": ${JSON.stringify(data)}\n}`,
   };
 
-  let Fetch = axios.request(options);
+  let response = axios.request(options);
 
-  return Fetch;
+  return response;
 }

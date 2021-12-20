@@ -5,8 +5,11 @@ import * as C from "./style";
 import { FaClipboardList, FaVolumeDown } from "react-icons/fa";
 import { Speak } from "../../components/Speaker";
 import { Link } from "react-router-dom";
+import { getStorage } from "../../components/storageFunction/set";
 
 function UserBaralho({ match }: any) {
+  
+
   const { thema, currentUserData } = useContext(AppContext);
   const [baralho, setBaralho] = useState({
     _id: "",
@@ -15,8 +18,8 @@ function UserBaralho({ match }: any) {
   });
 
   function BuscarItemPorId() {
-    let filter: any = currentUserData.memorize.find(
-      (x) => x._id == match.params.id
+    let filter: any = getStorage("currentUserData").memorize.find(
+      (x: any) => x._id == match.params.id
     );
     setBaralho(filter);
   }

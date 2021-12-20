@@ -8,10 +8,10 @@ import { FaPlus, FaTemperatureLow } from "react-icons/fa";
 import {
   config,
   editByfecth,
-  editUserData,
   getUserdata,
 } from "../../services/authenticationApi";
-import axios from "axios";
+import { getStorage, setStorage } from "../storageFunction/set";
+
 function MemorizeComponent() {
   const { thema, token } = useContext(AppContext);
   const [currentUser, setCurrentUser] = useState<any>({
@@ -42,21 +42,6 @@ function MemorizeComponent() {
   const [alteracao, setAlteracao] = useState(false);
   const [nomeNewBaralho, setNomeNewBaralho] = useState("");
   const [toogleAddbaralho, setToogleAddbaralho] = useState(false);
-  const [mem, setmen] = useState([]);
-
-  const [updateCurrentuser, setUpdateCurrentUser] = useState(false);
-
-  function getStorage(item: string) {
-    let get: any = localStorage.getItem(item);
-    let parser = JSON.parse(get);
-
-    return parser;
-  }
-
-  function setStorage(item: string, value: any) {
-    let valor = JSON.stringify(value);
-    localStorage.setItem(item, valor);
-  }
 
   async function adcionarnovoBaralhot() {
     if (nomeNewBaralho !== "") {
@@ -70,20 +55,9 @@ function MemorizeComponent() {
 
       setStorage("currentUserData", userStorage);
 
-      const options: any = {
-        method: "PATCH",
-        url: `http://localhost:8081/auth/edit/${userStorage._id}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        data: `{\n"memorize": ${JSON.stringify(userStorage.memorize)}\n}`,
-      };
-
-      axios
-        .request(options)
+      editByfecth(userStorage._id, userStorage.memorize, token)
         .then(function (response) {
-          console.log(response);
+          console.log(response.data);
           setAlteracao(true);
         })
         .catch(function (error) {
@@ -98,8 +72,6 @@ function MemorizeComponent() {
       getUserdata(userStorage._id, config(token)).then((response) => {
         setStorage("currentUserData", response.user);
         setCurrentUser(response.user);
-        console.log(response.user);
-
         setAlteracao(false);
       });
     }
@@ -113,40 +85,20 @@ function MemorizeComponent() {
     let userStorage: any = getStorage("currentUserData");
     setCurrentUser(userStorage);
     console.log(userStorage);
-  }, []);
+  }, [alteracao]);
 
   function handleExcluirBaralho(id: string) {
-    alert(id);
     const userStorage: any = getStorage("currentUserData");
-
-    console.log(id);
-    var cond = { _id: id };
-    // var procura: any = userStorage.memorize.indexOf(cond);
-    console.log(userStorage.memorize);
-
-    // console.log(procura);
 
     userStorage.memorize.forEach((el: any, i: any) => {
       if (el._id === id) {
-        console.log(i);
         userStorage.memorize.splice(i, 1);
       }
     });
 
     setStorage("currentUserData", userStorage);
 
-    const options: any = {
-      method: "PATCH",
-      url: `http://localhost:8081/auth/edit/${userStorage._id}`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      data: `{\n"memorize": ${JSON.stringify(userStorage.memorize)}\n}`,
-    };
-
-    axios
-      .request(options)
+    editByfecth(userStorage._id, userStorage.memorize, token)
       .then(function (response) {
         console.log(response);
         setAlteracao(true);
