@@ -43,7 +43,6 @@ export function editByfecth(id: any, data: any, token: any) {
     method: "PATCH",
     url: `https://authenticatedapi.herokuapp.com/auth/edit/${id}`,
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
     data: `{\n	"memorize": ${data}\n}`,
