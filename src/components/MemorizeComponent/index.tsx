@@ -72,7 +72,7 @@ function MemorizeComponent() {
 
       console.log("locl", userStorage)
 
-      editByfecth(userStorage._id, userStorage, token)
+      editByfecth(userStorage._id, userStorage.memorize, token)
         .then((response) => {
           setAlteracao(true);
           console.log(response);
