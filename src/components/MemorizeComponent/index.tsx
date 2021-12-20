@@ -44,6 +44,8 @@ function MemorizeComponent() {
   const [toogleAddbaralho, setToogleAddbaralho] = useState(false);
   const [mem, setmen] = useState([]);
 
+  const [updateCurrentuser, setUpdateCurrentUser] = useState(false);
+
   function getStorage(item: string) {
     let get: any = localStorage.getItem(item);
     let parser = JSON.parse(get);
@@ -72,7 +74,7 @@ function MemorizeComponent() {
         method: "PATCH",
         url: `http://localhost:8081/auth/edit/${userStorage._id}`,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         data: `{\n"memorize": ${JSON.stringify(userStorage.memorize)}\n}`,
@@ -82,7 +84,7 @@ function MemorizeComponent() {
         .request(options)
         .then(function (response) {
           console.log(response);
-          setAlteracao(true)
+          setAlteracao(true);
         })
         .catch(function (error) {
           console.error(error);
@@ -93,12 +95,13 @@ function MemorizeComponent() {
   useEffect(() => {
     if (alteracao) {
       const userStorage: any = getStorage("currentUserData");
-      getUserdata(userStorage._id, config(token)).then(
-        (response) => {
-          setStorage("currentUserData", response.user);
-          setAlteracao(false);
-        }
-      );
+      getUserdata(userStorage._id, config(token)).then((response) => {
+        setStorage("currentUserData", response.user);
+        setCurrentUser(response.user);
+        console.log(response.user);
+
+        setAlteracao(false);
+      });
     }
   }, [alteracao]);
 
@@ -110,9 +113,48 @@ function MemorizeComponent() {
     let userStorage: any = getStorage("currentUserData");
     setCurrentUser(userStorage);
     console.log(userStorage);
-  }, [alteracao]);
+  }, []);
 
+  function handleExcluirBaralho(id: string) {
+    alert(id);
+    const userStorage: any = getStorage("currentUserData");
 
+    console.log(id);
+    var cond = { _id: id };
+    // var procura: any = userStorage.memorize.indexOf(cond);
+    console.log(userStorage.memorize);
+
+    // console.log(procura);
+
+    userStorage.memorize.forEach((el: any, i: any) => {
+      if (el._id === id) {
+        console.log(i);
+        userStorage.memorize.splice(i, 1);
+      }
+    });
+
+    setStorage("currentUserData", userStorage);
+
+    const options: any = {
+      method: "PATCH",
+      url: `http://localhost:8081/auth/edit/${userStorage._id}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      data: `{\n"memorize": ${JSON.stringify(userStorage.memorize)}\n}`,
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response);
+        setAlteracao(true);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }
 
   return (
     <C.MemorizeContain thema={thema}>
@@ -166,10 +208,16 @@ function MemorizeComponent() {
           titulo={elem.titulo}
           qtdPalavras={elem.items.length}
           hidden={false}
-          // excluirBaralho={excluirBaralho}
+          excluirBaralho={handleExcluirBaralho}
           to={`/userbaralho/${elem._id}`}
         />
       ))}
+
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
 
       <C.AddCardContain thema={thema}>
         <div className="linhar">

@@ -26,9 +26,9 @@ function ItemBaralho({
             <FaPen size={10} />
           </C.CircleContain> */}
 
-          {/* <C.CircleContain size={25} onClick={() => excluirBaralho(id)}>
+          {excluirBaralho ? <C.CircleContain size={25} onClick={() => excluirBaralho(id)}>
             <FaTrash size={10} />
-          </C.CircleContain> */}
+          </C.CircleContain>: ""}
         </C.ItemEdit>
       )}
     </C.ItemContainer>
