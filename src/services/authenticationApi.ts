@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "https://authenticatedapi.herokuapp.com",
+  baseURL: "http://localhost:8081",
   headers: {},
 });
 
@@ -39,13 +39,17 @@ export async function editUserData(id: string, data: any, config: any) {
 }
 
 export function editByfecth(id: any, data: any, token: any) {
-  let Fetch = fetch(`https://authenticatedapi.herokuapp.com/auth/edit/${id}`, {
+  const options: any = {
     method: "PATCH",
+    url: `http://localhost:8081/auth/edit/${id}`,
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: `{\n\t"memorize": ${data}\n}`,
-  });
+    data: `{\n	"memorize": ${data}\n}`,
+  };
+
+  let Fetch = axios.request(options);
 
   return Fetch;
 }
