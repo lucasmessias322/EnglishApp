@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "https://textoingles-api.herokuapp.com/",
+  baseURL: "https://authenticatedapi.herokuapp.com",
   headers: {},
 });
 
@@ -35,7 +35,7 @@ export function getUserdata(userId: string, config: object) {
 export function editByfecth(id: string, data: any, token: string) {
   const options: any = {
     method: "PATCH",
-    url: `https://textoingles-api.herokuapp.com/auth/edit/${id}`,
+    url: `https://authenticatedapi.herokuapp.com/auth/edit/${id}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
