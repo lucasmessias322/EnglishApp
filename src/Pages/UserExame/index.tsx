@@ -13,7 +13,7 @@ function UserExame({ match }: any) {
     items: [
       {
         _id: "",
-        questions: "",
+        question: "",
         response: "",
       },
     ],
@@ -77,13 +77,13 @@ function UserExame({ match }: any) {
         <div
           className="question"
           onClick={() =>
-            Speak(dataBaralho.items[currentBaralho].questions, 0.8)
+            Speak(dataBaralho.items[currentBaralho].question, 0.8)
           }
         >
           <div className="play">
             <FaVolumeDown color="white" size={20} />
           </div>
-          <h2>{dataBaralho.items[currentBaralho].questions}</h2>
+          <h2>{dataBaralho.items[currentBaralho].question}</h2>
         </div>
         <div className="response">
           <div className="play"></div>
@@ -100,7 +100,7 @@ function UserExame({ match }: any) {
               Speak(
                 dataBaralho.items[
                   currentBaralho == 0 ? currentBaralho : currentBaralho - 1
-                ].questions
+                ].question
               )
             }
           />
@@ -117,7 +117,7 @@ function UserExame({ match }: any) {
                   currentBaralho == dataBaralho.items.length - 1
                     ? currentBaralho
                     : currentBaralho + 1
-                ].questions,
+                ].question,
                 0.8
               )
             }

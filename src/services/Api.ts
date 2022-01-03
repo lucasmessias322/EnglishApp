@@ -30,3 +30,4 @@ export function getBaralho(id:any) {
 
   return getmemorize;
 }
+

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const HeaderComponents = styled.div<{thema?:boolean}>`
+export const HeaderComponents = styled.div<{ thema?: boolean }>`
   position: fixed;
   width: 100%;
   z-index: 99;
@@ -117,5 +117,13 @@ export const HeaderComponents = styled.div<{thema?:boolean}>`
       opacity: 0;
       display: none;
     }
+  }
+`;
+
+export const IsUserBaralho = styled.div`
+  display: flex;
+
+  .child {
+    margin-left: 15px;
   }
 `;

@@ -24,14 +24,16 @@ function Baralho({ match }: any) {
       },
     ],
   });
-  console.log(currentUserData);
+
   
 
   useEffect(() => {
     getBaralho(match.params.id).then((baralho) => setBaralho(baralho));
+
+    
     
   }, []);
-
+console.log(dataBaralho);
   let RandomDataItems:any = dataBaralho.items ? dataBaralho.items : ["0"];
   Shuffle(RandomDataItems);
 

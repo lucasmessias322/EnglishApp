@@ -1,23 +1,17 @@
 import React, { useContext, useRef, useState, useEffect } from "react";
 
-import { FaBars, FaSignOutAlt, FaPlus } from "react-icons/fa";
+import {
+  FaBars,
+  FaSignOutAlt,
+  FaPlus,
+  FaEllipsisV,
+  FaClipboardList,
+} from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 import Switch from "react-switch";
 import { AppContext } from "../../Context/Store";
-import { HeaderComponents } from "./style";
-
-// type Props = {
-//   TitleOfText?,
-//   TituloDaPagina?,
-//   children?,
-//   switchButtom?,
-//   MemorizeTable?,
-//   MenuBars? = true,
-//   QtdItems?,
-//   Logo? = true,
-//   BaralhoPage? = false,
-//   adicionarNovoItem?
-// }
+import * as C from "./style";
 
 function Header({
   TitleOfText,
@@ -29,15 +23,18 @@ function Header({
   QtdItems,
   Logo = true,
   BaralhoPage = false,
-  adicionarNovoItem
+  adicionarNovoItem,
+  logoutButton,
+  isUserBaralho,
+  exameOnClick,
+  addnewItem
 }: any) {
   const menu = useRef(null);
   const [switchBtn, setSwitchBtn] = useState({ checked: false });
   const { thema, setThema, logout } = useContext(AppContext);
 
-
   function AtivarMenu() {
-    const Menu:any = menu.current;
+    const Menu: any = menu.current;
     if (Menu.classList == "MenuDisable") {
       Menu.classList.remove("MenuDisable");
     } else {
@@ -45,7 +42,7 @@ function Header({
     }
   }
 
-  function handleChange(checked:any) {
+  function handleChange(checked: any) {
     setSwitchBtn({ checked });
 
     //quando o botao Switch for mudado ele muda tambem no localstorage
@@ -78,7 +75,7 @@ function Header({
 
   return (
     // @ts-ignore
-    <HeaderComponents thema={thema}>
+    <C.HeaderComponents thema={thema}>
       <header>
         <div className="logo-end-Menu">
           {MenuBars ? <FaBars className="Fabars" onClick={AtivarMenu} /> : ""}
@@ -111,7 +108,7 @@ function Header({
 
               {BaralhoPage ? (
                 <FaPlus
-                onClick={() => adicionarNovoItem()}
+                  onClick={() => adicionarNovoItem()}
                   size={20}
                   color="white"
                   style={{ margin: "0 0 5px 15px" }}
@@ -122,7 +119,25 @@ function Header({
             </>
           )}
 
-          <FaSignOutAlt className="OutButton" onClick={() => logout()} />
+          {logoutButton ? (
+            ""
+          ) : (
+            <FaSignOutAlt className="OutButton" onClick={() => logout()} />
+          )}
+
+          {isUserBaralho ? (
+            <C.IsUserBaralho>
+              <FaPlus color="white" size={20} className="child" onClick={addnewItem}/>
+              <Link to={exameOnClick}>
+                <FaClipboardList color="white" size={20} className="child" />
+              </Link>
+              
+
+              <FaEllipsisV color="white" size={20} className="child" />
+            </C.IsUserBaralho>
+          ) : (
+            ""
+          )}
         </div>
       </header>
 
@@ -150,7 +165,7 @@ function Header({
       ) : (
         ""
       )}
-    </HeaderComponents>
+    </C.HeaderComponents>
   );
 }
 
