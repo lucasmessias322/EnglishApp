@@ -24,8 +24,8 @@ const Routes = () => {
         <PrivateRoute path="/memorize" component={Memorize} />
         <PrivateRoute path="/baralho/:id" component={Baralho} />
         <PrivateRoute path="/exame/:id" component={Exame} />
-        <PrivateRoute path="/userbaralho/:id" component={UserBaralho} />
-        <PrivateRoute path="/userexame/:id" component={UserExame} />
+        <PrivateRoute path="/userbaralho/:id/itemId/:itemid" component={UserBaralho} />
+        <PrivateRoute path="/userexame/:id/itemId/:itemid" component={UserExame} />
       </Switch>
     </BrowserRouter>
   )

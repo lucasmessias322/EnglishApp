@@ -161,7 +161,9 @@ function MemorizeComponent() {
           qtdPalavras={elem.items.length}
           hidden={false}
           excluirBaralho={handleExcluirBaralho}
-          to={`/userbaralho/${elem._id}`}
+          to={`/userbaralho/${elem._id}/itemId/${i}`}
+          
+         
         />
       ))}
 

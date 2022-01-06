@@ -8,6 +8,7 @@ const initialState = {
     token:"",
     thema: true,
     texto: 0,
+    current: 0,
     baralhoItems: Object,
     currentUserData: {
         email: "",
@@ -23,6 +24,7 @@ const initialState = {
         }],
         _id: ""
     },
+    setCurrent: Function,
     setCurrentUserData: Function,
     setToken: Function,
     logout: Function,
@@ -38,6 +40,7 @@ function Store(props) {
     const [state, setState] = useState(initialState)
     const [token, setToken] = useStorage('token')
     const [currentUserData, setCurrentUserData] = useStorage('currentUserData')
+    
     function updateState(key, value) {
         setState({
             ...state,
@@ -54,13 +57,6 @@ function Store(props) {
     }
 
 
-    // useEffect(() => {
-    //     if(currentUserData !== null){
-    //        getUserdata(currentUserData._id, config(token)).then(response => setCurrentUserData(response))
-           
-    //     }
-    // },[currentUserData])
-
 
     return (
         <AppContext.Provider value={{
@@ -68,6 +64,7 @@ function Store(props) {
             number: state.number,
             thema: state.thema,
             texto: state.texto,
+            current: state.current,
             baralhoItems: state.baralhoItems,
             setToken,
             currentUserData,
@@ -76,7 +73,8 @@ function Store(props) {
             setThema:thema => updateState('thema', thema),
             setNumber:number => updateState('number', number),
             setTexto: texto => updateState('texto', texto),
-            setBaralhoItems: baralhoItems =>('baralhoItems',baralhoItems)
+            setBaralhoItems: baralhoItems =>('baralhoItems',baralhoItems),
+            setCurrent: current =>('current', current)
         }}>
 
             {props.children}

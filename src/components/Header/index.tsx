@@ -27,7 +27,8 @@ function Header({
   logoutButton,
   isUserBaralho,
   exameOnClick,
-  addnewItem
+  addnewItem,
+  baralholength
 }: any) {
   const menu = useRef(null);
   const [switchBtn, setSwitchBtn] = useState({ checked: false });
@@ -128,9 +129,11 @@ function Header({
           {isUserBaralho ? (
             <C.IsUserBaralho>
               <FaPlus color="white" size={20} className="child" onClick={addnewItem}/>
-              <Link to={exameOnClick}>
+
+
+             {baralholength > 0 ? <Link to={exameOnClick}>
                 <FaClipboardList color="white" size={20} className="child" />
-              </Link>
+              </Link> : ""}
               
 
               <FaEllipsisV color="white" size={20} className="child" />

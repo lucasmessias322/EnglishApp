@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import * as C from "./style";
 import { FaStar, FaPen, FaTrash } from "react-icons/fa";
+import { AppContext } from "../../Context/Store";
 
 function ItemBaralho({
   thema,
@@ -11,10 +12,13 @@ function ItemBaralho({
   to,
   hidden = true,
   excluirBaralho,
+ 
+ 
 }: any) {
+  const {setCurrent} = useContext(AppContext)
   return (
-    <C.ItemContainer thema={thema}>
-      <Link to={to}>
+    <C.ItemContainer thema={thema} >
+      <Link to={to} >
         <div>
           <h3>{titulo} -</h3>
           <span>{qtdPalavras} Palavras</span>

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://localhost:8081",
+  baseURL: "https://authenticatedapi.herokuapp.com",
   headers: {},
 });
 
@@ -35,7 +35,7 @@ export function getUserdata(userId: string, config: object) {
 export function editByfecth(id: string, data: any, token: string) {
   const options: any = {
     method: "PATCH",
-    url: `http://localhost:8081/auth/edit/${id}`,
+    url: `https://authenticatedapi.herokuapp.com/auth/edit/${id}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -48,4 +48,20 @@ export function editByfecth(id: string, data: any, token: string) {
   return response;
 }
 
+export function getUserMemorizeItemByIndex(
+  userId: string,
+  index: number,
+  token: string
+) {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    }
+  };
+  let get = api.get(`/memorize/${userId}/item/${index}`, config)
+  .then(res => res.data)
+  .catch(error => console.log(error))
 
+  return get
+}
