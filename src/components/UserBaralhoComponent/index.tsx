@@ -30,25 +30,19 @@ function UserBaralhoComponent({ match }: Props) {
   const [update, setupdate] = useState(false);
 
   const [current, setCurrent] = useState(match.params.itemid)
-
-
   const [baralho, setBaralho] = useState(getStorage("currentUserData").memorize[current]);
 
   useEffect(() => {
     if (update) {
       const userStorage: any = getStorage("currentUserData");
       getUserMemorizeItemByIndex(userStorage._id, current, token).then(res => {
-        
+
         setBaralho(getStorage("currentUserData").memorize[current])
         setupdate(false)
       })
     }
 
   }, [update]);
-
-  // useEffect(() => {
-  //   setupdate(true);
-  // }, [baralho]);
 
   function closeInputAddCard() {
     setToogleAddbaralho(false);
@@ -92,9 +86,10 @@ function UserBaralhoComponent({ match }: Props) {
 
     setStorage("currentUserData", userStorage);
     setupdate(true);
-  
+
     console.log(id);
   }
+
 
   return (
     <C.BaralhoContain thema={thema}>
@@ -129,10 +124,10 @@ function UserBaralhoComponent({ match }: Props) {
       </AddinputCard>
       <br /> <br /> <br /> <br /> <br /> <br />
 
-      <C.Table>
+      <C.Table thema={thema}>
         {baralho.items.map((elem: any, i: any) => (
           <tr key={i}>
-            <td onClick={() => Speak(elem.question, 0.8)}>
+            <td onClick={() => Speak(elem.question)}>
               <div className="container">
                 <C.RoundButton thema={thema}>
                   <FaVolumeDown

@@ -27,6 +27,17 @@ export const response = styled.div<{ thema?: boolean }>`
   display: flex;
   color: ${(props) => (props.thema ? "#000" : "#FFF")};
 
+  .target{
+    max-width: 100px;
+    margin: 0 auto;
+    background-color: ${(props) => (props.thema ? "#FF006B" : "#0074ff")};
+    height: 30px;
+    weight: 100%;
+    filter: blur(8px);
+  -webkit-filter: blur(8px);
+    
+  }
+
   .play {
     width: 30px;
     height: 30px;
@@ -42,6 +53,7 @@ export const response = styled.div<{ thema?: boolean }>`
     font-size: 20px;
     width: 100%;
     text-align: center;
+    
   }
 `;
 

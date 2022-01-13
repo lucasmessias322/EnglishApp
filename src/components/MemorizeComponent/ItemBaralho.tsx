@@ -26,11 +26,11 @@ function ItemBaralho({
       </Link>
       {hidden ? "": (
         <C.ItemEdit >
-           {/* <C.CircleContain size={25}>
+           {/* <C.CircleContain size={25} thema={thema}>
             <FaPen size={10} />
           </C.CircleContain> */}
 
-          {excluirBaralho ? <C.CircleContain size={25} onClick={() => excluirBaralho(id)}>
+          {excluirBaralho ? <C.CircleContain thema={thema} size={25} onClick={() => excluirBaralho(id)}>
             <FaTrash size={10} />
           </C.CircleContain>: ""}
         </C.ItemEdit>

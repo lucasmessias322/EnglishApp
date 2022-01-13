@@ -1,14 +1,17 @@
-import React from 'react';
-import Store from './Context/Store';
+import React, { useContext } from 'react';
+import Store, { AppContext } from './Context/Store';
 import Routes from './routes';
 import 'swiper/swiper.scss';
 
 function App() {
+
   return (
     <Store>
+      
       <Routes />
+     
     </Store>
-    
+
   );
 }
 

@@ -14,15 +14,21 @@ function Register() {
     password: "",
     confirmpassword: "",
   });
+  const [loading, setLoading] = useState(false)
 
   function onSubmit(event: SyntheticEvent) {
     event.preventDefault();
+    setLoading(true)
 
     postRegister(values)
       .then((response) => {
         setResponse(response.data);
       })
-      .catch((error) => toast("Erro ao se registrar: " + error));
+      .catch((error) => {
+        setLoading(false)
+        toast("Erro ao se registrar: " + error)
+        
+      });
   }
 
   useEffect(() => {
@@ -79,7 +85,7 @@ function Register() {
             />
           </Input>
 
-          <C.ButtonSubmit>Acessar</C.ButtonSubmit>
+          <C.ButtonSubmit>{loading ? "Carregando...": "Registrar-me"}</C.ButtonSubmit>
         </form>
       </C.FormContainer>
       <C.H4>

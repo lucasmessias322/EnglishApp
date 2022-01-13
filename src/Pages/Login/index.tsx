@@ -11,13 +11,17 @@ function Login() {
   const { token, setToken, setCurrentUserData } = useContext(AppContext);
   const history = useHistory();
 
+  const [loading, setLoading] = useState(false)
+
   async function onSubmit(event:SyntheticEvent) {
     event.preventDefault();
 
     postLogin(values).then((response) => {
       setToken(response.data.token);
       setCurrentUserData(response.data.currentUser);
-    });
+    }).catch(error => {
+      setLoading(false)
+    })
 
     if (token) {
       setToken(token);
@@ -57,7 +61,7 @@ function Login() {
               required
             />
           </Input>
-          <C.ButtonSubmit>Acessar</C.ButtonSubmit>
+          <C.ButtonSubmit>{loading ? "Carregando...":"Acessar"}</C.ButtonSubmit>
         </form>
       </C.FormContainer>
       <C.H4>

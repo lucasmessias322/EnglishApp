@@ -25,6 +25,7 @@
     "sass": "^1.44.0",
     "styled-components": "^5.3.3",
     "swiper": "^6.8.1",
+    "text-to-speech-js": "^1.1.10",
     "typescript": "^4.5.2",
     "uuid": "^8.3.2",
     "web-vitals": "^1.1.2"

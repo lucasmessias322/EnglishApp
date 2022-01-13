@@ -9,7 +9,7 @@ import { FaChevronLeft, FaChevronRight, FaVolumeDown } from "react-icons/fa";
 import { AppContext } from "../../Context/Store";
 
 // helpers
-import { getStorage, setStorage } from "../storageFunction/set";
+import { getStorage } from "../storageFunction/set";
 import { Speak } from "../Speaker";
 
 // types
@@ -17,8 +17,8 @@ type Props = {
   match: any
 }
 
-function UserExameComponent({ match}: Props) {
-  const { thema, currentUserData } = useContext(AppContext);
+function UserExameComponent({ match }: Props) {
+  const { thema } = useContext(AppContext);
 
 
   const [currentBaralho, setCurrentBaralho] = useState(0);
@@ -28,7 +28,7 @@ function UserExameComponent({ match}: Props) {
 
   const [current, setCurrent] = useState(match.params.itemid)
   const [dataBaralho, setBaralho] = useState(getStorage("currentUserData").memorize[current]);
-  
+
   useEffect(() => {
     if (toogle) {
       setNextBaralho(() => {
@@ -59,8 +59,6 @@ function UserExameComponent({ match}: Props) {
     }
   }
 
-  
-
   return (
     <C.ExameContain thema={thema}>
       <Header
@@ -79,12 +77,13 @@ function UserExameComponent({ match}: Props) {
           <h2>{dataBaralho.items[currentBaralho].question}</h2>
         </C.question>
 
-        <C.response>
+        <C.response thema={thema}>
           <div className="play"></div>
           <h2>
-            {ocultarResposta ? "" : dataBaralho.items[currentBaralho].response}
+            {ocultarResposta ? <div className="target"></div> : dataBaralho.items[currentBaralho].response}
           </h2>
         </C.response>
+
       </C.questionAndResponseCard>
 
       <C.controls thema={thema}>

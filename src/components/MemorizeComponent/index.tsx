@@ -175,7 +175,7 @@ function MemorizeComponent() {
 
       <C.AddCardContain thema={thema}>
         <div className="linhar">
-          <C.AddCard size={50} onClick={() => setToogleAddbaralho(true)}>
+          <C.AddCard size={50} onClick={() => setToogleAddbaralho(true)} thema={thema}>
             <FaPlus size={25} color="white" />
           </C.AddCard>
         </div>

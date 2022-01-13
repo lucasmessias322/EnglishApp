@@ -99,7 +99,7 @@ export const CardCriarBaralho = styled.div<{ thema?: boolean }>`
 
 export const Table = styled.table<{ thema?: boolean }>`
   width: 100%;
-  color: ${(props) => (props.thema ? "#000" : "#FFF")};
+  color: ${(props) => (props.thema ? "black" : "white")};
   border-collapse: collapse;
 
   tr {
@@ -117,6 +117,8 @@ export const Table = styled.table<{ thema?: boolean }>`
 
         span {
           text-align: center;
+          
+          
         }
 
         .play {
