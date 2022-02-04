@@ -25,14 +25,14 @@ function Login() {
 
     if (token) {
       setToken(token);
-      return history.push("/dashboard");
+      return history.push("#/dashboard");
     }
     setValues({ email: "", password: "" });
   }
 
   useEffect(() => {
     if (token) {
-      history.push("/dashboard");
+      history.push("#/dashboard");
     }
   }, [token]);
 
@@ -67,7 +67,7 @@ function Login() {
       <C.H4>
         Não possui uma conta?{" "}
         <span>
-          <Link to="/register">REGISTRE-SE</Link>
+          <Link to="#/register">REGISTRE-SE</Link>
         </span>
       </C.H4>
     </C.Container>
