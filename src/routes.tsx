@@ -22,15 +22,15 @@ const Routes = () => {
     <meta name="apple-mobile-web-app-status-bar-style" content={thema ? "#FF006B" : "#0053B6"} />
     <meta name="msapplication-navbutton-color" content={thema ? "#FF006B" : "#0053B6"} />
       <Switch>
-        <Route exact path="/#/register" component={Register}></Route>
+        <Route exact path="/register" component={Register}></Route>
         <Route exact path="/" component={Login}></Route>
-        <PrivateRoute path="/#/dashboard" component={DashBoard} />
-        <PrivateRoute path="/#/textos" component={Textos} />
-        <PrivateRoute path="/#/memorize" component={Memorize} />
-        <PrivateRoute path="/#/baralho/:id" component={Baralho} />
-        <PrivateRoute path="/#/exame/:id" component={Exame} />
-        <PrivateRoute path="/#/userbaralho/:id/itemId/:itemid" component={UserBaralho} />
-        <PrivateRoute path="/#/userexame/:id/itemId/:itemid" component={UserExame} />
+        <PrivateRoute path="/dashboard" component={DashBoard} />
+        <PrivateRoute path="/textos" component={Textos} />
+        <PrivateRoute path="/memorize" component={Memorize} />
+        <PrivateRoute path="/baralho/:id" component={Baralho} />
+        <PrivateRoute path="/exame/:id" component={Exame} />
+        <PrivateRoute path="/userbaralho/:id/itemId/:itemid" component={UserBaralho} />
+        <PrivateRoute path="/userexame/:id/itemId/:itemid" component={UserExame} />
       </Switch>
     </BrowserRouter>
   )
