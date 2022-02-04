@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 
-import {Switch, BrowserRouter, Route } from "react-router-dom";
+import {Switch, BrowserRouter, Route} from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 
 import Register from "./Pages/Register";
@@ -22,7 +22,7 @@ const Routes = () => {
     <meta name="apple-mobile-web-app-status-bar-style" content={thema ? "#FF006B" : "#0053B6"} />
     <meta name="msapplication-navbutton-color" content={thema ? "#FF006B" : "#0053B6"} />
       <Switch>
-        <Route exact path="/register" component={Register}></Route>
+        <Route  exact path="/register" component={Register}></Route>
         <Route exact path="/" component={Login}></Route>
         <PrivateRoute path="/dashboard" component={DashBoard} />
         <PrivateRoute path="/textos" component={Textos} />

@@ -7,9 +7,7 @@ function App() {
 
   return (
     <Store>
-      
       <Routes />
-     
     </Store>
 
   );
