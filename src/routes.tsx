@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 
-import {Switch, BrowserRouter, Route} from "react-router-dom";
+import {HashRouter ,Switch, BrowserRouter, Route} from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 
 import Register from "./Pages/Register";
@@ -17,7 +17,7 @@ import { AppContext } from "./Context/Store";
 const Routes = () => {
   const { thema } = useContext(AppContext)
   return (
-    <BrowserRouter>
+    <HashRouter basename="/">
     <meta name="theme-color" content={thema ? "#FF006B" : "#0053B6"} />
     <meta name="apple-mobile-web-app-status-bar-style" content={thema ? "#FF006B" : "#0053B6"} />
     <meta name="msapplication-navbutton-color" content={thema ? "#FF006B" : "#0053B6"} />
@@ -32,7 +32,7 @@ const Routes = () => {
         <PrivateRoute path="/userbaralho/:id/itemId/:itemid" component={UserBaralho} />
         <PrivateRoute path="/userexame/:id/itemId/:itemid" component={UserExame} />
       </Switch>
-    </BrowserRouter>
+    </HashRouter>
   )
 };
 

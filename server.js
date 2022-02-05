@@ -1,20 +1,18 @@
-const express = require("express");
+const express = require('express');
+const path = require('path');
+require('dotenv/config');
 
 const app = express();
 
-const path = require("path");
+app.use(express.static(path.join(__dirname, './build')));
+app.set('port', process.env.PORT || 3000);
 
-const port = process.env.PORT || 3000;
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("build"));
-  app.get("*", (req, res) => {
-    req.sendFile(path.resolve(__dirname, "build", "index.html"));
-  });
-}
-
-app.listen(port, (err) => {
-  if (err) {return console.log(err)};
-
-  console.log("Server running on port: " + port);
+const server = app.listen(app.get('port'), function(err) {
+    console.log("server.js >>>")
+    console.log('Caderneta da Criança listening on port ', server.address().port);
+    console.log("Server on URL "+process.env.REACT_APP_API_URL)
+    if (err) {
+        console.log("err >>>")
+        console.log(err)
+    }
 });
