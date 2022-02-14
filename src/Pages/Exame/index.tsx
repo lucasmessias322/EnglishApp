@@ -27,12 +27,18 @@ function Exame({ match }: any) {
 
   useEffect(() => {
     getBaralho(match.params.id).then((baralho) => {
-      setBaralho(baralho);
-      
+      setBaralho(baralho)
+      setToogle(true);
     });
+
     
-    setToogle(true);
   }, []);
+
+  useEffect(() => {
+    if (dataBaralho.items.length > 0) {
+      Shuffle(dataBaralho.items)
+    }
+  }, [dataBaralho])
 
 
   useEffect(() => {
