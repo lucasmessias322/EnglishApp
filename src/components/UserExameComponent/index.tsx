@@ -9,37 +9,48 @@ import { FaChevronLeft, FaChevronRight, FaVolumeDown } from "react-icons/fa";
 import { AppContext } from "../../Context/Store";
 
 // helpers
-import { getStorage } from "../storageFunction/set";
+import { getStorage, setStorage } from '../storageFunction/set';
 import { Speak } from "../Speaker";
 
+import Shuffle from '../RandomArray'
 // types
 type Props = {
   match: any
 }
 
 function UserExameComponent({ match }: Props) {
-  const { thema } = useContext(AppContext);
+  const { thema} = useContext(AppContext);
 
 
   const [currentBaralho, setCurrentBaralho] = useState(0);
   const [nextBaralho, setNextBaralho] = useState(currentBaralho + 1);
-  const [toogle, setToogle] = useState(false);
   const [ocultarResposta, setOcultarResposta] = useState(true);
 
   const [current, setCurrent] = useState(match.params.itemid)
   const [dataBaralho, setBaralho] = useState(getStorage("currentUserData").memorize[current]);
 
+  const [toogle, setToogle] = useState(false)
+
   useEffect(() => {
-    if (toogle) {
-      setNextBaralho(() => {
-        if (currentBaralho + 1 > dataBaralho.items.length - 1) {
-          return 0;
-        } else {
-          return currentBaralho + 1;
-        }
-      });
+  
+    if(!toogle){
+      Shuffle(dataBaralho.items)
+      setToogle(true)
     }
-  }, [toogle, currentBaralho]);
+      
+
+  }, [])
+
+  useEffect(() => {
+    setNextBaralho(() => {
+      if (currentBaralho + 1 > dataBaralho.items.length - 1) {
+        return 0;
+      } else {
+        return currentBaralho + 1;
+      }
+    });
+
+  }, [currentBaralho]);
 
   function Forward() {
     if (currentBaralho >= dataBaralho.items.length - 1) {
@@ -74,7 +85,7 @@ function UserExameComponent({ match }: Props) {
           <C.playButton thema={thema}>
             <FaVolumeDown color="white" size={20} />
           </C.playButton>
-          <h2>{dataBaralho.items[currentBaralho].question}</h2>
+          <h2>{toogle ? dataBaralho.items[currentBaralho].question: "carregando.."}</h2>
         </C.question>
 
         <C.response thema={thema}>
