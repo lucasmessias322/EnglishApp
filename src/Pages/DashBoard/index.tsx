@@ -1,6 +1,6 @@
 import React, { useContext, useState} from 'react'
 import { AppContext } from '../../Context/Store'
-import { FaBrain, FaTextHeight, FaAngleRight } from "react-icons/fa";
+import { FaBrain, FaTextHeight} from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import * as C from './style'
 import Header from '../../components/Header';
@@ -16,7 +16,7 @@ function DashBoard() {
       <C.SectionOne thema={thema}>
         <C.LogoAndImageLogo thema={thema}>
           <img src="/assets/logo.png" alt="" />
-          <h1>Inglish Plus<span>+</span></h1>
+          <h1>English Plus+<span>+</span></h1>
           <p>Bem vindo de volta {currentUserData.name}, oque vocé quer fazer?</p>
         </C.LogoAndImageLogo>
       </C.SectionOne>
@@ -54,7 +54,7 @@ function DashBoard() {
         </p>
       </C.WhyLearning>
       <footer>
-        <span>Todos os direitos reservados a Inglish Plus+</span>
+        <span>Todos os direitos reservados a English Plus+</span>
       </footer> 
     </C.DashboardContainer>
   )
