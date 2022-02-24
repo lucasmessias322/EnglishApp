@@ -1,22 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import * as C from "./style";
 
-function AddinputCard({
-  title,
-  children,
-  toogleAddbaralho,
+export default function EditionCard({
+  editItem,
   cancel,
-  ok,
   setWordInEnglish,
   WordInEnglish,
   setWordInProtuguese,
-  WordInProtuguese
-}: any) {
+  WordInProtuguese,
+  ok,
+  deleteItem,
+}) {
   return (
-    <C.CriarBaralhoContain toogleAddbaralho={toogleAddbaralho}>
-      <C.CardCriarBaralho>
+    <C.EditionCardContainer editItem={editItem}>
+      <C.EditionCard>
         <div className="contain">
-          <h3>{title}</h3>
+          <h3>Editar item</h3>
           <div className="inputContain">
             <input
               type="text"
@@ -26,19 +25,22 @@ function AddinputCard({
             />
             <input
               type="text"
-              placeholder="Palavra em portugues..."
+              placeholder="Palavra em ingles..."
               value={WordInProtuguese}
               onChange={(e) => setWordInProtuguese(e.target.value)}
             />
           </div>
           <div className="actions">
-            <h5 onClick={cancel}>CANCELAR</h5>
-            <h5 onClick={ok}>OK</h5>
+            <h5 id="delete" onClick={deleteItem}>
+              DELETAR
+            </h5>
+            <div>
+              <h5 onClick={cancel}>CANCELAR</h5>
+              <h5 onClick={() => ok()}>OK</h5>
+            </div>
           </div>
         </div>
-      </C.CardCriarBaralho>
-    </C.CriarBaralhoContain>
+      </C.EditionCard>
+    </C.EditionCardContainer>
   );
 }
-
-export default AddinputCard;

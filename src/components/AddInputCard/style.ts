@@ -56,8 +56,6 @@ export const CardCriarBaralho = styled.div`
   .contain {
     width: 100%;
     color: white;
-    h3 {
-    }
 
     .inputContain {
       margin: 40px 0px;

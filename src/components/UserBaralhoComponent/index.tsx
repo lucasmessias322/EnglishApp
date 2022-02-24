@@ -1,25 +1,29 @@
-import React, { useContext, useEffect, useState } from 'react'
-import * as C from './style'
+import React, { useContext, useEffect, useState } from "react";
+import * as C from "./style";
 
 // context
-import { AppContext } from '../../Context/Store'
-import Header from '../Header';
+import { AppContext } from "../../Context/Store";
+import Header from "../Header";
 
 //helpers
-import { getStorage, setStorage } from '../storageFunction/set';
+import { getStorage, setStorage } from "../storageFunction/set";
 import { v4 as uuidv4 } from "uuid";
 
 // components
-import AddinputCard from '../AddInputCard';
-import { editByfecth, getUserdata, getUserMemorizeItemByIndex } from '../../services/authenticationApi';
-import { FaVolumeDown, FaTrash } from "react-icons/fa";
-import { Speak } from '../Speaker';
+import AddinputCard from "../AddInputCard";
+import {
+  editByfecth,
+  getUserMemorizeItemByIndex,
+} from "../../services/authenticationApi";
+import EditionCard from "./EditionCard";
 
+import ResponseItem from "./ResponseItem";
+import QuestionItem from "./QuestionItem";
 
 // types
 type Props = {
-  match: any,
-}
+  match: any;
+};
 
 function UserBaralhoComponent({ match }: Props) {
   const { thema, token } = useContext(AppContext);
@@ -28,25 +32,26 @@ function UserBaralhoComponent({ match }: Props) {
   const [WordInEnglish, setWordInEnglish] = useState("");
   const [WordInProtuguese, setWordInProtuguese] = useState("");
   const [update, setupdate] = useState(false);
+  const [editItem, setEditItem] = useState(false);
 
-  const [current, setCurrent] = useState(match.params.itemid)
-  const [baralho, setBaralho] = useState(getStorage("currentUserData").memorize[current]);
+  const [current, setCurrent] = useState(match.params.itemid);
+  const [baralho, setBaralho] = useState(
+    getStorage("currentUserData").memorize[current]
+  );
+
+  const [itemId, setItemId] = useState("");
 
   useEffect(() => {
     if (update) {
       const userStorage: any = getStorage("currentUserData");
-      getUserMemorizeItemByIndex(userStorage._id, current, token).then(res => {
-
-        setBaralho(getStorage("currentUserData").memorize[current])
-        setupdate(false)
-      })
+      getUserMemorizeItemByIndex(userStorage._id, current, token).then(
+        (res) => {
+          setBaralho(getStorage("currentUserData").memorize[current]);
+          setupdate(false);
+        }
+      );
     }
-
   }, [update]);
-
-  function closeInputAddCard() {
-    setToogleAddbaralho(false);
-  }
 
   function saveitem() {
     if (WordInEnglish !== "" && WordInProtuguese !== "") {
@@ -58,7 +63,6 @@ function UserBaralhoComponent({ match }: Props) {
 
       const userStorage: any = getStorage("currentUserData");
       userStorage.memorize[current].items.push(items);
-      console.log(userStorage.memorize[current]);
 
       setStorage("currentUserData", userStorage);
 
@@ -75,21 +79,60 @@ function UserBaralhoComponent({ match }: Props) {
     }
   }
 
-  function deleteItem(id: number) {
+  function saveEditItem(id: string) {
+    if (WordInEnglish !== "" && WordInProtuguese !== "") {
+      let item: any = {
+        question: WordInEnglish,
+        response: WordInProtuguese,
+      };
+
+      const userStorage: any = getStorage("currentUserData");
+      let items = userStorage.memorize[current].items;
+
+      items.forEach(function (el: any, i: any) {
+        if (el._id === itemId) {
+          // achou!
+          items[i].question = WordInEnglish;
+          items[i].response = WordInProtuguese;
+          console.log(items);
+
+          setStorage("currentUserData", userStorage);
+          editByfecth(userStorage._id, userStorage.memorize, token)
+            .then((res) => {
+              setEditItem(false);
+              setupdate(true);
+              setWordInEnglish("");
+              setWordInProtuguese("");
+            })
+            .catch(function (error) {
+              console.error(error);
+            });
+        }
+      });
+    }
+  }
+
+  function deleteItem() {
     const userStorage: any = getStorage("currentUserData");
 
     userStorage.memorize[current].items.forEach((el: any, i: any) => {
-      if (el._id === id) {
+      if (el._id === itemId) {
         userStorage.memorize[current].items.splice(i, 1);
+        setStorage("currentUserData", userStorage);
+
+        editByfecth(userStorage._id, userStorage.memorize, token)
+          .then((res) => {
+            setEditItem(false);
+            setupdate(true);
+            setWordInEnglish("");
+            setWordInProtuguese("");
+          })
+          .catch(function (error) {
+            console.error(error);
+          });
       }
     });
-
-    setStorage("currentUserData", userStorage);
-    setupdate(true);
-
-    console.log(id);
   }
-
 
   return (
     <C.BaralhoContain thema={thema}>
@@ -106,60 +149,42 @@ function UserBaralhoComponent({ match }: Props) {
       <AddinputCard
         title="Add new Item"
         toogleAddbaralho={toogleAddbaralho}
-        cancel={() => closeInputAddCard()}
+        cancel={() => setToogleAddbaralho((e) => !e)}
         ok={() => saveitem()}
-      >
-        <input
-          type="text"
-          placeholder="Palavra em ingles..."
-          value={WordInEnglish}
-          onChange={(e) => setWordInEnglish(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Palavra em portugues..."
-          value={WordInProtuguese}
-          onChange={(e) => setWordInProtuguese(e.target.value)}
-        />
-      </AddinputCard>
+        setWordInEnglish={setWordInEnglish}
+        WordInEnglish={WordInEnglish}
+        setWordInProtuguese={setWordInProtuguese}
+        WordInProtuguese={WordInProtuguese}
+      />
+      
+      <EditionCard
+        editItem={editItem}
+        cancel={() => setEditItem((e) => !e)}
+        ok={saveEditItem}
+        deleteItem={deleteItem}
+        setWordInEnglish={setWordInEnglish}
+        WordInEnglish={WordInEnglish}
+        setWordInProtuguese={setWordInProtuguese}
+        WordInProtuguese={WordInProtuguese}
+      />
       <br /> <br /> <br /> <br /> <br /> <br />
-
       <C.Table thema={thema}>
         {baralho.items.map((elem: any, i: any) => (
-          <tr key={i}>
-            <td onClick={() => Speak(elem.question)}>
-              <div className="container">
-                <C.RoundButton thema={thema}>
-                  <FaVolumeDown
-                    className="volumeDow-icon"
-                    color="white"
-                    size={15}
-                  />
-                </C.RoundButton>
+          <tr key={i} id={i}>
+            <QuestionItem thema={thema} question={elem.question} />
 
-                <span>{elem.question}</span>
-              </div>
-            </td>
-
-            <td>
-              <div className="resposonseContainer">
-                <span className="response">{elem.response}</span>
-                <C.RoundButton thema={thema}>
-                  <FaTrash
-                    color="white"
-                    size={15}
-                    onClick={() => deleteItem(elem._id)}
-                  />
-                </C.RoundButton>
-              </div>
-            </td>
-
+            <ResponseItem
+              thema={thema}
+              response={elem.response}
+              editItem={() => setEditItem((e) => !e)}
+              setItemId={setItemId}
+              id={elem._id}
+            />
           </tr>
         ))}
       </C.Table>
-
     </C.BaralhoContain>
-  )
+  );
 }
 
-export default UserBaralhoComponent
+export default UserBaralhoComponent;
