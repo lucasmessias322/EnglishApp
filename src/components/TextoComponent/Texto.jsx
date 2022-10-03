@@ -5,18 +5,21 @@ import * as C from "./style";
 
 function Texto({ thema, DataTextoAudio }) {
   const { number } = useContext(AuthContext);
-  const calc = (number - 1);
-  const dataLen = (DataTextoAudio.length - 1);
+  const calc = number - 1;
+  const dataLen = DataTextoAudio.length - 1;
 
   useEffect(() => {
     let paragrafo = document.getElementById(`${number}`);
 
     if (number == paragrafo.id) {
       paragrafo.classList.add("SelectedP");
-    } else if (number >= 1) {
+    }
+
+    if (number >= 1) {
       let paragrafo1 = document.getElementById(`${calc}`);
       paragrafo1.classList.remove("SelectedP");
-    } else if (number === 0) {
+    }
+    if (number === 0) {
       let paragrafo1 = document.getElementById(`${dataLen}`);
       paragrafo1.classList.remove("SelectedP");
     }
