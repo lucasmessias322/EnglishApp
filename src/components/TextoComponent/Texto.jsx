@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
+// import { Swiper, SwiperSlide } from "swiper/react";
 import { AuthContext } from "../../Context/AuthContext";
 import * as C from "./style";
 
@@ -33,7 +33,13 @@ function Texto({ thema, DataTextoAudio }) {
       <br />
       <br />
       <br />
-      <Swiper spaceBetween={0} slidesPerView={1}>
+      {DataTextoAudio.map((item, i) => (
+        <div key={i}>
+          <p id={i}>{item.AudioText}</p>
+          <br />
+        </div>
+      ))}
+      {/* <Swiper spaceBetween={0} slidesPerView={1}>
         <SwiperSlide>
           {DataTextoAudio.map((item, i) => (
             <div key={i}>
@@ -51,7 +57,7 @@ function Texto({ thema, DataTextoAudio }) {
             </div>
           ))}
         </SwiperSlide>
-      </Swiper>
+      </Swiper> */}
     </C.TextoContainer>
   );
 }
