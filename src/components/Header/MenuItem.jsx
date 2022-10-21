@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-
+import { AuthContext } from "../../Context/AuthContext";
 function MenuItem({ index, TitleMenu, setCurrentTexto }) {
-  //   const { setCurrentTexto } = useContext(AppContext);
+  const { setNumber, setTexto } = useContext(AuthContext);
 
   return (
-    <li onClick={() => setCurrentTexto(index)}>
+    <li onClick={() => setTexto(index)}>
       <span>
         <svg
           stroke="currentColor"

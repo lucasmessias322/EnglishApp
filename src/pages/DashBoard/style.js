@@ -4,7 +4,7 @@ export const DashboardContainer = styled.div`
   min-height: 100vh;
   footer {
     padding: 15px 10px;
-    background-color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
+    background-color: ${(props) => (props.thema ? "#D50059" : "#0053B6")};
 
     span {
       color: white;
@@ -47,7 +47,7 @@ export const LogoAndImageLogo = styled.div`
     font-size: 35px;
 
     span {
-      color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
+      color: ${(props) => (props.thema ? "#D50059" : "#0053B6")};
     }
   }
   p {
@@ -71,7 +71,7 @@ export const ThingsToDo = styled.div`
   text-align: center;
 
   h3 {
-    color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
+    color: ${(props) => (props.thema ? "#D50059" : "#0053B6")};
   }
 
   div.CardsContain {
@@ -97,7 +97,7 @@ export const Card = styled.div`
   }
 
   padding: 10px;
-  background-color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
+  background-color: ${(props) => (props.thema ? "#D50059" : "#0053B6")};
   cursor: pointer;
 
   a {
@@ -128,7 +128,7 @@ export const WhyLearning = styled.div`
 
   h3 {
     font-size: 18px;
-    color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
+    color: ${(props) => (props.thema ? "#D50059" : "#0053B6")};
   }
 
   p {

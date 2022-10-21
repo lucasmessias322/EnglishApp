@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import useStorage from "../utils/useStorage";
+import { RemoveStorage } from "../utils/storageFunctions";
 
 const initialState = {
   number: 0,
@@ -7,6 +8,7 @@ const initialState = {
   thema: true,
   texto: 0,
   current: 0,
+  currentUserData: Object,
   setCurrent: Function,
   setCurrentUserData: Function,
   setToken: Function,
@@ -30,7 +32,12 @@ export default function AuthProvider(props) {
     });
   }
 
-  function logout() {}
+  function logout() {
+    setToken("");
+    setCurrentUserData("");
+    RemoveStorage("token");
+    RemoveStorage("currentUserData");
+  }
 
   return (
     <AuthContext.Provider
@@ -41,6 +48,9 @@ export default function AuthProvider(props) {
         texto: state.texto,
         current: state.current,
         logout,
+        setToken,
+        setCurrentUserData,
+        currentUserData,
         setThema: (thema) => updateState("thema", thema),
         setNumber: (number) => updateState("number", number),
         setTexto: (texto) => updateState("texto", texto),

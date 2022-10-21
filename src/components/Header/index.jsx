@@ -12,14 +12,8 @@ export default function Header({
   TituloDaPagina,
   switchButtom,
   MenuBars = false,
-  QtdItems,
-  BaralhoPage = false,
-  adicionarNovoItem,
   logoutButton,
-  isUserBaralho,
-  exameOnClick,
-  addnewItem,
-  baralholength,
+  LoginSigninBtn,
   DataTexto,
   setCurrentTexto,
 }) {
@@ -71,90 +65,51 @@ export default function Header({
     <C.HeaderContainer thema={thema}>
       <C.Header thema={thema}>
         <C.LeftSide>
-          {MenuBars ? (
-            <Fa.FaBars className="Fabars" onClick={AtivarMenu} />
-          ) : (
-            ""
-          )}
-          <h3>
-            {TituloDaPagina
-              ? `${TituloDaPagina} - ${QtdItems} palavras `
-              : "English Plus+"}
-          </h3>
+          {MenuBars && <Fa.FaBars className="Fabars" onClick={AtivarMenu} />}
+          <h3>{TituloDaPagina ? "" : "English Plus+"}</h3>
         </C.LeftSide>
 
         <C.RightSide className="left">
-          {switchButtom ? (
-            ""
-          ) : (
-            <>
-              <Switch
-                className="Switchbtn"
-                onColor={"#004393"}
-                offColor={"#9A0041"}
-                uncheckedIcon
-                checkedIcon
-                height={15}
-                width={50}
-                handleDiameter={25}
-                onChange={handleChange}
-                checked={switchBtn.checked}
-              />
-
-              {BaralhoPage ? (
-                <Fa.FaPlus
-                  onClick={() => adicionarNovoItem()}
-                  size={20}
-                  color="white"
-                  style={{ margin: "0 0 5px 15px" }}
-                />
-              ) : (
-                ""
-              )}
-            </>
+          {switchButtom && (
+            <Switch
+              className="Switchbtn"
+              onColor={"#004393"}
+              offColor={"#9A0041"}
+              uncheckedIcon
+              checkedIcon
+              height={15}
+              width={50}
+              handleDiameter={25}
+              onChange={handleChange}
+              checked={switchBtn.checked}
+            />
           )}
 
           {logoutButton ? (
             <Fa.FaSignOutAlt className="OutButton" onClick={() => logout()} />
           ) : (
-            ""
-          )}
-
-          {isUserBaralho ? (
-            <C.IsUserBaralho>
-              <Fa.FaPlus
-                color="white"
-                size={20}
-                className="child"
-                onClick={addnewItem}
-              />
-
-              {baralholength > 0 ? (
-                <Link to={exameOnClick}>
-                  <Fa.FaClipboardList
-                    color="white"
-                    size={20}
-                    className="child"
-                  />
-                </Link>
-              ) : (
-                ""
+            <>
+              {LoginSigninBtn && (
+                <C.LoginSignin thema={thema}>
+                  <Link to="/loginregister/true">
+                    <span>Login</span>
+                  </Link>
+                  <Link to="/loginregister/false">
+                    <span className="register">Register</span>
+                  </Link>
+                </C.LoginSignin>
               )}
-
-              <Fa.FaEllipsisV color="white" size={20} className="child" />
-            </C.IsUserBaralho>
-          ) : (
-            ""
+            </>
           )}
         </C.RightSide>
       </C.Header>
 
-      {DataTexto ? (
+      {DataTexto && (
         <>
           <C.TextTitle thema={thema}>
             <h4>{TitleOfText}</h4>
           </C.TextTitle>
-          {MenuBars ? (
+          {MenuBars && (
             <C.Menu thema={thema}>
               <menu className="MenuDisable" ref={menu}>
                 {DataTexto?.map((item, i) => (
@@ -167,12 +122,8 @@ export default function Header({
                 ))}
               </menu>
             </C.Menu>
-          ) : (
-            ""
           )}
         </>
-      ) : (
-        ""
       )}
     </C.HeaderContainer>
   );

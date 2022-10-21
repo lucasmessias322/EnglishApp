@@ -19,6 +19,7 @@ export const TextoLayoutContainer = styled.div`
 
 export const TextoContainer = styled.div`
   margin: auto;
+  padding-top:30px;
   text-align: center;
   max-width: 700px;
   width: 100%;

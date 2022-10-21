@@ -30,7 +30,7 @@ const DadosDoTexto = [
 ];
 
 export default function TextoComponent({ texto }) {
-  const { thema } = useContext(AuthContext);
+  const { thema, currentUserData } = useContext(AuthContext);
   const [DataTexto, setDataTexto] = useState(DadosDoTexto);
   const [currentTexto, setCurrentTexto] = useState(0);
 
@@ -43,14 +43,20 @@ export default function TextoComponent({ texto }) {
   return (
     <C.TextoLayoutContainer thema={thema}>
       <Header
-      
+        switchButtom={currentUserData && true}
+        logoutButton={currentUserData && true}
         MenuBars={true}
         DataTexto={DataTexto}
         TitleOfText={DataTexto[currentTexto].titulo}
         setCurrentTexto={setCurrentTexto}
       />
-      <Texto  thema={thema} DataTextoAudio={DataTexto[currentTexto].textos} />
-      <FraseAFrase  thema={thema}
+      <Texto
+        currentTexto
+        thema={thema}
+        DataTextoAudio={DataTexto[currentTexto].textos}
+      />
+      <FraseAFrase
+        thema={thema}
         DataFraseAFrase={DataTexto[currentTexto].fraseAFraseDoTexto}
       />
       <br />
@@ -58,7 +64,7 @@ export default function TextoComponent({ texto }) {
       <br />
       <br />
       <br />
-      <Player  thema={thema} DataTextoAudio={DataTexto[currentTexto].textos} />
+      <Player thema={thema} DataTextoAudio={DataTexto[currentTexto].textos} />
     </C.TextoLayoutContainer>
   );
 }

@@ -4,40 +4,11 @@ export const HeaderContainer = styled.div`
   position: fixed;
   width: 100%;
   z-index: 99;
-  .BaralhoTypes {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    color: white;
-    position: fixed;
-    background-color: ${(props) => (props.thema ? "#E90062" : "#003861")};
-    padding: 10px 0px;
-    margin-top: 0px;
-
-    h2 {
-      width: 100%;
-      text-align: center;
-      font-size: 18px;
-    }
-  }
-
-  menu {
-  }
-
-  .MenuDisable {
-    opacity: 0.2;
-    width: 0px;
-
-    * {
-      opacity: 0;
-      display: none;
-    }
-  }
 `;
 
 export const Header = styled.header`
   width: 100%;
-  background-color: ${(props) => (props.thema ? "#FF006B" : "#0053B6")};
+  background-color: ${(props) => (props.thema ? "#D50059" : "#0053B6")};
   padding-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
@@ -45,6 +16,32 @@ export const Header = styled.header`
   display: flex;
   justify-content: space-between;
   line-height: 20px;
+`;
+
+export const LeftSide = styled.div`
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  .Fabars {
+    color: white;
+    font-size: 30px;
+    margin-right: 15px;
+  }
+
+  h3 {
+    /* font-size: 25px; */
+    color: white;
+    margin: 5px 10px;
+    padding: 0;
+    font-weight: bold;
+
+    span {
+      color: white;
+      font-size: 15px;
+    }
+  }
 `;
 
 export const RightSide = styled.div`
@@ -58,27 +55,27 @@ export const RightSide = styled.div`
   }
 `;
 
-export const LeftSide = styled.div`
+export const LoginSignin = styled.div`
+  //
   display: flex;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  align-items: center;
 
-  .Fabars {
-    color: white;
-    font-size: 30px;
-    margin-right: 15px;
-  }
-
-  h3 {
-    /* font-size: 25px; */
-    color: white;
-    margin: 5px 0;
-    padding: 0;
-    font-weight: bold;
-
+  a {
     span {
       color: white;
-      font-size: 15px;
+      font-size: 17px;
+      margin-left: 15px;
+    }
+
+    span.register {
+      border-radius: 20px;
+      padding: 5px 20px;
+      background-color: ${(props) =>
+        props.thema ? "#FF1376" : "rgba(83, 162, 255, 0.57)"};
+    }
+
+    &:hover {
+      transform: scale(1.1);
     }
   }
 `;
@@ -94,6 +91,27 @@ export const TextTitle = styled.div`
 `;
 
 export const Menu = styled.div`
+  @keyframes slidein {
+    from {
+      opacity: 0;
+      display: none;
+    }
+
+    to {
+      opacity: 1;
+      display: block;
+    }
+  }
+  menu.MenuDisable {
+    opacity: 0.2;
+    height: 0px;
+    width: 0px;
+
+    * {
+      opacity: 0;
+      display: none;
+    }
+  }
   menu {
     transition: 0.4s;
     width: 100%;
@@ -104,6 +122,8 @@ export const Menu = styled.div`
     z-index: 999;
 
     li {
+      animation-duration: 0.5s;
+      animation-name: slidein;
       color: white;
       list-style: none;
       height: 60px;
@@ -123,13 +143,5 @@ export const Menu = styled.div`
         margin-right: 15px;
       }
     }
-  }
-`;
-
-export const IsUserBaralho = styled.div`
-  display: flex;
-
-  .child {
-    margin-left: 15px;
   }
 `;

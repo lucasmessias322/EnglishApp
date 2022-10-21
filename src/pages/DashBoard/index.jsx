@@ -5,18 +5,25 @@ import * as C from "./style";
 import { AuthContext } from "../../Context/AuthContext";
 import { Link } from "react-router-dom";
 export default function DashBoard() {
-  const { thema } = useContext(AuthContext);
+  const { thema, currentUserData } = useContext(AuthContext);
 
   return (
     <C.DashboardContainer thema={thema}>
-      <Header />
+      <Header
+        switchButtom={currentUserData && true}
+        LoginSigninBtn
+        logoutButton={currentUserData && true}
+      />
       <br />
       <br />
       <C.SectionOne thema={thema}>
         <C.LogoAndImageLogo>
           <img src="/assets/logo.png" alt="" />
           <h1>English Plus+</h1>
-          <p>Bem vindo(a), oque vocé quer fazer?</p>
+          <p>
+            Bem vindo(a) {currentUserData && currentUserData.name}, oque vocé
+            quer fazer?
+          </p>
         </C.LogoAndImageLogo>
       </C.SectionOne>
       <C.ThingsToDo thema={thema}>
