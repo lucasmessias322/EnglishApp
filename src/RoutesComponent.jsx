@@ -15,7 +15,7 @@ export default function RoutesComponent() {
         <Route element={<PrivateRoutes />}>
           <Route exact path="/listsofwords" element={<ListsOfWords />} />
           <Route exact path="/list/:listData" element={<List />} />
-          <Route exact path="/cards/:listData" element={<Cards />} />
+          {/* <Route exact path="/cards/:listData" element={<Cards />} /> */}
         </Route>
         <Route exact path="/" element={<DashBoard />} />
         <Route exact path="/textos" element={<TextosPage />} />
