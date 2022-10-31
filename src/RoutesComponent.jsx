@@ -5,7 +5,7 @@ import TextosPage from "./pages/TextosPage";
 import LoginRegister from "./pages/LoginRegister";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import ListsOfWords from "./pages/ListsOfWords";
-import Cards from "./pages/Cards";
+
 import List from "./pages/List";
 
 export default function RoutesComponent() {
