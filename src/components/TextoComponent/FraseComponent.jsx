@@ -7,7 +7,10 @@ function FraseComponent({ thema, FraseInIngles, FraseInPortuguese }) {
   const [toogle, setToogle] = useState(false);
 
   function Play(texto) {
-    Speak(texto);
+    setToogle(true);
+    Speak(texto, () => {
+      setToogle(false);
+    });
   }
 
   return (
@@ -17,7 +20,6 @@ function FraseComponent({ thema, FraseInIngles, FraseInPortuguese }) {
           thema={thema}
           onClick={() => {
             Play(FraseInIngles);
-            setToogle((e) => !e);
           }}
         >
           {toogle ? <FaVolumeUp /> : <FaVolumeDown />}

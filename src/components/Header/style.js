@@ -31,11 +31,11 @@ export const LeftSide = styled.div`
   }
 
   h3 {
-    /* font-size: 25px; */
     color: white;
     margin: 5px 10px;
     padding: 0;
     font-weight: bold;
+    cursor: pointer;
 
     span {
       color: white;

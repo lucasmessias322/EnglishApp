@@ -5,7 +5,7 @@ import { RemoveStorage } from "../utils/storageFunctions";
 const initialState = {
   number: 0,
   token: "",
-  thema: true,
+  thema: false,
   texto: 0,
   current: 0,
   currentUserData: Object,

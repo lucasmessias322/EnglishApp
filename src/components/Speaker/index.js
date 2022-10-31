@@ -1,9 +1,13 @@
-export function Speak(texto, velocidade = 1) {
+export async function Speak(texto, cb) {
   let msg = new SpeechSynthesisUtterance();
   msg.text = texto;
   msg.lang = "en-us";
-  msg.rate = velocidade;
-  window.speechSynthesis.speak(msg);
+  msg.rate = 1;
+  await window.speechSynthesis.speak(msg);
+
+  setTimeout(() => {
+    cb();
+  }, 2000);
 }
 
 // let myTimeout :any;

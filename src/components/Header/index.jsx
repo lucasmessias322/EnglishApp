@@ -18,7 +18,7 @@ export default function Header({
   setCurrentTexto,
 }) {
   const menu = useRef(null);
-  const [switchBtn, setSwitchBtn] = useState({ checked: false });
+  const [switchBtn, setSwitchBtn] = useState({ checked: true });
   const { thema, setThema, logout } = useContext(AuthContext);
 
   function AtivarMenu() {
@@ -66,7 +66,7 @@ export default function Header({
       <C.Header thema={thema}>
         <C.LeftSide>
           {MenuBars && <Fa.FaBars className="Fabars" onClick={AtivarMenu} />}
-          <h3>{TituloDaPagina ? "" : "English Plus+"}</h3>
+          <h3>{TituloDaPagina ? "" : <Link to="/">English Plus+</Link>}</h3>
         </C.LeftSide>
 
         <C.RightSide className="left">

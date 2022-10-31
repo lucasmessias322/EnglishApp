@@ -26,6 +26,7 @@ export default function DashBoard() {
           </p>
         </C.LogoAndImageLogo>
       </C.SectionOne>
+
       <C.ThingsToDo thema={thema}>
         <h3>Você pode aprender com:</h3>
         <div className="CardsContain">
@@ -35,6 +36,15 @@ export default function DashBoard() {
                 <FaTextHeight size={70} color="white" />
               </div>
               <p>Com textos em ingles....</p>
+            </Link>
+          </C.Card>
+
+          <C.Card thema={thema} style={{ opacity: !currentUserData && "0.6" }}>
+            <Link to="/listsofwords">
+              <div>
+                <FaBrain size={70} color="white" />
+              </div>
+              <p>Com Palavras em ingles....</p>
             </Link>
           </C.Card>
         </div>

@@ -4,15 +4,22 @@ import DashBoard from "./pages/DashBoard";
 import TextosPage from "./pages/TextosPage";
 import LoginRegister from "./pages/LoginRegister";
 import PrivateRoutes from "./utils/PrivateRoutes";
+import ListsOfWords from "./pages/ListsOfWords";
+import Cards from "./pages/Cards";
+import List from "./pages/List";
 
 export default function RoutesComponent() {
   return (
     <HashRouter>
       <Routes>
-        <Route element={<PrivateRoutes />}></Route>
-        <Route path="/" element={<DashBoard />} />
-        <Route path="/textos" element={<TextosPage />} />
-        <Route path="/loginregister/:login" element={<LoginRegister />} />
+        <Route element={<PrivateRoutes />}>
+          <Route exact path="/listsofwords" element={<ListsOfWords />} />
+          <Route exact path="/list/:listData" element={<List />} />
+          <Route exact path="/cards/:listData" element={<Cards />} />
+        </Route>
+        <Route exact path="/" element={<DashBoard />} />
+        <Route exact path="/textos" element={<TextosPage />} />
+        <Route exact path="/loginregister/:login" element={<LoginRegister />} />
       </Routes>
     </HashRouter>
   );

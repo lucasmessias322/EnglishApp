@@ -43,7 +43,7 @@ export default function TextoComponent({ texto }) {
   return (
     <C.TextoLayoutContainer thema={thema}>
       <Header
-        switchButtom={currentUserData && true}
+        switchButtom={true}
         logoutButton={currentUserData && true}
         MenuBars={true}
         DataTexto={DataTexto}
