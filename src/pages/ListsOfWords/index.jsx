@@ -95,7 +95,7 @@ export default function ListsOfWords() {
 
       <C.ListContainer>
         {myLists?.map((elem, i) => (
-          <C.ListItem key={i}>
+          <C.ListItem key={i} thema={thema}>
             <div>
               <Link to={`/list/${JSON.stringify(elem)}`}>
                 <h3>{elem.title} </h3>

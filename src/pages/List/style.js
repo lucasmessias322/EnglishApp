@@ -18,12 +18,14 @@ export const Table = styled.table`
   thead {
     tr {
       td {
+        border: 0.5px solid ${(props) => (props.thema ? "#d50059" : "#004eaa")};
         text-align: center;
         font-size: 16px;
 
         h3 {
+          color: white;
           padding: 15px 10px;
-          background-color: #004eaa;
+          background-color: ${(props) => (props.thema ? "#d50059" : "#004eaa")};
         }
 
         h3.pt {
@@ -41,7 +43,7 @@ export const Table = styled.table`
     tr {
       td {
         padding: 10px;
-        border: 0.5px solid;
+        border: 0.5px solid ${(props) => (props.thema ? "black" : "#fff")};
 
         div.pt {
           display: flex;
@@ -49,6 +51,7 @@ export const Table = styled.table`
           align-items: center;
 
           span {
+            color: white;
             display: flex;
             justify-content: center;
             align-items: center;

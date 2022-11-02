@@ -80,13 +80,13 @@ export default function List() {
       </AddModal>
 
       <C.TableConatiner>
-        <C.Table>
+        <C.Table thema={thema}>
           <thead>
             <tr>
               <td>
                 <h3 className="eng">Ingles</h3>
               </td>
-              <td>
+              <td className="PtTd">
                 <h3 className="pt">Portugues</h3>
               </td>
             </tr>

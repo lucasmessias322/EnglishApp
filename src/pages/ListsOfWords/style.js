@@ -46,7 +46,7 @@ export const ListItem = styled.div`
   }
 
   h3 {
-    color: white;
+    color: ${(props) => (props.thema ? "#000" : "#FFFF")};
   }
   div {
     a {

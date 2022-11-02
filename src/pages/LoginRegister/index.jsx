@@ -85,7 +85,7 @@ function LoginComponent() {
       />
       <Input
         Password
-        text="text"
+        text="password"
         placeholder="Senha"
         name="password"
         onChange={(e) => setValues({ ...values, password: e.target.value })}
