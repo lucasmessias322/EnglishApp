@@ -92,7 +92,7 @@ function LoginComponent() {
         value={values.password}
         required
       />
-      <C.ButtonSubmit>{loading ? "Carregando..." : "acessar"}</C.ButtonSubmit>
+      <C.ButtonSubmit>{loading ? "Carregando..." : "Acessar"}</C.ButtonSubmit>
     </form>
   );
 }

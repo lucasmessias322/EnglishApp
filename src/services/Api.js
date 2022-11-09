@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const BaseUrl = "https://textoingles-api.herokuapp.com";
+const OnlineApiHeroku = "https://textoingles-api.herokuapp.com";
+const localhost = "http://localhost:8081";
+
+const BaseUrl = OnlineApiHeroku;
 const api = axios.create({
   baseURL: BaseUrl,
 });

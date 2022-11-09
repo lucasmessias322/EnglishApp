@@ -23,7 +23,6 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "electron": "electron .",
     "start": "node server.js",
     "dev": "react-scripts start",
     "build": "react-scripts build",

@@ -23,13 +23,14 @@ export default function ListsOfWords() {
     items: [],
     private: false,
   });
+  const [editListName, setEditListName] = useState(false);
+
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     getMemorizes(token, currentUserData._id)
       .then((res) => {
         setMyLists(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, [update]);
@@ -69,7 +70,30 @@ export default function ListsOfWords() {
     }
   }
 
-  async function EditListName() {}
+  async function EditListName(e) {
+    e.preventDefault();
+
+    const data = {
+      title: newListItem.title,
+    };
+
+    await patchEditListName(data, editListName, token)
+      .then((res) => {
+        setListModalOpen(false);
+        setUpdate((e) => !e);
+        setNewListItem({
+          title: "",
+          userId: "",
+          username: "",
+          items: [],
+          private: false,
+        });
+        setEditListName(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   return (
     <C.Container thema={thema}>
@@ -77,8 +101,8 @@ export default function ListsOfWords() {
       <AddModal
         modalOpen={listModalOpen}
         setModalOpen={setListModalOpen}
-        title="Criar lista"
-        SaveFunction={AddnewListItem}
+        title={editListName ? "Editar lista" : "Criar lista"}
+        SaveFunction={editListName ? EditListName : AddnewListItem}
       >
         <input
           type="text"
@@ -103,9 +127,15 @@ export default function ListsOfWords() {
               </Link>
             </div>
             <div className="BtnsContainer">
-              {/* <span className="iconContainer">
+              <span
+                className="iconContainer"
+                onClick={() => {
+                  setEditListName(elem._id);
+                  setListModalOpen(true);
+                }}
+              >
                 <FaPencilAlt size={13} />
-              </span> */}
+              </span>
               <span
                 className="iconContainer"
                 onClick={() => DeleteList(elem._id)}
