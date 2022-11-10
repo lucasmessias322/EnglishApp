@@ -16,6 +16,9 @@ export default function Header({
   LoginSigninBtn,
   DataTexto,
   setCurrentTexto,
+  setIsPlayng,
+  setCurrentParagraph,
+  setAudioIndex,
 }) {
   const menu = useRef(null);
   const [switchBtn, setSwitchBtn] = useState({ checked: true });
@@ -118,6 +121,9 @@ export default function Header({
                     index={i}
                     TitleMenu={item.titulo}
                     setCurrentTexto={setCurrentTexto}
+                    setIsPlayng={setIsPlayng}
+                    setCurrentParagraph={setCurrentParagraph}
+                    setAudioIndex={setAudioIndex}
                   />
                 ))}
               </menu>

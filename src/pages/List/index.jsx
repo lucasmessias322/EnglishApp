@@ -2,10 +2,11 @@ import * as C from "./style";
 import Header from "../../components/Header";
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { FaPlus, FaRegTrashAlt } from "react-icons/fa";
+import { FaPlus, FaRegTrashAlt, FaVolumeDown } from "react-icons/fa";
 import AddModal from "../../components/AddModal";
 import { deleteItem, getMemorizes, patchAddNewItem } from "../../services/Api";
 import { AuthContext } from "../../Context/AuthContext";
+import { Speak } from "../../components/Speaker";
 
 export default function List() {
   const { thema, currentUserData, token } = useContext(AuthContext);
@@ -94,13 +95,24 @@ export default function List() {
           <tbody>
             {ItemsLista?.map((elem, i) => (
               <tr key={i}>
-                <td>{elem.WordInEng}</td>
+                <td>
+                  <div className="eng">
+                    <div className="tools">
+                      <span onClick={() => Speak(elem.WordInEng)}>
+                        <FaVolumeDown size={13} />
+                      </span>
+                    </div>
+                    {elem.WordInEng}
+                  </div>
+                </td>
                 <td>
                   <div className="pt">
                     {elem.WordInPt}
-                    <span onClick={() => DeletarItem(elem._id)}>
-                      <FaRegTrashAlt className="trashIcon" size={13} />
-                    </span>
+                    <div className="tools">
+                      <span onClick={() => DeletarItem(elem._id)}>
+                        <FaRegTrashAlt className="trashIcon" size={13} />
+                      </span>
+                    </div>
                   </div>
                 </td>
               </tr>

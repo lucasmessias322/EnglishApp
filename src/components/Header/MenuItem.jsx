@@ -1,10 +1,25 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
-function MenuItem({ index, TitleMenu, setCurrentTexto }) {
-  const { setNumber, setTexto } = useContext(AuthContext);
+
+function MenuItem({
+  index,
+  TitleMenu,
+  setCurrentTexto,
+  setIsPlayng,
+  setAudioIndex,
+}) {
+  // const { setNumber, setTexto } = useContext(AuthContext);
 
   return (
-    <li onClick={() => setTexto(index)}>
+    <li
+      onClick={() => {
+        setIsPlayng(false);
+        setAudioIndex(0);
+
+        setCurrentTexto(index);
+      }}
+    >
       <span>
         <svg
           stroke="currentColor"

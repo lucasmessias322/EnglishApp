@@ -4,28 +4,35 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 import * as C from "./style";
 
-function Player({ thema, DataTextoAudio }) {
-  const [IsPlayng, setIsPlayng] = useState(false);
+function Player({
+  thema,
+  currentTexto,
+  DataTexto,
+  IsPlayng,
+  setIsPlayng = false,
+  setCurrentParagraph,
+  AudioIndex,
+  setAudioIndex,
+}) {
+  const DataTextoAudio = DataTexto[currentTexto].textos;
   const [Slow, setSlow] = useState(false);
   const [Fast, setFast] = useState(false);
-  const [AudioIndex, setAudioIndex] = useState(0);
+  // const [AudioIndex, setAudioIndex] = useState(0);
 
   const Audio = useRef(null);
   const FastButton = useRef(null);
   const SlowButton = useRef(null);
 
-  const { setNumber } = useContext(AuthContext);
-
   useEffect(() => {
     if (DataTextoAudio) {
       if (AudioIndex === DataTextoAudio.length) {
         setAudioIndex(0);
-        setNumber(0);
+        // setCurrentParagraph(0);
         setIsPlayng(false);
         console.log(`Index: ${AudioIndex}`);
       } else {
         Audio.current.play();
-        setNumber(AudioIndex);
+        // setCurrentParagraph(AudioIndex);
       }
     }
   }, [AudioIndex]);

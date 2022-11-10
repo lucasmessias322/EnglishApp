@@ -7,7 +7,7 @@ export async function Speak(texto, cb) {
 
   setTimeout(() => {
     cb();
-  }, 2000);
+  }, 500);
 }
 
 // let myTimeout :any;

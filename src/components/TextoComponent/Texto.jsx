@@ -1,29 +1,35 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 // import { Swiper, SwiperSlide } from "swiper/react";
 import { AuthContext } from "../../Context/AuthContext";
 import * as C from "./style";
 
-function Texto({ thema, DataTextoAudio }) {
-  const { number } = useContext(AuthContext);
-  const calc = number - 1;
-  const dataLen = DataTextoAudio.length - 1;
+function Texto({
+  thema,
+  DataTexto,
+  currentTexto,
+  currentParagraph,
+  AudioIndex,
+}) {
+  const dataTextoAudio = DataTexto[currentTexto].textos;
+  const dataLen = dataTextoAudio.length - 1;
+  const calc = AudioIndex - 1;
 
   useEffect(() => {
-    let paragrafo = document.getElementById(`${number}`);
+    let paragrafo = document.getElementById(`${AudioIndex}`);
 
-    if (number == paragrafo.id) {
+    if (AudioIndex == paragrafo.id) {
       paragrafo.classList.add("SelectedP");
     }
 
-    if (number >= 1) {
-      let paragrafo1 = document.getElementById(`${calc}`);
-      paragrafo1.classList.remove("SelectedP");
+    if (AudioIndex >= 1) {
+      let previousParagraph = document.getElementById(`${calc}`);
+      previousParagraph.classList.remove("SelectedP");
     }
-    if (number === 0) {
-      let paragrafo1 = document.getElementById(`${dataLen}`);
-      paragrafo1.classList.remove("SelectedP");
+    if (AudioIndex === 0) {
+      let previousParagraph = document.getElementById(`${dataLen}`);
+      previousParagraph.classList.remove("SelectedP");
     }
-  }, [number]);
+  }, [AudioIndex, dataTextoAudio]);
 
   return (
     <C.TextoContainer thema={thema}>
@@ -33,7 +39,7 @@ function Texto({ thema, DataTextoAudio }) {
       <br />
       <br />
       <br />
-      {DataTextoAudio.map((item, i) => (
+      {dataTextoAudio.map((item, i) => (
         <div key={i}>
           <p id={i}>{item.AudioText}</p>
           <br />

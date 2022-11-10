@@ -45,12 +45,24 @@ export const Table = styled.table`
         padding: 10px;
         border: 0.5px solid ${(props) => (props.thema ? "black" : "#fff")};
 
+        div.eng {
+          display: flex;
+          align-items: center;
+        }
+
         div.pt {
           display: flex;
           justify-content: space-between;
           align-items: center;
+        }
+
+        div.tools {
+          display: flex;
+          justify-content: center;
+          align-items: center;
 
           span {
+            margin: 0px 5px;
             color: white;
             display: flex;
             justify-content: center;
@@ -61,12 +73,6 @@ export const Table = styled.table`
 
             &:hover {
               background-color: #d50059;
-            }
-
-            .trashIcon {
-              &:hover {
-                /* color: #d50059; */
-              }
             }
           }
         }

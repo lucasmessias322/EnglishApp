@@ -33,6 +33,9 @@ export default function TextoComponent({ texto }) {
   const { thema, currentUserData } = useContext(AuthContext);
   const [DataTexto, setDataTexto] = useState(DadosDoTexto);
   const [currentTexto, setCurrentTexto] = useState(0);
+  const [currentParagraph, setCurrentParagraph] = useState(0);
+  const [AudioIndex, setAudioIndex] = useState(0);
+  const [IsPlayng, setIsPlayng] = useState(false);
 
   useEffect(() => {
     getTextos().then((textos) => {
@@ -49,11 +52,16 @@ export default function TextoComponent({ texto }) {
         DataTexto={DataTexto}
         TitleOfText={DataTexto[currentTexto].titulo}
         setCurrentTexto={setCurrentTexto}
+        setIsPlayng={setIsPlayng}
+        setCurrentParagraph={setCurrentParagraph}
+        setAudioIndex={setAudioIndex}
       />
       <Texto
-        currentTexto
         thema={thema}
-        DataTextoAudio={DataTexto[currentTexto].textos}
+        DataTexto={DataTexto}
+        currentTexto={currentTexto}
+        currentParagraph={currentParagraph}
+        AudioIndex={AudioIndex}
       />
       <FraseAFrase
         thema={thema}
@@ -64,7 +72,16 @@ export default function TextoComponent({ texto }) {
       <br />
       <br />
       <br />
-      <Player thema={thema} DataTextoAudio={DataTexto[currentTexto].textos} />
+      <Player
+        IsPlayng={IsPlayng}
+        setIsPlayng={setIsPlayng}
+        thema={thema}
+        currentTexto={currentTexto}
+        DataTexto={DataTexto}
+        setCurrentParagraph={setCurrentParagraph}
+        AudioIndex={AudioIndex}
+        setAudioIndex={setAudioIndex}
+      />
     </C.TextoLayoutContainer>
   );
 }

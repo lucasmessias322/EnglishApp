@@ -18,7 +18,7 @@ export default function RoutesComponent() {
           {/* <Route exact path="/cards/:listData" element={<Cards />} /> */}
         </Route>
         <Route exact path="/" element={<DashBoard />} />
-        <Route exact path="/textos" element={<TextosPage />} />
+        <Route exact path="/textos/" element={<TextosPage />} />
         <Route exact path="/loginregister/:login" element={<LoginRegister />} />
       </Routes>
     </HashRouter>
