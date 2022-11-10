@@ -16,6 +16,7 @@ function Texto({
 
   useEffect(() => {
     let paragrafo = document.getElementById(`${AudioIndex}`);
+    
 
     if (AudioIndex == paragrafo.id) {
       paragrafo.classList.add("SelectedP");

@@ -19,6 +19,7 @@ export default function Header({
   setIsPlayng,
   setCurrentParagraph,
   setAudioIndex,
+  AudioIndex
 }) {
   const menu = useRef(null);
   const [switchBtn, setSwitchBtn] = useState({ checked: true });
@@ -124,6 +125,7 @@ export default function Header({
                     setIsPlayng={setIsPlayng}
                     setCurrentParagraph={setCurrentParagraph}
                     setAudioIndex={setAudioIndex}
+                    AudioIndex={AudioIndex}
                   />
                 ))}
               </menu>

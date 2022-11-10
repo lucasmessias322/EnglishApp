@@ -7,19 +7,20 @@ function MenuItem({
   TitleMenu,
   setCurrentTexto,
   setIsPlayng,
+  AudioIndex,
   setAudioIndex,
 }) {
-  // const { setNumber, setTexto } = useContext(AuthContext);
+  function changeTheText() {
+    setIsPlayng(false);
+    let paragrafo = document.getElementById(`${AudioIndex}`);
+    paragrafo.classList.remove("SelectedP");
+
+    setAudioIndex(0);
+    setCurrentTexto(index);
+  }
 
   return (
-    <li
-      onClick={() => {
-        setIsPlayng(false);
-        setAudioIndex(0);
-
-        setCurrentTexto(index);
-      }}
-    >
+    <li onClick={() => changeTheText()}>
       <span>
         <svg
           stroke="currentColor"

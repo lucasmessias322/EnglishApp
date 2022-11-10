@@ -31,7 +31,13 @@ function Player({
         setIsPlayng(false);
         console.log(`Index: ${AudioIndex}`);
       } else {
-        Audio.current.play();
+        if (IsPlayng) {
+          Audio.current.play();
+        } else {
+          Audio.current.pause();
+        }
+        // setIsPlayng(true);
+
         // setCurrentParagraph(AudioIndex);
       }
     }

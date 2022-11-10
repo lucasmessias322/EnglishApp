@@ -55,6 +55,7 @@ export default function TextoComponent({ texto }) {
         setIsPlayng={setIsPlayng}
         setCurrentParagraph={setCurrentParagraph}
         setAudioIndex={setAudioIndex}
+        AudioIndex={AudioIndex}
       />
       <Texto
         thema={thema}
