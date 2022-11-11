@@ -10,7 +10,7 @@ function Texto({
   currentParagraph,
   AudioIndex,
 }) {
-  const dataTextoAudio = DataTexto[currentTexto].textos;
+  const dataTextoAudio = DataTexto.textos;
   const dataLen = dataTextoAudio.length - 1;
   const calc = AudioIndex - 1;
 

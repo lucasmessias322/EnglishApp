@@ -14,7 +14,7 @@ function Player({
   AudioIndex,
   setAudioIndex,
 }) {
-  const DataTextoAudio = DataTexto[currentTexto].textos;
+  const DataTextoAudio = DataTexto.textos;
   const [Slow, setSlow] = useState(false);
   const [Fast, setFast] = useState(false);
   // const [AudioIndex, setAudioIndex] = useState(0);

@@ -5,43 +5,35 @@ import Header from "../Header";
 import Texto from "./Texto";
 import FraseAFrase from "./FraseAFrase";
 import Player from "./Player";
-import { getTextos } from "../../services/Api";
+import { getTextos, getUnicTexto } from "../../services/Api";
 
-const DadosDoTexto = [
-  {
-    titulo: "Carregando",
-    textos: [
-      {
-        AudioPathData: "",
-        AudioText: "Carregando...",
-        Translate: "Carregando...",
-      },
-      {
-        AudioPathData: "",
-        AudioText: "",
-        Translate: "",
-      },
-    ],
+const DadosDoTexto = {
+  titulo: "Carregando",
+  textos: [
+    {
+      AudioPathData: "",
+      AudioText: "Carregando...",
+      Translate: "Carregando...",
+    },
+    {
+      AudioPathData: "",
+      AudioText: "",
+      Translate: "",
+    },
+  ],
 
-    fraseAFraseDoTexto: [
-      { FraseInIngles: "Carregando...", FraseInPortuguese: "" },
-    ],
-  },
-];
+  fraseAFraseDoTexto: [
+    { FraseInIngles: "Carregando...", FraseInPortuguese: "" },
+  ],
+};
 
-export default function TextoComponent({ texto }) {
+export default function TextoComponent({ DataTexto, Alltextos }) {
   const { thema, currentUserData } = useContext(AuthContext);
-  const [DataTexto, setDataTexto] = useState(DadosDoTexto);
+
   const [currentTexto, setCurrentTexto] = useState(0);
   const [currentParagraph, setCurrentParagraph] = useState(0);
   const [AudioIndex, setAudioIndex] = useState(0);
   const [IsPlayng, setIsPlayng] = useState(false);
-
-  useEffect(() => {
-    getTextos().then((textos) => {
-      setDataTexto(textos);
-    });
-  }, []);
 
   return (
     <C.TextoLayoutContainer thema={thema}>
@@ -49,8 +41,8 @@ export default function TextoComponent({ texto }) {
         switchButtom={true}
         logoutButton={currentUserData && true}
         MenuBars={true}
-        DataTexto={DataTexto}
-        TitleOfText={DataTexto[currentTexto].titulo}
+        DataTexto={Alltextos}
+        TitleOfText={DataTexto.titulo}
         setCurrentTexto={setCurrentTexto}
         setIsPlayng={setIsPlayng}
         setCurrentParagraph={setCurrentParagraph}
@@ -66,7 +58,7 @@ export default function TextoComponent({ texto }) {
       />
       <FraseAFrase
         thema={thema}
-        DataFraseAFrase={DataTexto[currentTexto].fraseAFraseDoTexto}
+        DataFraseAFrase={DataTexto.fraseAFraseDoTexto}
       />
       <br />
       <br />

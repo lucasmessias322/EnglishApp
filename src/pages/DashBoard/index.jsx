@@ -31,7 +31,7 @@ export default function DashBoard() {
         <h3>Você pode aprender com:</h3>
         <div className="CardsContain">
           <C.Card thema={thema}>
-            <Link to="/textos">
+            <Link to="/textos/0">
               <div>
                 <FaTextHeight size={70} color="white" />
               </div>

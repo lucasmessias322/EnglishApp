@@ -26,6 +26,15 @@ export async function getTextos() {
   return await get;
 }
 
+export async function getUnicTexto(indexTexto) {
+  const get = api
+    .get(`/api/textos/${indexTexto}`)
+    .then((response) => response.data)
+    .catch((error) => console.log(error));
+
+  return await get;
+}
+
 export async function postLogin(data) {
   return api
     .post("/auth/login", data)
