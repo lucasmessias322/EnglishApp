@@ -128,7 +128,7 @@ export const AddNewListContainer = styled.div`
   }
 `;
 
-export const BtnAddListContainer = styled.div`
+export const BtnContainer = styled.div`
   bottom: 0;
   width: 100%;
   position: fixed;
@@ -147,6 +147,7 @@ export const BtnAddListContainer = styled.div`
     padding: 15px;
     background-color: ${(props) => (props.thema ? "#D50059" : "#005ac5")};
     border-radius: 100%;
+    font-size:20px;
 
     &:hover {
       transform: scale(1.1);
@@ -154,3 +155,5 @@ export const BtnAddListContainer = styled.div`
     }
   }
 `;
+
+ 

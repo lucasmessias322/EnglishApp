@@ -81,29 +81,30 @@ export const Table = styled.table`
   }
 `;
 
-export const BtnAddItemContainer = styled.div`
+export const BtnsContainer = styled.div`
   bottom: 0;
   width: 100%;
   position: fixed;
-  padding: 0px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: center;
   align-items: flex-end;
+`;
 
-  div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 10px;
-    color: white;
-    padding: 15px;
-    background-color: ${(props) => (props.thema ? "#D50059" : "#005ac5")};
-    border-radius: 100%;
+export const DownBtn = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px 0;
+  color: white;
+  padding: 15px;
+  background-color: ${(props) => (props.thema ? "#D50059" : "#005ac5")};
+  border-radius: 100%;
+  font-size: 16px;
 
-    &:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 10px black;
-    }
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px black;
   }
 `;

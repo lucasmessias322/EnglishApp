@@ -17,7 +17,6 @@ function Player({
   const DataTextoAudio = DataTexto.textos;
   const [Slow, setSlow] = useState(false);
   const [Fast, setFast] = useState(false);
-  // const [AudioIndex, setAudioIndex] = useState(0);
 
   const Audio = useRef(null);
   const FastButton = useRef(null);
@@ -27,7 +26,7 @@ function Player({
     if (DataTextoAudio) {
       if (AudioIndex === DataTextoAudio.length) {
         setAudioIndex(0);
-        // setCurrentParagraph(0);
+
         setIsPlayng(false);
         console.log(`Index: ${AudioIndex}`);
       } else {
@@ -36,9 +35,6 @@ function Player({
         } else {
           Audio.current.pause();
         }
-        // setIsPlayng(true);
-
-        // setCurrentParagraph(AudioIndex);
       }
     }
   }, [AudioIndex]);
@@ -77,16 +73,17 @@ function Player({
 
   useEffect(() => {
     VelocidadeLnta();
-    VelocidadeRpida();
   });
 
   useEffect(() => {
-    VelocidadeLnta();
-  }, [Slow, thema]);
-
-  useEffect(() => {
-    VelocidadeRpida();
-  }, [Fast, thema]);
+    if (Fast === true && Slow === false) {
+      setSlow(false);
+      VelocidadeRpida();
+    } else if (Slow === true && Fast === false) {
+      setFast(false);
+      VelocidadeLnta();
+    }
+  }, [Fast, Slow, thema]);
 
   return (
     <C.PlayerComponent thema={thema}>
@@ -106,19 +103,20 @@ function Player({
         src={DataTextoAudio ? DataTextoAudio[AudioIndex].AudioPathData : ""}
       />
 
-      <li></li>
+      {/* <li></li> */}
       <li id="SlowButton" ref={SlowButton} onClick={() => setSlow(!Slow)}>
         <img
           src="/assets/logo-area-turtle-silhouette-tortoise 1 1.png"
           alt="slowButton"
         />
       </li>
+      {/* <li id="FastButton" ref={FastButton} onClick={() => setFast(!Fast)}>
+        <FaFighterJet />
+      </li> */}
       <li id="PlayPauseButton" onClick={() => setIsPlayng(!IsPlayng)}>
         {IsPlayng ? <FaPause /> : <FaPlay />}
       </li>
-      <li id="FastButton" ref={FastButton} onClick={() => setFast(!Fast)}>
-        <FaFighterJet />
-      </li>
+
       <li id="homeBtn">
         <Link to="/">
           <FaHome />

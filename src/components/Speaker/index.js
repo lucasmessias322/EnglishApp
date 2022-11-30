@@ -10,6 +10,14 @@ export async function Speak(texto, cb) {
   }, 500);
 }
 
+export function SpeakForExame(texto, cb) {
+  let msg = new SpeechSynthesisUtterance();
+  msg.text = texto;
+  msg.lang = "en-us";
+  msg.rate = 1;
+  window.speechSynthesis.speak(msg);
+}
+
 // let myTimeout :any;
 // function myTimer(time = 10000) {
 //   window.speechSynthesis.pause();

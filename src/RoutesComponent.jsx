@@ -5,6 +5,7 @@ import TextosPage from "./pages/TextosPage";
 import LoginRegister from "./pages/LoginRegister";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import ListsOfWords from "./pages/ListsOfWords";
+import CardsPage from "./pages/Cards";
 
 import List from "./pages/List";
 
@@ -15,7 +16,7 @@ export default function RoutesComponent() {
         <Route element={<PrivateRoutes />}>
           <Route exact path="/listsofwords" element={<ListsOfWords />} />
           <Route exact path="/list/:listData" element={<List />} />
-          {/* <Route exact path="/cards/:listData" element={<Cards />} /> */}
+          <Route exact path="/cards/:listData" element={<CardsPage />} />
         </Route>
         <Route exact path="/" element={<DashBoard />} />
         <Route path="/textos/:indexTexto" element={<TextosPage />} />

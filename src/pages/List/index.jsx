@@ -1,8 +1,13 @@
 import * as C from "./style";
 import Header from "../../components/Header";
 import { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
-import { FaPlus, FaRegTrashAlt, FaVolumeDown } from "react-icons/fa";
+import { useParams, Link } from "react-router-dom";
+import {
+  FaPlus,
+  FaRegTrashAlt,
+  FaVolumeDown,
+  FaClipboard,
+} from "react-icons/fa";
 import AddModal from "../../components/AddModal";
 import { deleteItem, getMemorizes, patchAddNewItem } from "../../services/Api";
 import { AuthContext } from "../../Context/AuthContext";
@@ -121,11 +126,16 @@ export default function List() {
         </C.Table>
       </C.TableConatiner>
 
-      <C.BtnAddItemContainer>
-        <div onClick={() => setModalOpen(true)}>
-          <FaPlus size={20} />
-        </div>
-      </C.BtnAddItemContainer>
+      <C.BtnsContainer>
+        <C.DownBtn thema={thema}>
+          <Link to={`/cards/${JSON.stringify(ItemsLista)}`}>
+            <FaClipboard />
+          </Link>
+        </C.DownBtn>
+        <C.DownBtn thema={thema} onClick={() => setModalOpen(true)}>
+          <FaPlus />
+        </C.DownBtn>
+      </C.BtnsContainer>
     </C.Container>
   );
 }

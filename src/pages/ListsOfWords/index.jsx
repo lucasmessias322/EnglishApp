@@ -9,7 +9,12 @@ import {
   postNewMemorize,
   patchEditListName,
 } from "../../services/Api";
-import { FaPlus, FaRegTrashAlt, FaPencilAlt } from "react-icons/fa";
+import {
+  FaPlus,
+  FaRegTrashAlt,
+  FaPencilAlt
+  
+} from "react-icons/fa";
 import AddModal from "../../components/AddModal";
 
 export default function ListsOfWords() {
@@ -147,11 +152,11 @@ export default function ListsOfWords() {
         ))}
       </C.ListContainer>
 
-      <C.BtnAddListContainer>
+      <C.BtnContainer>
         <div onClick={() => setListModalOpen(true)}>
-          <FaPlus size={20} />
+          <FaPlus />
         </div>
-      </C.BtnAddListContainer>
+      </C.BtnContainer>
     </C.Container>
   );
 }
