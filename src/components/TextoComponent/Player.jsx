@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaPlay, FaPause, FaFighterJet, FaHome } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
+import { BaseUrl } from "../../services/Api";
 import * as C from "./style";
 
 function Player({
@@ -28,7 +29,7 @@ function Player({
         setAudioIndex(0);
 
         setIsPlayng(false);
-        console.log(`Index: ${AudioIndex}`);
+        // console.log(`Index: ${AudioIndex}`);
       } else {
         if (IsPlayng) {
           Audio.current.play();
@@ -100,7 +101,11 @@ function Player({
             }
           })
         }
-        src={DataTextoAudio ? DataTextoAudio[AudioIndex].AudioPathData : ""}
+        src={
+          DataTextoAudio
+            ? `${BaseUrl}/${DataTextoAudio[AudioIndex].AudioPathData}`
+            : ""
+        }
       />
 
       {/* <li></li> */}
