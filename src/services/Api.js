@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const OnlineApiVercel = "https://engleshplus-api.vercel.app";
+const OnlineApiCyclic = "https://frightened-visor-fly.cyclic.app";
 const localhost = "http://localhost:8081";
 
 
-export const BaseUrl = OnlineApiVercel;
+export const BaseUrl = OnlineApiCyclic;
 const api = axios.create({
   baseURL: BaseUrl,
 });
