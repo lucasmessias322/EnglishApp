@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const colors = {
+export const colors = {
   color1: "#111B29",
   color2: "#FF006B",
   color3: "rgb(255, 253, 128)",
@@ -15,6 +15,7 @@ export const TextoLayoutContainer = styled.div`
   min-height: 100vh;
   width: 100%;
   background: ${(props) => (props.thema ? "white" : colors.color1)};
+
 `;
 
 export const TextoContainer = styled.div`
@@ -33,54 +34,8 @@ export const TextoContainer = styled.div`
     color: ${(props) => (props.thema ? colors.color2 : colors.color3)};
   }
 `;
+ 
 
-export const FraseAFraseComponent = styled.div`
-  padding: 10px;
-  width: 100%;
-  max-width: 700px;
-  margin: auto;
-
-  h2 {
-    color: ${(props) => (props.thema ? colors.color2 : colors.color4)};
-    font-size: 30px;
-  }
-
-  div.content-frases {
-    list-style: none;
-  }
-
-  @media (max-width: 500px) {
-    div.content-frases {
-      li {
-        h3 {
-          font-size: 16px;
-        }
-        p {
-          font-size: 15px;
-        }
-      }
-    }
-  }
-`;
-
-export const FraseAFraseContainer = styled.li`
-  margin: 10px;
-
-  div {
-    display: flex;
-    align-items: center;
-    h3 {
-      margin: 5px;
-      color: ${(props) => (props.thema ? colors.color2 : colors.color4)};
-      font-size: 22px;
-    }
-  }
-  p {
-    font-size: 16px;
-    margin-left: 45px;
-    color: ${(props) => (props.thema ? "black" : "white")};
-  }
-`;
 
 export const PlayerComponent = styled.div`
   width: 100%;
@@ -168,16 +123,16 @@ export const PlayerComponent = styled.div`
     }
   }
 `;
-export const PlayFraseButton = styled.div`
-  width: 25px;
-  height: 25px;
-  background-color: ${(props) => (props.thema ? colors.color2 : colors.color7)};
-  color: white;
-  border-radius: 100%;
-  padding: 5px;
-  margin-right: 10px;
+// export const PlayFraseButton = styled.div`
+//   width: 25px;
+//   height: 25px;
+//   background-color: ${(props) => (props.thema ? colors.color2 : colors.color7)};
+//   color: white;
+//   border-radius: 100%;
+//   padding: 5px;
+//   margin-right: 10px;
 
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
+//   &:hover {
+//     transform: scale(1.1);
+//   }
+// `;
