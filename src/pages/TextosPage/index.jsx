@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextoComponent from "../../components/TextoComponent";
-import { AuthContext } from "../../Context/AuthContext";
 import { getTextos, getUnicTexto } from "../../services/Api";
 import { useParams } from "react-router-dom";
+
 
 const DadosDoTexto = {
   titulo: "Carregando",
@@ -18,11 +18,20 @@ const DadosDoTexto = {
       Translate: "",
     },
   ],
-
   fraseAFraseDoTexto: [
     { FraseInIngles: "Carregando...", FraseInPortuguese: "" },
   ],
+  questionsAboutText: [
+    {
+      question: "",
+      choiceA: "",
+      choiceB: "",
+      choiceC: "",
+      correct: "",
+    },
+  ],
 };
+
 const DadosDoTextos = [
   {
     titulo: "Carregando",
@@ -53,11 +62,9 @@ export default function Textos() {
   useEffect(() => {
     getTextos().then((textos) => {
       setAllTextos(textos);
-      console.log(textos);
     });
     getUnicTexto(indexTexto).then((texto) => {
       setDataTexto(texto);
-      console.log(texto);
     });
   }, [indexTexto]);
 

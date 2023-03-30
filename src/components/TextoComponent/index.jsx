@@ -1,31 +1,12 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import * as C from "./style";
 import { AuthContext } from "../../Context/AuthContext";
 import Header from "../Header";
 import Texto from "./Texto";
 import FraseAFrase from "./FraseAFrase";
 import Player from "./Player";
-import { getTextos, getUnicTexto } from "../../services/Api";
-
-const DadosDoTexto = {
-  titulo: "Carregando",
-  textos: [
-    {
-      AudioPathData: "",
-      AudioText: "Carregando...",
-      Translate: "Carregando...",
-    },
-    {
-      AudioPathData: "",
-      AudioText: "",
-      Translate: "",
-    },
-  ],
-
-  fraseAFraseDoTexto: [
-    { FraseInIngles: "Carregando...", FraseInPortuguese: "" },
-  ],
-};
+import Quiz from "./Quiz";
+import {toast, ToastContainer} from 'react-toastify'
 
 export default function TextoComponent({ DataTexto, Alltextos }) {
   const { thema, currentUserData } = useContext(AuthContext);
@@ -34,9 +15,11 @@ export default function TextoComponent({ DataTexto, Alltextos }) {
   const [currentParagraph, setCurrentParagraph] = useState(0);
   const [AudioIndex, setAudioIndex] = useState(0);
   const [IsPlayng, setIsPlayng] = useState(false);
+  
 
   return (
     <C.TextoLayoutContainer thema={thema}>
+      <ToastContainer />
       <Header
         switchButtom={true}
         logoutButton={currentUserData && true}
@@ -60,6 +43,7 @@ export default function TextoComponent({ DataTexto, Alltextos }) {
         thema={thema}
         DataFraseAFrase={DataTexto.fraseAFraseDoTexto}
       />
+      <Quiz toast={toast} questions={DataTexto.questionsAboutText} />
       <br />
       <br />
       <br />

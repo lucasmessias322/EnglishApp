@@ -108,16 +108,13 @@ function Player({
         }
       />
 
-      {/* <li></li> */}
       <li id="SlowButton" ref={SlowButton} onClick={() => setSlow(!Slow)}>
         <img
           src="/assets/logo-area-turtle-silhouette-tortoise 1 1.png"
           alt="slowButton"
         />
       </li>
-      {/* <li id="FastButton" ref={FastButton} onClick={() => setFast(!Fast)}>
-        <FaFighterJet />
-      </li> */}
+
       <li id="PlayPauseButton" onClick={() => setIsPlayng(!IsPlayng)}>
         {IsPlayng ? <FaPause /> : <FaPlay />}
       </li>

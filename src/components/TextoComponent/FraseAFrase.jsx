@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { colors } from "./style";
 
 function FraseAFrase({ thema, DataFraseAFrase }) {
-  const [showFraseFrase, setShowFraseFrase] = useState(true);
+  const [showFraseFrase, setShowFraseFrase] = useState(false);
 
   return (
     <FraseAFraseComponent thema={thema}>
