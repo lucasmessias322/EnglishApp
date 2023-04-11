@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { colors } from "./style";
 
 export default function Quiz({ toast, questions }) {
-  const [showFraseFrase, setShowFraseFrase] = useState(true);
+  const [showFraseFrase, setShowFraseFrase] = useState(false);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
 
   useEffect(() => {
@@ -112,6 +112,12 @@ const Question = styled.div`
     font-size: 20px;
     font-weight: normal;
     padding-bottom: 10px;
+  }
+
+  @media (max-width: 500px) {
+    h4 {
+      font-size: 17px;
+    }
   }
 `;
 

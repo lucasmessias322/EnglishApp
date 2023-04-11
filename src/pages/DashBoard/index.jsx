@@ -39,14 +39,14 @@ export default function DashBoard() {
             </Link>
           </C.Card>
 
-          <C.Card thema={thema} style={{ opacity: !currentUserData && "0.6" }}>
+          {/* <C.Card thema={thema} style={{ opacity: !currentUserData && "0.6" }}>
             <Link to="/listsofwords">
               <div>
                 <FaBrain size={70} color="white" />
               </div>
               <p>Com Palavras em ingles....</p>
             </Link>
-          </C.Card>
+          </C.Card> */}
         </div>
       </C.ThingsToDo>
       <C.WhyLearning thema={thema}>

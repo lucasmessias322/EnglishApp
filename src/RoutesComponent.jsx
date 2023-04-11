@@ -14,7 +14,7 @@ export default function RoutesComponent() {
     <HashRouter>
       <Routes>
         <Route element={<PrivateRoutes />}>
-          <Route exact path="/listsofwords" element={<ListsOfWords />} />
+          {/* <Route exact path="/listsofwords" element={<ListsOfWords />} /> */}
           <Route exact path="/list/:listData" element={<List />} />
           <Route exact path="/cards/:listData" element={<CardsPage />} />
         </Route>
