@@ -17,9 +17,10 @@ export default function Header({
   DataTexto,
   setCurrentTexto,
   setIsPlayng,
+  IsPlayng,
   setCurrentParagraph,
   setAudioIndex,
-  AudioIndex
+  AudioIndex,
 }) {
   const menu = useRef(null);
   const [switchBtn, setSwitchBtn] = useState({ checked: true });
@@ -118,6 +119,7 @@ export default function Header({
               <menu className="MenuDisable" ref={menu}>
                 {DataTexto?.map((item, i) => (
                   <MenuItem
+                    IsPlayng
                     key={i}
                     index={i}
                     TitleMenu={item.titulo}

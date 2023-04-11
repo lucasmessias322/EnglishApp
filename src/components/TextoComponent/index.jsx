@@ -28,6 +28,7 @@ export default function TextoComponent({ DataTexto, Alltextos }) {
         TitleOfText={DataTexto.titulo}
         setCurrentTexto={setCurrentTexto}
         setIsPlayng={setIsPlayng}
+        IsPlayng={IsPlayng}
         setCurrentParagraph={setCurrentParagraph}
         setAudioIndex={setAudioIndex}
         AudioIndex={AudioIndex}

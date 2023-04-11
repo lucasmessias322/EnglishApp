@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 
@@ -7,16 +7,24 @@ function MenuItem({
   TitleMenu,
   setCurrentTexto,
   setIsPlayng,
+  IsPlayng,
   AudioIndex,
   setAudioIndex,
 }) {
   function changeTheText() {
     setIsPlayng(false);
+
     let paragrafo = document.getElementById(`${AudioIndex}`);
     paragrafo.classList.remove("SelectedP");
 
     setAudioIndex(0);
     setCurrentTexto(index);
+    if (AudioIndex === 0) {
+      let paragrafo = document.getElementById("0");
+      paragrafo.classList.add("SelectedP");
+    }
+
+    console.log(AudioIndex);
   }
 
   return (
