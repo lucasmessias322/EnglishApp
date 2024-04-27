@@ -2,7 +2,7 @@ import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config();
 
-export const engleshPlusBaseApi = process.env.engleshPlusApiUrl;
+export const engleshPlusBaseApi = "https://frightened-visor-fly.cyclic.app";
 
 const engleshPlusApi = axios.create({
   baseURL: engleshPlusBaseApi,
