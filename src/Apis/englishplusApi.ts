@@ -1,8 +1,8 @@
 import axios from "axios";
-import dotenv from "dotenv"
-dotenv.config()
+import dotenv from "dotenv";
+dotenv.config();
 
-export const engleshPlusBaseApi = process.env.engleshPlusApiUrl ||`http://localhost:8081`;
+export const engleshPlusBaseApi = process.env.engleshPlusApiUrl;
 
 const engleshPlusApi = axios.create({
   baseURL: engleshPlusBaseApi,
