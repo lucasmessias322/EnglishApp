@@ -2,11 +2,7 @@ import styled from "styled-components";
 import HeaderComponent from "../../Components/HeaderComponent";
 import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import {
-  getMemorizes,
-  getSingleMemorizes,
-  getUserMemorizes,
-} from "../../Apis/englishplusApi";
+import { getMemorizes, getUserMemorizes } from "../../Apis/englishplusApi";
 import { AuthContext } from "../../Context/AuthContext";
 
 interface memotypes {
@@ -20,17 +16,14 @@ export default function MemorizeLists() {
   const [memoTextAndNews, setmemoTextAndNews] = useState<memotypes[]>([]);
   const [publicMemos, setpublicMemos] = useState<memotypes[]>([]);
   const { token, userId } = useContext(AuthContext);
-  
+
   useEffect(() => {
     async function getAllMemos() {
       await getMemorizes(token).then((res) => {
         setpublicMemos(res);
-
-        // console.log(res);
       });
       await getUserMemorizes(userId, token).then((response) => {
         setmemoTextAndNews(response);
-        console.log("SingleMemorizes", response);
       });
     }
     getAllMemos();

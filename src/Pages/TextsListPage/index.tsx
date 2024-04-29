@@ -18,16 +18,14 @@ export default function TextsListPage() {
       _id: "",
       level: "A1",
       resume: "",
-      title: "",
+      title: "Carregando..",
       content: "",
     },
-    // adicione mais objetos conforme necessário
   ]);
 
   useEffect(() => {
     getTexts().then((res) => {
       setLevels(res);
-      // console.log(res);
     });
   }, []);
 
@@ -36,12 +34,14 @@ export default function TextsListPage() {
       <HeaderComponent fixed />
 
       <LevelWrapper>
-        <h2>Level A1</h2>
+        <h2>Textos em Ingles</h2>
         <TextListWrapper>
           {levels.map((text, textIndex) => (
             <TextItem key={textIndex}>
               <Link to={`/text/${text._id}`}>
-                <h4>{text.title}</h4>
+                <h4>
+                  {text.title} - {text.level}
+                </h4>
                 <span>{text.resume}</span>
               </Link>
             </TextItem>

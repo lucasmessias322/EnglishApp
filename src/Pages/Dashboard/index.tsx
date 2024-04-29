@@ -4,18 +4,32 @@ import { Link } from "react-router-dom";
 import { GiBrain } from "react-icons/gi";
 import HeaderComponent from "../../Components/HeaderComponent";
 import { AuthContext } from "../../Context/AuthContext";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function Dashboard() {
   const { token, userData } = useContext(AuthContext);
-  
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    if (userData) {
+      // Verifica se userData está definido
+      const nameWords = userData.name.split(" "); // Divide o nome em palavras
+      const firstTwoWords = nameWords.slice(0, 2); // Pega as duas primeiras palavras
+      setUserName(firstTwoWords.join(" ")); // Define as duas primeiras palavras como userName
+    }
+  }, [userData]);
+
   return (
     <DashboardContainer>
       <HeaderComponent fixed={false} loginSignin />
       <SectionOne>
         <LogoAndImageLogo>
           <img src="/logo.png" alt="" /> <h2>English Plus+</h2>
-          <p>Bem vindo(a) , oque você quer fazer?</p>
+          {userData ? (
+            <p>Bem vindo(a) de volta {userName}!</p>
+          ) : (
+            <p>Bem vindo(a), oque você quer fazer?</p>
+          )}
         </LogoAndImageLogo>
       </SectionOne>
       <SectionTwo>

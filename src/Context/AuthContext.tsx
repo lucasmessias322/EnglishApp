@@ -1,7 +1,6 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { getSingleUser } from "../Apis/englishplusApi";
 
-
 interface AuthProvidertypes {
   children?: ReactNode;
 }
@@ -49,20 +48,21 @@ function useStorage(
 export default function AuthProvider({ children }: AuthProvidertypes) {
   const [token, setToken] = useStorage("token");
   const [userId, setuserId] = useStorage("userid");
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState({ name: "" });
 
   const contextValue: initialState = {
     token: token || "",
     setToken,
-    userData,
+    userData: userData,
     userId: userId || "",
     setuserId,
   };
 
   useEffect(() => {
-    if (token) {
+    if (token && userId) {
       getSingleUser(userId, token).then((res) => {
-        setUserData(res[0]);
+        setUserData(res);
+        console.log(res);
       });
     }
   }, [token]);

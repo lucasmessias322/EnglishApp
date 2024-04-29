@@ -15,6 +15,11 @@ interface CardType {
   frontContent: string;
   backContent: string;
 }
+interface memotypes {
+  _id: string;
+  title: string;
+  flashcards: [];
+}
 
 export default function MemoList() {
   const { memoid } = useParams();
@@ -23,6 +28,7 @@ export default function MemoList() {
   const [cards, setCards] = useState<CardType[]>([
     { frontContent: "Carregando..", backContent: "Carregando.." },
   ]);
+  const [Memo, setMemo] = useState<memotypes[]>({});
   const [currentIndexCard, setCurrentIndexCard] = useState(0);
   const [cardsReviewed, setCardsReviewed] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
@@ -64,7 +70,8 @@ export default function MemoList() {
 
   useEffect(() => {
     getOneEspecific(memoid, token).then((res) => {
-      // console.log(res[0].flashcards);
+      //  console.log(res[0]);
+      setMemo(res[0]);
 
       setCards(res[0].flashcards);
     });
@@ -80,7 +87,7 @@ export default function MemoList() {
     <Container>
       <HeaderComponent fixed />
       <SectionOne>
-        <h2>Citações de Textos e Notícias</h2>
+        <h2>{Memo.title}</h2>
 
         {/* <LearningOptions>
           <LearningOption>

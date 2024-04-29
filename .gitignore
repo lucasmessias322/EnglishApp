@@ -13,6 +13,7 @@ dist-ssr
 *.local
 
 ThingsTodo.md
+.env
 
 # Editor directories and files
 .vscode/*
