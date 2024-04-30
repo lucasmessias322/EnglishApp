@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import HeaderComponent from "../../Components/HeaderComponent";
 import DeckComponent from "../../Components/MemoListComponents/DeckComponent";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getOneEspecific, getSingleMemorizes } from "../../Apis/englishplusApi";
 import { AuthContext } from "../../Context/AuthContext";
 import { PiCardsFill } from "react-icons/pi";
@@ -23,6 +23,8 @@ interface memotypes {
   title: string;
   flashcards: [];
 }
+
+
 
 export default function MemoList() {
   const { memoid } = useParams();
@@ -93,18 +95,24 @@ export default function MemoList() {
         <h2>{Memo.title}</h2>
 
         <LearningOptions>
+          {/* <LearningOption>
+            <Link to="">
+              <PiCardsFill className="icon" />
+              <h4>Cartões</h4>
+            </Link>
+          </LearningOption> */}
           <LearningOption>
-            <PiCardsFill className="icon" />
-            <h4>Cartões</h4>
+            <Link to={`/learn/${memoid}`}>
+              <FaBook className="icon" />
+              <h4>Aprender</h4>
+            </Link>
           </LearningOption>
-          <LearningOption>
-            <FaBook className="icon" />
-            <h4>Aprender</h4>
-          </LearningOption>
-          <LearningOption>
-            <IoDocuments className="icon" />
-            <h4>Avaliar</h4>
-          </LearningOption>
+          {/* <LearningOption>
+            <Link to="">
+              <IoDocuments className="icon" />
+              <h4>Avaliar</h4>
+            </Link>
+          </LearningOption> */}
         </LearningOptions>
 
         {showResults ? (
@@ -156,22 +164,25 @@ const LearningOptions = styled.div`
 `;
 
 const LearningOption = styled.div`
-  width: 100%;
-  max-width: 200px;
-  background-color: #353a52;
-  display: flex;
-  align-items: center;
-
-  border-radius: 10px;
-  padding: 15px;
   margin: 5px;
-  cursor: pointer;
+  a {
+    width: 100%;
+    max-width: 200px;
+    background-color: #353a52;
 
-  .icon {
-    font-size: 25px;
-    margin-right: 10px;
-    color: #7583ff;
+    border-radius: 10px;
+    padding: 15px;
+
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    .icon {
+      font-size: 25px;
+      margin-right: 10px;
+      color: #7583ff;
+    }
   }
+
   @media (max-width: 600px) {
     max-width: 400px;
   }

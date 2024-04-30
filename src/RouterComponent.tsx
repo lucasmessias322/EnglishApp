@@ -7,6 +7,7 @@ import MemorizeLists from "./Pages/MemorizeLists";
 import MemoList from "./Pages/MemoList";
 import LoginSigning from "./Pages/LoginSigning";
 import PrivateRoutes from "./utils/PrivateRoutes";
+import LearnPage from "./Pages/LearnPage";
 
 export default function RouterComponent() {
   return (
@@ -15,6 +16,7 @@ export default function RouterComponent() {
         <Route element={<PrivateRoutes />}>
           <Route path="/memorizelists" element={<MemorizeLists />} />
           <Route path="/memolist/:memoid" element={<MemoList />} />
+          <Route path="/learn/:memoid" element={<LearnPage />} />
         </Route>
         <Route path="/" element={<Dashboard />} />
         <Route path="/account/:accountType" element={<LoginSigning />} />
