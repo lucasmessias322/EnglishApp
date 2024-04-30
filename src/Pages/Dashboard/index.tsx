@@ -25,7 +25,7 @@ export default function Dashboard() {
       <SectionOne>
         <LogoAndImageLogo>
           <img src="/logo.png" alt="" /> <h2>English Plus+</h2>
-          {userData ? (
+          {userName ? (
             <p>Bem vindo(a) de volta {userName}!</p>
           ) : (
             <p>Bem vindo(a), oque você quer fazer?</p>

@@ -6,6 +6,9 @@ import DeckComponent from "../../Components/MemoListComponents/DeckComponent";
 import { useParams } from "react-router-dom";
 import { getOneEspecific, getSingleMemorizes } from "../../Apis/englishplusApi";
 import { AuthContext } from "../../Context/AuthContext";
+import { PiCardsFill } from "react-icons/pi";
+import { FaBook } from "react-icons/fa";
+import { IoDocuments } from "react-icons/io5";
 
 interface MemoListTypes {
   isFlipped?: boolean;
@@ -85,11 +88,11 @@ export default function MemoList() {
 
   return (
     <Container>
-      <HeaderComponent fixed />
+      <HeaderComponent fixed loginSignin />
       <SectionOne>
         <h2>{Memo.title}</h2>
 
-        {/* <LearningOptions>
+        <LearningOptions>
           <LearningOption>
             <PiCardsFill className="icon" />
             <h4>Cartões</h4>
@@ -102,7 +105,7 @@ export default function MemoList() {
             <IoDocuments className="icon" />
             <h4>Avaliar</h4>
           </LearningOption>
-        </LearningOptions> */}
+        </LearningOptions>
 
         {showResults ? (
           <ResultsContainer>

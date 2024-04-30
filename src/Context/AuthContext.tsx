@@ -12,6 +12,7 @@ interface initialState {
   setuserId: (userId: string) => void;
   userData: object;
   setUserData?: (userData: object) => void;
+  logout: () => void;
 }
 
 const initialState: initialState = {
@@ -21,6 +22,7 @@ const initialState: initialState = {
   userData: {},
   setUserData: () => {},
   setuserId: () => {},
+  logout: () => {},
 };
 
 export const AuthContext = createContext(initialState);
@@ -46,8 +48,8 @@ function useStorage(
 }
 
 export default function AuthProvider({ children }: AuthProvidertypes) {
-  const [token, setToken] = useStorage("token");
-  const [userId, setuserId] = useStorage("userid");
+  const [token, setToken, clearToken] = useStorage("token");
+  const [userId, setuserId, clearuserId] = useStorage("userid");
   const [userData, setUserData] = useState({ name: "" });
 
   const contextValue: initialState = {
@@ -56,6 +58,7 @@ export default function AuthProvider({ children }: AuthProvidertypes) {
     userData: userData,
     userId: userId || "",
     setuserId,
+    logout,
   };
 
   useEffect(() => {
@@ -66,6 +69,12 @@ export default function AuthProvider({ children }: AuthProvidertypes) {
       });
     }
   }, [token]);
+
+  function logout() {
+    clearToken();
+    clearuserId();
+    window.location.reload();
+  }
 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>

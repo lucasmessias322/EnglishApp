@@ -37,7 +37,7 @@ export default function MemorizeLists() {
 
   return (
     <Container>
-      <HeaderComponent fixed />
+      <HeaderComponent fixed loginSignin />
 
       <DefaultDecksWrapper>
         <DecksList>

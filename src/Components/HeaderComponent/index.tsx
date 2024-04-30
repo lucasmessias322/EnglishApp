@@ -17,7 +17,7 @@ export default function HeaderComponent({
   children,
   loginSignin,
 }: HeaderProps) {
-  const { token } = useContext(AuthContext);
+  const { token, logout } = useContext(AuthContext);
 
   return (
     <Header fixed={fixed}>
@@ -33,6 +33,16 @@ export default function HeaderComponent({
             </Link>
             <Link to="/account/register">
               <span className="register">Register</span>
+            </Link>
+          </LoginSignin>
+        </ChildrenContainer>
+      )}
+
+      {loginSignin && token && (
+        <ChildrenContainer>
+          <LoginSignin onClick={logout}>
+            <Link to="/">
+              <span className="login">Sair</span>
             </Link>
           </LoginSignin>
         </ChildrenContainer>
