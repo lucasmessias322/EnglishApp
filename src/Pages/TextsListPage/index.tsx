@@ -36,7 +36,7 @@ export default function TextsListPage() {
       <LevelWrapper>
         <h2>Textos em Ingles</h2>
         <TextListWrapper>
-          {levels.map((text, textIndex) => (
+          {levels?.map((text, textIndex) => (
             <TextItem key={textIndex}>
               <Link to={`/text/${text._id}`}>
                 <h4>

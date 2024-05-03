@@ -143,9 +143,8 @@ export default function TextPage() {
         setAddflashcardverificationtoggle((e) => !e);
         setmemoTextAndNews(response.MemoList);
       });
-    }else{
+    } else {
       console.log("Login necessario");
-      
     }
   }
 

@@ -24,8 +24,6 @@ interface memotypes {
   flashcards: [];
 }
 
-
-
 export default function MemoList() {
   const { memoid } = useParams();
 

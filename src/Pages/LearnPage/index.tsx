@@ -1,3 +1,242 @@
+// import React, { useContext, useEffect, useState } from "react";
+// import styled from "styled-components";
+// import { Link, useParams } from "react-router-dom";
+// import { getOneEspecific } from "../../Apis/englishplusApi";
+// import { AuthContext } from "../../Context/AuthContext";
+// import { FaBook, FaWindowClose } from "react-icons/fa";
+
+// interface MemoType {
+//   _id: string;
+//   title: string;
+//   flashcards: { frontContent: string; backContent: string }[];
+// }
+
+// export default function LearnPage() {
+//   const { memoid } = useParams();
+//   const [memo, setMemo] = useState<MemoType | null>(null);
+//   const [currentRound, setCurrentRound] = useState<number>(1);
+//   const [currentCardIndex, setCurrentCardIndex] = useState<number>(0);
+//   const [selectedOption, setSelectedOption] = useState<number | null>(null);
+//   const [answerOptions, setAnswerOptions] = useState<string[]>([]);
+//   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+//   const [correctAnswerIndex, setCorrectAnswerIndex] = useState<number | null>(
+//     null
+//   );
+//   const [cardsReviewed, setCardsReviewed] = useState(0);
+//   const [showNextButton, setShowNextButton] = useState<boolean>(false);
+//   const [correctAnswers, setCorrectAnswers] = useState<number>(0); // Contador de respostas corretas
+//   const [incorrectAnswers, setIncorrectAnswers] = useState<number>(0); // Contador de respostas incorretas
+//   const [roundFinished, setRoundFinished] = useState<boolean>(false); // Flag para indicar se a rodada terminou
+//   const [reviewedWords, setReviewedWords] = useState<string[]>([]);
+
+//   const [availableFlashcards, setAvailableFlashcards] = useState<
+//     { frontContent: string; backContent: string }[]
+//   >([]);
+
+//   const { token } = useContext(AuthContext);
+//   const cardsPerRound = 10;
+
+//   useEffect(() => {
+//     getOneEspecific(memoid, token).then((res) => {
+//       setMemo(res[0]);
+//     });
+//   }, []);
+
+//   // Efeito para atualizar as opções de resposta quando a memória ou o índice da carta atual mudar
+//   useEffect(() => {
+//     // Verifica se há uma memória disponível
+//     if (memo) {
+//       // Filtra as cartas de memória para excluir a carta atual
+//       const otherFlashcards = memo.flashcards
+//         .filter((_, index) => index !== currentCardIndex)
+//         .slice(0, 3);
+//       // Embaralha e seleciona as três cartas restantes para as opções de resposta
+//       // const shuffledFlashcards = shuffleArray(otherFlashcards).slice(0, 3);
+//       // Extrai o conteúdo de trás de cada carta embaralhada
+//       const allOptions = otherFlashcards.map(
+//         (flashcard) => flashcard.backContent
+//       );
+//       // Adiciona o conteúdo de trás da carta atual às opções de resposta
+//       allOptions.push(memo.flashcards[currentCardIndex].backContent);
+//       // Embaralha novamente todas as opções de resposta
+//       const shuffledOptions = shuffleArray(allOptions);
+//       // Define as opções de resposta no estado
+//       setAnswerOptions(shuffledOptions);
+//     }
+//   }, [memo, currentCardIndex]);
+
+//   const handleOptionClick = (index: number) => {
+//     if (isCorrect !== null) {
+//       return; // Do nothing if answer has already been selected
+//     }
+//     setSelectedOption(index);
+//     const correctOptionIndex =
+//       memo!.flashcards[currentCardIndex].backContent === answerOptions[index]
+//         ? index
+//         : null;
+//     if (correctOptionIndex !== null) {
+//       setIsCorrect(true);
+//       setCorrectAnswers((prevCount) => prevCount + 1); // Incrementa o contador de respostas corretas
+//     } else {
+//       setIsCorrect(false);
+//       setCorrectAnswerIndex(
+//         answerOptions.findIndex(
+//           (option) => option === memo!.flashcards[currentCardIndex].backContent
+//         )
+//       );
+//       setIncorrectAnswers((prevCount) => prevCount + 1); // Incrementa o contador de respostas incorretas
+//     }
+//     setShowNextButton(true);
+//   };
+
+//   const handleNextCard = () => {
+//     if (isCorrect === null) {
+//       return; // Do nothing if answer has not been selected yet
+//     }
+
+//     // Se a rodada terminou, adicionamos as palavras revisadas ao array
+//     const currentWord = memo.flashcards[currentCardIndex];
+//     setReviewedWords([...reviewedWords, currentWord]);
+
+//     setCardsReviewed(cardsReviewed + 1);
+
+//     if (
+//       currentCardIndex + 1 >=
+//       cardsPerRound
+//       // currentCardIndex + 1 >= memo!.flashcards.length
+//     ) {
+//       // setCurrentCardIndex(0);
+//       setCurrentRound(currentRound + 1);
+//       setRoundFinished(true); // Marca a rodada como terminada
+//     } else {
+//       setCurrentCardIndex(currentCardIndex + 1);
+//     }
+
+//     setSelectedOption(null);
+//     setIsCorrect(null);
+//     setCorrectAnswerIndex(null);
+//     setShowNextButton(false);
+//   };
+
+//   const handleNextRound = () => {
+//     // setCardsReviewed(0);
+//     setCorrectAnswers(0);
+//     setIncorrectAnswers(0);
+//     setRoundFinished(false);
+//   };
+
+//   useEffect(() => {
+//     console.log(reviewedWords);
+//   }, [reviewedWords]);
+
+//   return (
+//     <Container>
+//       <Header>
+//         <h2 className="learn">
+//           <FaBook className="icon" /> Aprender
+//         </h2>
+//         <h2>
+//           {roundFinished
+//             ? "Proxima rodada " + currentRound
+//             : "Rodada " + currentRound}
+//         </h2>
+//         <Link to={`/memolist/${memoid}`}>
+//           <FaWindowClose color="#7583ff" size={30} />
+//         </Link>
+//       </Header>
+//       {memo && (
+//         <SectionWrapper>
+//           {!roundFinished && (
+//             <>
+//               <h4 className="frontContent">
+//                 {memo.flashcards[currentCardIndex].frontContent}
+//               </h4>
+//               <AnswerOptionsContainer>
+//                 <span>Selecione a palavra correspondente:</span>
+//                 <ul>
+//                   {answerOptions.map((option, index) => (
+//                     <AnswerOption
+//                       key={index}
+//                       onClick={() => handleOptionClick(index)}
+//                       selected={selectedOption === index}
+//                       correct={
+//                         isCorrect !== null && index === correctAnswerIndex
+//                       }
+//                       incorrect={
+//                         isCorrect !== null &&
+//                         !isCorrect &&
+//                         index === selectedOption
+//                       }
+//                       disabled={isCorrect !== null}
+//                     >
+//                       {option}
+//                     </AnswerOption>
+//                   ))}
+//                 </ul>
+//               </AnswerOptionsContainer>
+//             </>
+//           )}
+
+//           {showNextButton && (
+//             <NextButton onClick={handleNextCard}>Próximo</NextButton>
+//           )}
+//           {roundFinished && (
+//             <RoundSummary>
+//               <ResultsContainer>
+//                 <span className="hits">
+//                   Conheço a palavra: {correctAnswers}
+//                 </span>
+//                 <span className="misses">
+//                   Ainda Aprendendo: {incorrectAnswers}
+//                 </span>
+//                 <p>
+//                   Palavras estudadas{" "}
+//                   {cardsReviewed + " / " + memo.flashcards.length}
+//                 </p>
+//               </ResultsContainer>
+
+//               <NextRoundButton onClick={handleNextRound}>
+//                 Próxima Rodada
+//               </NextRoundButton>
+//               <h3>Palavras estudados nesta rodada:</h3>
+//               <ul>
+//                 {reviewedWords.map((flashcard, index) => (
+//                   <li key={index}>
+//                     <span className="frontContent">
+//                       {flashcard.frontContent}
+//                     </span>
+//                     <span>{flashcard.backContent}</span>
+//                     <span></span>
+//                   </li>
+//                 ))}
+//               </ul>
+//             </RoundSummary>
+//           )}
+//         </SectionWrapper>
+//       )}
+//     </Container>
+//   );
+// }
+
+// function shuffleArray<T>(array: T[]): T[] {
+//   const newArray = [...array];
+//   for (let i = newArray.length - 1; i > 0; i--) {
+//     const j = Math.floor(Math.random() * (i + 1));
+//     [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+//   }
+//   return newArray;
+// }
+
+// ===================================================
+/*
+
+O problema é que quando muda de rodada por exemplo eu desejo que os flashCards anteriores não seja mais exibido para
+ o usuario novamente para ele revisar, desejo depois de uma rodada ele exiba novos flashcards ao inves dos anteriores
+
+ vou começar tudo do zero prestando a tençao para conseguir implementar com sucesso!
+
+ */
+
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
@@ -14,17 +253,26 @@ interface MemoType {
 export default function LearnPage() {
   const { memoid } = useParams();
   const [memo, setMemo] = useState<MemoType | null>(null);
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [currentRound, setCurrentRound] = useState<number>(1);
   const [currentCardIndex, setCurrentCardIndex] = useState<number>(0);
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [answerOptions, setAnswerOptions] = useState<string[]>([]);
+  const [answerOptions, setAnswerOptions] = useState<string[] | null>([]);
+  const [reviewedWords, setReviewedWords] = useState([]);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [correctAnswerIndex, setCorrectAnswerIndex] = useState<number | null>(
     null
   );
+  const [correctAnswers, setCorrectAnswers] = useState<number>(0); // Contador de respostas corretas
+  const [incorrectAnswers, setIncorrectAnswers] = useState<number>(0); // Contador de respostas incorretas
   const [showNextButton, setShowNextButton] = useState<boolean>(false);
+  const [roundFinished, setRoundFinished] = useState<boolean>(false);
+  const [RoundProgress, setRoundProgress] = useState<number>(0);
+  const [finishedAllRounds, setFinishedAllRounds] = useState<boolean>(false);
+
   const { token } = useContext(AuthContext);
-  const cardsPerRound = 8;
+  // const cardsPerRound = 10;
+
+  const [cardsPerRound, setCardsPerRound] = useState<number>(10);
 
   useEffect(() => {
     getOneEspecific(memoid, token).then((res) => {
@@ -33,16 +281,24 @@ export default function LearnPage() {
   }, []);
 
   useEffect(() => {
+    // Verifica se há uma memória disponível
     if (memo) {
+      // Filtra as cartas de memória para excluir a carta atual
       const otherFlashcards = memo.flashcards.filter(
         (_, index) => index !== currentCardIndex
       );
+
+      // Embaralha e seleciona as três cartas restantes para as opções de resposta
       const shuffledFlashcards = shuffleArray(otherFlashcards).slice(0, 3);
+      // Extrai o conteúdo de trás de cada carta embaralhada
       const allOptions = shuffledFlashcards.map(
         (flashcard) => flashcard.backContent
       );
+      // Adiciona o conteúdo de trás da carta atual às opções de resposta
       allOptions.push(memo.flashcards[currentCardIndex].backContent);
+      // Embaralha novamente todas as opções de resposta
       const shuffledOptions = shuffleArray(allOptions);
+      // Define as opções de resposta no estado
       setAnswerOptions(shuffledOptions);
     }
   }, [memo, currentCardIndex]);
@@ -51,6 +307,7 @@ export default function LearnPage() {
     if (isCorrect !== null) {
       return; // Do nothing if answer has already been selected
     }
+
     setSelectedOption(index);
     const correctOptionIndex =
       memo!.flashcards[currentCardIndex].backContent === answerOptions[index]
@@ -58,6 +315,7 @@ export default function LearnPage() {
         : null;
     if (correctOptionIndex !== null) {
       setIsCorrect(true);
+      setCorrectAnswers((prevCount) => prevCount + 1); // Incrementa o contador de respostas corretas
     } else {
       setIsCorrect(false);
       setCorrectAnswerIndex(
@@ -65,27 +323,58 @@ export default function LearnPage() {
           (option) => option === memo!.flashcards[currentCardIndex].backContent
         )
       );
+      setIncorrectAnswers((prevCount) => prevCount + 1); // Incrementa o contador de respostas incorretas
     }
     setShowNextButton(true);
   };
 
+  // useEffect(() => {
+  //   const RoundProgress =
+  //     (currentRound - 1) * cardsPerRound + currentCardIndex;
+  //   setRoundProgress(RoundProgress);
+  // }, [currentCardIndex]);
+
+  // const RoundProgress =
+  //   (currentRound - 1) * cardsPerRound + currentCardIndex;
   const handleNextCard = () => {
     if (isCorrect === null) {
       return; // Do nothing if answer has not been selected yet
     }
-    if (
-      currentCardIndex + 1 >= cardsPerRound ||
-      currentCardIndex + 1 >= memo!.flashcards.length
-    ) {
-      setCurrentCardIndex(0);
+
+    // Se a rodada terminou, adicionamos as palavras revisadas ao array
+    const currentWord = memo.flashcards[currentCardIndex];
+    setReviewedWords([...reviewedWords, currentWord]);
+
+    setRoundProgress(RoundProgress + 1);
+    console.log(RoundProgress);
+
+    if (RoundProgress + 1 >= cardsPerRound) {
+      //Finalizaçao de um round
+      setRoundFinished(true);
+      console.log("RoundFinished");
+      setRoundProgress(0);
+    }
+
+    if (currentCardIndex + 1 >= memo.flashcards.length) {
+      //Terminou todas as rodadas!
+      setRoundFinished(false);
+      setFinishedAllRounds(true);
       setCurrentRound(currentRound + 1);
     } else {
       setCurrentCardIndex(currentCardIndex + 1);
     }
+
     setSelectedOption(null);
     setIsCorrect(null);
     setCorrectAnswerIndex(null);
     setShowNextButton(false);
+  };
+
+  const handleNextRound = () => {
+    setCorrectAnswers(0);
+    setIncorrectAnswers(0);
+    setReviewedWords([]);
+    setRoundFinished(false);
   };
 
   return (
@@ -94,40 +383,78 @@ export default function LearnPage() {
         <h2 className="learn">
           <FaBook className="icon" /> Aprender
         </h2>
-        <h2>Rodada {currentRound}</h2>
+        <h2>Rodada</h2>
         <Link to={`/memolist/${memoid}`}>
           <FaWindowClose color="#7583ff" size={30} />
         </Link>
       </Header>
-      {memo && (
-        <SectionWrapper>
-          <h4 className="frontContent">
-            {memo.flashcards[currentCardIndex].frontContent}
-          </h4>
-          <AnswerOptionsContainer>
-            <span>Selecione a palavra correspondente:</span>
+      <SectionWrapper>
+        {!roundFinished && !finishedAllRounds && (
+          <>
+            <h4 className="frontContent">
+              {memo?.flashcards[currentCardIndex].frontContent}
+            </h4>
+            <AnswerOptionsContainer>
+              <span>Selecione a palavra correspondente:</span>
+              <ul>
+                {answerOptions.map((elem, index) => (
+                  <AnswerOption
+                    onClick={() => handleOptionClick(index)}
+                    selected={selectedOption === index}
+                    correct={isCorrect !== null && index === correctAnswerIndex}
+                    incorrect={
+                      isCorrect !== null &&
+                      !isCorrect &&
+                      index === selectedOption
+                    }
+                    disabled={isCorrect !== null}
+                  >
+                    {elem}
+                  </AnswerOption>
+                ))}
+              </ul>
+            </AnswerOptionsContainer>
+          </>
+        )}
+
+        {showNextButton && (
+          <NextButton onClick={handleNextCard}>Próximo</NextButton>
+        )}
+
+        {roundFinished && (
+          <RoundSummary>
+            <ResultsContainer>
+              <span className="hits">Conheço a palavra:{correctAnswers}</span>
+              <span className="misses">
+                Ainda Aprendendo:{incorrectAnswers}
+              </span>
+              <p>
+                Palavras estudadas {currentCardIndex}/{memo.flashcards.length}
+              </p>
+            </ResultsContainer>
+
+            <NextRoundButton onClick={handleNextRound}>
+              Próxima Rodada
+            </NextRoundButton>
+            <h3>Palavras estudados nesta rodada: </h3>
             <ul>
-              {answerOptions.map((option, index) => (
-                <AnswerOption
-                  key={index}
-                  onClick={() => handleOptionClick(index)}
-                  selected={selectedOption === index}
-                  correct={isCorrect !== null && index === correctAnswerIndex}
-                  incorrect={
-                    isCorrect !== null && !isCorrect && index === selectedOption
-                  }
-                  disabled={isCorrect !== null}
-                >
-                  {option}
-                </AnswerOption>
+              {reviewedWords.map((elem, i) => (
+                <li>
+                  <span className="frontContent">{elem.frontContent}</span>
+                  <span>{elem.backContent}</span>
+                  <span></span>
+                </li>
               ))}
             </ul>
-          </AnswerOptionsContainer>
-          {showNextButton && (
-            <NextButton onClick={handleNextCard}>Próximo</NextButton>
-          )}
-        </SectionWrapper>
-      )}
+          </RoundSummary>
+        )}
+
+        {finishedAllRounds && (
+          <div>
+            <h2>Todos os cards finalizados</h2>
+          </div>
+        )}
+      </SectionWrapper>
     </Container>
   );
 }
@@ -184,10 +511,10 @@ const AnswerOptionsContainer = styled.div`
 `;
 
 interface AnswerOptionProps {
-  selected: boolean;
-  correct: boolean;
-  incorrect: boolean;
-  disabled: boolean;
+  selected?: boolean;
+  correct?: boolean;
+  incorrect?: boolean;
+  disabled?: boolean;
 }
 
 const AnswerOption = styled.li<AnswerOptionProps>`
@@ -213,6 +540,87 @@ const AnswerOption = styled.li<AnswerOptionProps>`
 
 const NextButton = styled.button`
   margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #7583ff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+`;
+
+const RoundSummary = styled.div`
+  p {
+    margin: 5px 0;
+  }
+
+  h3 {
+    margin-top: 40px;
+  }
+
+  ul {
+    padding: 20px 0px;
+
+    list-style: none;
+
+    li {
+      background-color: #2e3856;
+      margin-bottom: 10px;
+      padding: 20px;
+      border-radius: 5px;
+      span {
+        width: 200px;
+      }
+      .frontContent {
+        border-right: 1px solid #51597e;
+        margin-right: 20px;
+        padding-right: 20px;
+      }
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+`;
+
+const ResultsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  margin: auto;
+  padding-top: 50px;
+
+  h3 {
+    padding-bottom: 10px;
+  }
+
+  p {
+    padding-top: 15px;
+  }
+
+  span {
+    max-width: 250px;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+  }
+
+  span.hits {
+    background-color: #0e3b44;
+    color: #59e8b1;
+  }
+  span.misses {
+    background-color: #46201f;
+    color: #f3812f;
+  }
+`;
+
+const NextRoundButton = styled.button`
+  margin-top: 10px;
   padding: 10px 20px;
   background-color: #7583ff;
   color: #fff;
