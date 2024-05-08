@@ -63,10 +63,16 @@ export default function AuthProvider({ children }: AuthProvidertypes) {
 
   useEffect(() => {
     if (token && userId) {
-      getSingleUser(userId, token).then((res) => {
-        setUserData(res);
-        console.log(res);
-      });
+      getSingleUser(userId, token)
+        .then((res) => {
+          setUserData(res);
+          // console.log(res);
+        })
+        .catch((err) => {
+          logout();
+          console.log("logout");
+          
+        });
     }
   }, [token]);
 

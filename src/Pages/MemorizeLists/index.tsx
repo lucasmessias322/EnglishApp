@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { getMemorizes, getUserMemorizes } from "../../Apis/englishplusApi";
 import { AuthContext } from "../../Context/AuthContext";
+import LoadingComp from "../../Components/LoadingComp";
 
 interface memotypes {
   _id: string;
@@ -39,21 +40,25 @@ export default function MemorizeLists() {
     <Container>
       <HeaderComponent fixed loginSignin />
 
-      <DefaultDecksWrapper>
-        <DecksList>
-          <h2>Listas de Memorizaçao:</h2>
-          {memoList.map((item) =>
-            item.flashcards.length > 0 ? (
-              <DeckItem key={item._id}>
-                <Link to={`/memolist/${item._id}`}>
-                  <h4>{item.title}</h4>
-                  <span>{item.flashcards.length} palavras</span>
-                </Link>
-              </DeckItem>
-            ) : null
-          )}
-        </DecksList>
-      </DefaultDecksWrapper>
+      {memoList.length === 0 ? (
+        <LoadingComp />
+      ) : (
+        <DefaultDecksWrapper>
+          <DecksList>
+            <h2>Listas de Memorizaçao:</h2>
+            {memoList?.map((item) =>
+              item.flashcards.length > 0 ? (
+                <DeckItem key={item._id}>
+                  <Link to={`/memolist/${item._id}`}>
+                    <h4>{item.title}</h4>
+                    <span>{item.flashcards.length} palavras</span>
+                  </Link>
+                </DeckItem>
+              ) : null
+            )}
+          </DecksList>
+        </DefaultDecksWrapper>
+      )}
     </Container>
   );
 }

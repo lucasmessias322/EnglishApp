@@ -1,9 +1,10 @@
 import axios from "axios";
 
+const engleshPlusBaseApiLocal = `http://localhost:8081`;
 export const engleshPlusBaseApi = "https://frightened-visor-fly.cyclic.app";
 
 const engleshPlusApi = axios.create({
-  baseURL: engleshPlusBaseApi,
+  baseURL: engleshPlusBaseApiLocal,
 });
 
 export async function getSingleUser(userId: string, token: string) {
@@ -16,7 +17,7 @@ export async function getSingleUser(userId: string, token: string) {
   const get = engleshPlusApi
     .get(`/api/user/${userId}`, config)
     .then((response) => response.data)
-    .catch((error) => console.log(error));
+    // .catch((error) => console.log(error));
 
   return await get;
 }

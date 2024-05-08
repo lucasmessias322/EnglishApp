@@ -3,6 +3,7 @@ import HeaderComponent from "../../Components/HeaderComponent";
 import { useEffect, useState } from "react";
 import { getTexts } from "../../Apis/englishplusApi";
 import { Link } from "react-router-dom";
+import LoadingComp from "../../Components/LoadingComp";
 
 interface Text {
   _id: string;
@@ -14,13 +15,13 @@ interface Text {
 
 export default function TextsListPage() {
   const [levels, setLevels] = useState<Text[]>([
-    {
-      _id: "",
-      level: "A1",
-      resume: "",
-      title: "Carregando..",
-      content: "",
-    },
+    // {
+    //   _id: "",
+    //   level: "A1",
+    //   resume: "",
+    //   title: "Carregando..",
+    //   content: "",
+    // },
   ]);
 
   useEffect(() => {
@@ -33,21 +34,25 @@ export default function TextsListPage() {
     <Container>
       <HeaderComponent fixed />
 
-      <LevelWrapper>
-        <h2>Textos em Ingles</h2>
-        <TextListWrapper>
-          {levels?.map((text, textIndex) => (
-            <TextItem key={textIndex}>
-              <Link to={`/text/${text._id}`}>
-                <h4>
-                  {text.title} - {text.level}
-                </h4>
-                <span>{text.resume}</span>
-              </Link>
-            </TextItem>
-          ))}
-        </TextListWrapper>
-      </LevelWrapper>
+      {levels.length === 0 ? (
+        <LoadingComp />
+      ) : (
+        <LevelWrapper>
+          <h2>Textos em Ingles</h2>
+          <TextListWrapper>
+            {levels?.map((text, textIndex) => (
+              <TextItem key={textIndex}>
+                <Link to={`/text/${text._id}`}>
+                  <h4>
+                    {text.title} - {text.level}
+                  </h4>
+                  <span>{text.resume}</span>
+                </Link>
+              </TextItem>
+            ))}
+          </TextListWrapper>
+        </LevelWrapper>
+      )}
     </Container>
   );
 }
