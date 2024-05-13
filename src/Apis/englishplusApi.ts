@@ -4,7 +4,7 @@ const engleshPlusBaseApiLocal = `http://localhost:8081`;
 export const engleshPlusBaseApi = "https://frightened-visor-fly.cyclic.app";
 
 const engleshPlusApi = axios.create({
-  baseURL: engleshPlusBaseApiLocal,
+  baseURL: engleshPlusBaseApi,
 });
 
 export async function getSingleUser(userId: string, token: string) {
