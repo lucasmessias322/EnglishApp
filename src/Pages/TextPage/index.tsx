@@ -4,8 +4,8 @@ import styled from "styled-components";
 import {
   getSingleText,
   engleshPlusBaseApi,
+  engleshPlusBaseApiLocal,
   PutMemorize,
-  getSingleMemorizes,
   getUserMemorizes,
 } from "../../Apis/englishplusApi";
 import HeaderComponent from "../../Components/HeaderComponent";

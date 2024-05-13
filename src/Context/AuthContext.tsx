@@ -10,7 +10,7 @@ interface initialState {
   userId: string;
   setToken: (token: string) => void;
   setuserId: (userId: string) => void;
-  userData: object;
+  userData: { role?: []; name?: string; username?: string; email?: string };
   setUserData?: (userData: object) => void;
   logout: () => void;
 }
@@ -50,7 +50,7 @@ function useStorage(
 export default function AuthProvider({ children }: AuthProvidertypes) {
   const [token, setToken, clearToken] = useStorage("token");
   const [userId, setuserId, clearuserId] = useStorage("userid");
-  const [userData, setUserData] = useState({ name: "" });
+  const [userData, setUserData] = useState({ name: "", role: [] });
 
   const contextValue: initialState = {
     token: token || "",
@@ -71,7 +71,6 @@ export default function AuthProvider({ children }: AuthProvidertypes) {
         .catch((err) => {
           logout();
           console.log("logout");
-          
         });
     }
   }, [token]);

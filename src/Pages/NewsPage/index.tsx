@@ -9,6 +9,7 @@ interface Source {
   name: string;
 }
 interface Article {
+  _id: string;
   source: Source;
   author: string;
   title: string;
@@ -22,31 +23,17 @@ interface Article {
 export default function NewsPage() {
   const [newsList, setNewsList] = useState<Article[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [category, setCategory] = useState("general");
 
   useEffect(() => {
-    if (page >= 1) {
-      // fetchNews();
-    }
-  }, [page]);
-
-  const fetchNews = async () => {
-    try {
-      const res = await getNews(page, category);
-
-      const articles = res.articles.filter(
-        (item: any) => !item.title.includes("[Removed]") && item.urlToImage
-      );
-      console.log(articles);
-      setNewsList([...newsList, ...articles]); // Adiciona as novas noticias às noticias existentes
-    } catch (error) {
-      console.error("Error fetching news:", error);
-    }
-  };
-
-  const handleLoadMore = () => {
-    setPage(page + 1); // Atualiza a página para buscar mais notícias
-  };
+    getNews().then((res) => {
+      if (res && res.length > 0) {
+        const articles = res?.filter(
+          (item: any) => !item.title?.includes("[Removed]") && item.urlToImage
+        );
+        setNewsList(articles);
+      }
+    });
+  }, []);
 
   return (
     <Container>
@@ -54,6 +41,7 @@ export default function NewsPage() {
       <ContentList>
         {newsList.map((news) => (
           <NewsItem
+            articleid={news._id}
             key={news.url}
             title={news.title}
             category="Science, Technology"
@@ -62,9 +50,9 @@ export default function NewsPage() {
             description={news.description}
           />
         ))}
-        <LoadMoreButton onClick={handleLoadMore}>
+        {/* <LoadMoreButton onClick={handleLoadMore}>
           Carregar mais notícias
-        </LoadMoreButton>
+        </LoadMoreButton> */}
       </ContentList>
     </Container>
   );

@@ -1,18 +1,24 @@
-// https://newsapi.org/v2/everything?q=Apple&from=2024-04-09&sortBy=popularity&apiKey=66e4119252284e1aad0e276006c2f156
 import axios from "axios";
-const apiKey = "66e4119252284e1aad0e276006c2f156";
-const newsApiBaseUrl = "https://newsapi.org/v2";
+
+const newsApiBaseUrl = "http://localhost:8081";
+export const engleshPlusBaseApi = "https://frightened-visor-fly.cyclic.app";
 
 const newsApi = axios.create({
-  baseURL: newsApiBaseUrl,
-  headers: { Authorization: `Bearer ${apiKey}` },
+  baseURL: engleshPlusBaseApi,
 });
 
-export async function getNews(page?: number, category?: string) {
+export async function getNews() {
   const get = newsApi
-    .get(
-      `/top-headlines?country=us&sortBy=relevancy&language=en&category=${category}&page=${page}&pageSize=25`
-    )
+    .get(`/api/news`)
+    .then((response) => response.data)
+    .catch((error) => console.log(error));
+
+  return await get;
+}
+
+export async function getArticle(articleid: string) {
+  const get = newsApi
+    .get(`/api/news/${articleid}`)
     .then((response) => response.data)
     .catch((error) => console.log(error));
 

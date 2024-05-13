@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 interface Props {
+  articleid: string;
   title: string;
   category: string;
   publicationDate: string;
@@ -9,6 +11,7 @@ interface Props {
 }
 
 export default function NewsItem({
+  articleid,
   title,
   category,
   publicationDate,
@@ -27,18 +30,20 @@ export default function NewsItem({
 
   return (
     <ContentItem>
-      <img src={image} />
-      <div className="previewcontent">
-        <h4 className="title">{title}</h4>
-        <span className="category">{category}</span>
-        <span>
-          <b>{formatDate(publicationDate)}</b>
-        </span>
-        <p className="content">{description}</p>
-        <a href="" className="Readmore ">
-          Read more ...
-        </a>
-      </div>
+      <Link to={`/article/${articleid}`}>
+        <img src={image} />
+        <div className="previewcontent">
+          <h4 className="title">{title}</h4>
+          <span className="category">{category}</span>
+          <span>
+            <b>{formatDate(publicationDate)}</b>
+          </span>
+          <p className="content">{description}</p>
+          <a href="" className="Readmore ">
+            Read more ...
+          </a>
+        </div>
+      </Link>
     </ContentItem>
   );
 }
@@ -52,6 +57,7 @@ const ContentItem = styled.li`
   align-items: center;
   border-bottom: 1px solid #242424;
   margin-bottom: 20px;
+  
   img {
     width: 100%;
     height: 200px;

@@ -1,11 +1,46 @@
 import axios from "axios";
 
-const engleshPlusBaseApiLocal = `http://localhost:8081`;
+export const engleshPlusBaseApiLocal = `http://localhost:8081`;
 export const engleshPlusBaseApi = "https://frightened-visor-fly.cyclic.app";
 
 const engleshPlusApi = axios.create({
-  baseURL: engleshPlusBaseApiLocal,
+  baseURL: engleshPlusBaseApi,
 });
+
+export async function PostText(data: any, userId: string, token: string) {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const post = engleshPlusApi
+    .post(`/api/texts/${userId}`, data, config)
+    .then((response) => response.data)
+    .catch((error) => console.log(error));
+
+  return await post;
+}
+
+export async function UploadAudios(
+  folderName: string,
+  data: any,
+  token: string
+) {
+  const config = {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const post = engleshPlusApi
+    .post(`/api/texts/upload?folderName=${folderName}`, data, config)
+    .then((response) => response.data)
+    .catch((error) => console.log(error));
+
+  return await post;
+}
 
 export async function getSingleUser(userId: string, token: string) {
   const config = {
@@ -16,8 +51,8 @@ export async function getSingleUser(userId: string, token: string) {
   };
   const get = engleshPlusApi
     .get(`/api/user/${userId}`, config)
-    .then((response) => response.data)
-    // .catch((error) => console.log(error));
+    .then((response) => response.data);
+  // .catch((error) => console.log(error));
 
   return await get;
 }

@@ -42,7 +42,7 @@ export default function Dashboard() {
             </Link>
           </Card>
           {/* <Card>
-            <Link to="/newspage">
+            <Link to="/news">
               <FaRegNewspaper size={70} />
               <p>Com Noticias...</p>
             </Link>
