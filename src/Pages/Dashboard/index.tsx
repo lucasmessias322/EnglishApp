@@ -9,6 +9,7 @@ import { useContext, useEffect, useState } from "react";
 export default function Dashboard() {
   const { token, userData } = useContext(AuthContext);
   const [userName, setUserName] = useState("");
+  const [isAdmin, setIsAdmin] = useState();
 
   useEffect(() => {
     if (userData) {
@@ -16,12 +17,14 @@ export default function Dashboard() {
       const nameWords = userData.name.split(" "); // Divide o nome em palavras
       const firstTwoWords = nameWords.slice(0, 2); // Pega as duas primeiras palavras
       setUserName(firstTwoWords.join(" ")); // Define as duas primeiras palavras como userName
+
+      setIsAdmin(userData.role === "admin");
     }
   }, [userData]);
 
   return (
     <DashboardContainer>
-      <HeaderComponent fixed={false} loginSignin />
+      <HeaderComponent admin={isAdmin} fixed={false} loginSignin />
       <SectionOne>
         <LogoAndImageLogo>
           <img src="/logo.png" alt="" /> <h2>English Plus+</h2>

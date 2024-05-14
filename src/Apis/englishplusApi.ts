@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const engleshPlusBaseApiLocal = `http://localhost:8081`;
-export const engleshPlusBaseApi = "https://frightened-visor-fly.cyclic.app";
+export const engleshPlusBaseApi = "https://engleshplus-api.vercel.app";
 
 const engleshPlusApi = axios.create({
   baseURL: engleshPlusBaseApi,

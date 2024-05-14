@@ -9,6 +9,7 @@ interface HeaderProps {
   textPage?: boolean;
   loginSignin?: boolean;
   children?: ReactNode;
+  admin?: boolean;
 }
 
 export default function HeaderComponent({
@@ -16,8 +17,9 @@ export default function HeaderComponent({
   textPage,
   children,
   loginSignin,
+  admin,
 }: HeaderProps) {
-  const { token, logout } = useContext(AuthContext);
+  const { token, logout, userData } = useContext(AuthContext);
 
   return (
     <Header fixed={fixed}>
@@ -40,8 +42,13 @@ export default function HeaderComponent({
 
       {loginSignin && token && (
         <ChildrenContainer>
-          <LoginSignin onClick={logout}>
-            <Link to="/">
+          <LoginSignin>
+            {admin && (
+              <Link to="/admin/AddNewText">
+                <span className="register">Admin</span>
+              </Link>
+            )}
+            <Link to="/" onClick={logout}>
               <span className="login">Sair</span>
             </Link>
           </LoginSignin>
