@@ -35,7 +35,7 @@ export async function UploadAudios(
   };
 
   const post = engleshPlusApi
-    .post(`/api/texts/upload?folderName=${folderName}`, data, config)
+    .post(`/api/texts/upload/${folderName}`, data, config)
     .then((response) => response.data)
     .catch((error) => console.log(error));
 

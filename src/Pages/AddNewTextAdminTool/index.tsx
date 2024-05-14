@@ -8,7 +8,8 @@ export default function AddNewTextAdminTool() {
   return (
     <Container>
       <ToastContainer />
-      <MyForm /> <AudioUploader />
+      <MyForm />
+      <AudioUploader />
     </Container>
   );
 }

@@ -74,7 +74,8 @@ export default function MyForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      PostText(formData, userData._id, token)
+      if (!formData) return;
+      PostText(formData, userData?._id, token)
         .then((res) =>
           toast.success(res.msg, {
             theme: "colored",

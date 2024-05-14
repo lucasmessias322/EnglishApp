@@ -24,7 +24,8 @@ const AudioUploader: React.FC<AudioUploaderProps> = ({ className }) => {
     setFolderName(e.target.value);
   };
 
-  const handleUpload = async () => {
+  const handleUpload = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       if (!selectedFiles) return;
       // Adicione cada arquivo com uma chave única
@@ -36,14 +37,18 @@ const AudioUploader: React.FC<AudioUploaderProps> = ({ className }) => {
       formData.append("folderName", folderName);
 
       // Faça o upload dos arquivos usando a função UploadAudios
-      const response = await UploadAudios(folderName, formData, token);
+      await UploadAudios(folderName, formData, token)
+        .then((res) => {
+          console.log("URLs dos áudios:", res);
 
-      console.log("URLs dos áudios:", response);
-      toast.success("upload Feito com sucesso!", {
-        theme: "colored",
-      });
-      setAudiosUrls(response.audioUrls);
-      console.log(response.audioUrls);
+          setAudiosUrls(res.audioUrls);
+          console.log(res.audioUrls);
+
+          toast.success("upload Feito com sucesso!", {
+            theme: "colored",
+          });
+        })
+        .catch((err) => console.log(err));
     } catch (error) {
       console.error("Erro ao fazer upload dos arquivos de áudio:", error);
       toast.error("Erro ao fazer upload", {
@@ -54,28 +59,31 @@ const AudioUploader: React.FC<AudioUploaderProps> = ({ className }) => {
 
   return (
     <UploaderContainer className={className}>
-      <InputLabel>
-        Selecione os arquivos de áudio:
-        <Input
-          required
-          type="file"
-          name="audioFiles"
-          accept="audio/*"
-          multiple
-          onChange={handleFileChange}
-        />
-      </InputLabel>
-      <InputLabel>
-        Nome da Pasta:
-        <Input
-          required
-          type="text"
-          placeholder="Nome da Pasta"
-          value={folderName}
-          onChange={handleFolderNameChange}
-        />
-      </InputLabel>
-      <UploadButton onClick={handleUpload}>Enviar</UploadButton>
+      <form onSubmit={handleUpload}>
+        <InputLabel>
+          Selecione os arquivos de áudio:
+          <Input
+            required
+            type="file"
+            name="audioFiles"
+            accept="audio/*"
+            multiple
+            onChange={handleFileChange}
+          />
+        </InputLabel>
+        <InputLabel>
+          Nome da Pasta:
+          <Input
+            required
+            type="text"
+            placeholder="Nome da Pasta"
+            value={folderName}
+            onChange={handleFolderNameChange}
+          />
+        </InputLabel>
+        <UploadButton>Enviar</UploadButton>
+      </form>
+
       {audiosUrls?.length > 0 && (
         <DisplayAudioUrls>
           {audiosUrls?.map((item) => (
