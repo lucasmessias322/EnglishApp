@@ -38,11 +38,9 @@ export default function Dashboard() {
       <SectionTwo>
         <h2>Você pode aprender com:</h2>
         <div className="CardsContain">
-          <Card>
-            <Link to="/textslist">
-              <FaTextHeight size={70} />
-              <p>Com Textos...</p>
-            </Link>
+          <Card to="/textslist">
+            <FaTextHeight size={70} />
+            <p>Com Textos...</p>
           </Card>
           {/* <Card>
             <Link to="/news">
@@ -50,12 +48,17 @@ export default function Dashboard() {
               <p>Com Noticias...</p>
             </Link>
           </Card> */}
-          <Card>
-            <Link to="/memorizelists">
-              <GiBrain size={70} />
+          <Card
+            disabled={!userName}
+            to={userName ? "/memorizelists" : ""}
+            title={
+              !userName &&
+              "Voce prescisa fazer login para acessar esse recurso!"
+            }
+          >
+            <GiBrain size={70} />
 
-              <p>Memorize Palavras</p>
-            </Link>
+            <p>Memorize Palavras</p>
           </Card>
         </div>
       </SectionTwo>
@@ -159,7 +162,7 @@ const SectionTwo = styled.section`
   }
 `;
 
-const Card = styled.div`
+const Card = styled(Link)<{ disabled?: boolean }>`
   width: 150px;
   height: 150px;
   border-radius: 10px;
@@ -177,6 +180,9 @@ const Card = styled.div`
   padding: 10px;
   background-color: #212433;
   cursor: pointer;
+
+  opacity: ${(props) => (props.disabled ? ".2" : "1")};
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 `;
 
 const WhyLearning = styled.div`
