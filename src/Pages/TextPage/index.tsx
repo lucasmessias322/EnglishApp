@@ -15,6 +15,8 @@ import WordPopUpComponent from "../../Components/TextPageComponents/WordPopUp";
 import TextWrapperComponent from "../../Components/TextPageComponents/TextWrapperComponent";
 import { AuthContext } from "../../Context/AuthContext";
 
+import handleTextToSpeech from "../../utils/TextToSpeech";
+
 interface Text {
   title: string;
   content: { paragraph: string; audiotexturl: string }[];
@@ -84,7 +86,6 @@ export default function TextPage() {
   }, [textid]);
 
   const handleClickWord = (word: string) => {
-    // handleTextToSpeech(word);
     fetchTranslation(word)
       .then((translation: any) => {
         setTranslatedWord(translation);
@@ -105,16 +106,6 @@ export default function TextPage() {
     const engClean = data[0][0][1].replace(",", "").replace(".", "");
     const translation = { backContent: ptClean, frontContent: engClean };
     return translation;
-  };
-
-  const handleTextToSpeech = (word: string) => {
-    if ("speechSynthesis" in window) {
-      const utterance = new SpeechSynthesisUtterance(word);
-      utterance.lang = "en";
-      speechSynthesis.speak(utterance);
-    } else {
-      console.error("Text-to-speech is not supported in this browser.");
-    }
   };
 
   useEffect(() => {

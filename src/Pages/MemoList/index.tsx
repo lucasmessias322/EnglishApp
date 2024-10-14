@@ -4,7 +4,7 @@ import styled from "styled-components";
 import HeaderComponent from "../../Components/HeaderComponent";
 import DeckComponent from "../../Components/MemoListComponents/DeckComponent";
 import { Link, useParams } from "react-router-dom";
-import { getOneEspecific, getSingleMemorizes } from "../../Apis/englishplusApi";
+import { DeletMemorize, getOneEspecific } from "../../Apis/englishplusApi";
 import { AuthContext } from "../../Context/AuthContext";
 import { PiCardsFill } from "react-icons/pi";
 import { FaBook } from "react-icons/fa";
@@ -31,7 +31,7 @@ export default function MemoList() {
   const [cards, setCards] = useState<CardType[]>([
     { frontContent: "Carregando..", backContent: "Carregando.." },
   ]);
-  const [Memo, setMemo] = useState<memotypes[]>({});
+  const [Memo, setMemo] = useState<memotypes>();
   const [currentIndexCard, setCurrentIndexCard] = useState(0);
   const [cardsReviewed, setCardsReviewed] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
@@ -73,7 +73,7 @@ export default function MemoList() {
 
   useEffect(() => {
     getOneEspecific(memoid, token).then((res) => {
-      //  console.log(res[0]);
+      // console.log(res[0]);
       setMemo(res[0]);
 
       setCards(res[0].flashcards);
@@ -86,11 +86,15 @@ export default function MemoList() {
     setCards(shuffledCards);
   };
 
+  function HandleDeleteMemorize(memoID: string) {
+    DeletMemorize(memoID, token);
+  }
+
   return (
     <Container>
       <HeaderComponent fixed loginSignin />
       <SectionOne>
-        <h2>{Memo.title}</h2>
+        <h2>{Memo?.title}</h2>
 
         <LearningOptions>
           {/* <LearningOption>

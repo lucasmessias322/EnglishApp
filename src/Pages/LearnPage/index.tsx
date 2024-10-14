@@ -4,6 +4,9 @@ import { Link, useParams } from "react-router-dom";
 import { getOneEspecific } from "../../Apis/englishplusApi";
 import { AuthContext } from "../../Context/AuthContext";
 import { FaBook, FaWindowClose } from "react-icons/fa";
+import { HiSpeakerWave } from "react-icons/hi2";
+
+import handleTextToSpeech from "../../utils/TextToSpeech";
 
 interface MemoType {
   _id: string;
@@ -64,6 +67,11 @@ export default function LearnPage() {
     }
   }, [memo, currentCardIndex]);
 
+  const playSound = (soundPath: string) => {
+    const audio = new Audio(soundPath);
+    audio.play();
+  };
+
   const handleOptionClick = (index: number) => {
     if (isCorrect !== null) {
       return; // Do nothing if answer has already been selected
@@ -77,6 +85,7 @@ export default function LearnPage() {
     if (correctOptionIndex !== null) {
       setIsCorrect(true);
       setCorrectAnswers((prevCount) => prevCount + 1); // Incrementa o contador de respostas corretas
+      playSound("/soundEffects/rightanswer.mp3"); // Reproduz o som de acerto
     } else {
       setIsCorrect(false);
       setCorrectAnswerIndex(
@@ -85,6 +94,7 @@ export default function LearnPage() {
         )
       );
       setIncorrectAnswers((prevCount) => prevCount + 1); // Incrementa o contador de respostas incorretas
+      playSound("/soundEffects/error.wav"); // Reproduz o som de erro
     }
     setShowNextButton(true);
   };
@@ -145,9 +155,20 @@ export default function LearnPage() {
       <SectionWrapper>
         {!roundFinished && !finishedAllRounds && (
           <>
-            <h4 className="frontContent">
-              {memo?.flashcards[currentCardIndex].frontContent}
-            </h4>
+            <FrontContent>
+              <HiSpeakerWave
+                color="white"
+                className="HiSpeakerWave"
+                size={25}
+                onClick={() =>
+                  handleTextToSpeech(
+                    memo?.flashcards[currentCardIndex].frontContent
+                  )
+                }
+              />
+
+              <h4>{memo?.flashcards[currentCardIndex].frontContent}</h4>
+            </FrontContent>
             <AnswerOptionsContainer>
               <span>Selecione a palavra correspondente:</span>
               <ul>
@@ -194,7 +215,16 @@ export default function LearnPage() {
             <ul>
               {reviewedWords.map((elem, i) => (
                 <li>
-                  <span className="frontContent">{elem.frontContent}</span>
+                  <div className="frontContent">
+                    <HiSpeakerWave
+                      color="white"
+                      className="HiSpeakerWave"
+                      size={25}
+                      onClick={() => handleTextToSpeech(elem.frontContent)}
+                    />
+                    <span>{elem.frontContent}</span>
+                  </div>
+
                   <span>{elem.backContent}</span>
                   <span></span>
                 </li>
@@ -242,7 +272,7 @@ const Header = styled.header`
 
 const SectionWrapper = styled.section`
   margin: auto;
-  padding: 20px 10px;
+  // padding: 20px 10px;
   width: 100%;
   max-width: 900px;
 `;
@@ -252,9 +282,6 @@ const AnswerOptionsContainer = styled.div`
   margin: auto;
   width: 100%;
   margin-top: 50px;
-
-  span {
-  }
 
   ul {
     padding: 20px 0px;
@@ -325,14 +352,39 @@ const RoundSummary = styled.div`
         width: 200px;
       }
       .frontContent {
+        display: flex;
+        align-items: center;
+
+        width: 50%;
         border-right: 1px solid #51597e;
-        margin-right: 20px;
-        padding-right: 20px;
+
+        .HiSpeakerWave {
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+
+        span {
+          padding: 0px 10px;
+        }
       }
 
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+  }
+`;
+
+const FrontContent = styled.div`
+  display: flex;
+  align-items: center;
+
+  .HiSpeakerWave {
+    margin-right: 10px;
+
+    &:hover {
+      transform: scale(1.1);
     }
   }
 `;

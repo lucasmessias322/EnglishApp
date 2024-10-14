@@ -165,3 +165,19 @@ export async function PostMemorize(data: any, token: string) {
 
   return await post;
 }
+
+export async function DeletMemorize(memoId: string, token: string) {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const post = engleshPlusApi
+    .delete(`/api/memorize/${memoId}`, config)
+    .then((response) => response.data)
+    .catch((error) => console.log(error));
+
+  return await post;
+}

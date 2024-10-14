@@ -88,7 +88,6 @@ const WordContainer = styled.span`
     cursor: pointer;
     color: #ffffff;
     background-color: #52043b;
-    /* padding: 0px 5px; */
     text-align: center;
   }
 `;
