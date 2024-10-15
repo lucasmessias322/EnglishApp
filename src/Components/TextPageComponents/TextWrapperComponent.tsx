@@ -25,21 +25,49 @@ export default function TextWrapperComponent({
   const calc = audioIndex - 1;
 
   useEffect(() => {
-    let paragrafo = document.getElementById(`${audioIndex}`);
+    // Limpar todas as seleções de parágrafos
+    const paragraphs = document.querySelectorAll(".SelectedP");
+    paragraphs.forEach((paragraph) => {
+      paragraph.classList.remove("SelectedP");
+    });
 
-    if (audioIndex == paragrafo.id) {
-      paragrafo.classList.add("SelectedP");
+    // Marcar o parágrafo atual
+    let currentParagraph = document.getElementById(`${audioIndex}`);
+    if (currentParagraph) {
+      currentParagraph.classList.add("SelectedP");
     }
 
-    if (audioIndex >= 1) {
+    // Desmarcar o parágrafo anterior
+    if (audioIndex > 0) {
       let previousParagraph = document.getElementById(`${calc}`);
-      previousParagraph.classList.remove("SelectedP");
+      if (previousParagraph) {
+        previousParagraph.classList.remove("SelectedP");
+      }
     }
-    if (audioIndex === 0) {
-      let previousParagraph = document.getElementById(`${dataLen}`);
-      previousParagraph.classList.remove("SelectedP");
+
+    // Tratar caso especial quando o índice é zero, reiniciando a seleção
+    if (audioIndex === 0 && dataLen >= 0) {
+      let lastParagraph = document.getElementById(`${dataLen}`);
+      if (lastParagraph) {
+        lastParagraph.classList.remove("SelectedP");
+      }
     }
   }, [audioIndex, dataTextoAudio]);
+
+  useEffect(() => {
+    // Limpar todas as seleções de parágrafos quando o texto mudar
+    const paragraphs = document.querySelectorAll(".SelectedP");
+    paragraphs.forEach((paragraph) => {
+      paragraph.classList.remove("SelectedP");
+    });
+
+    // Reiniciar o índice do áudio para zero e marcar o primeiro parágrafo
+    // setAudioIndex(0);
+    let firstParagraph = document.getElementById("0");
+    if (firstParagraph) {
+      firstParagraph.classList.add("SelectedP");
+    }
+  }, [text]);
 
   return (
     <Container>

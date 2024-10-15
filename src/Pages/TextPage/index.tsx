@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import {
   getSingleText,
@@ -7,6 +7,7 @@ import {
   engleshPlusBaseApiLocal,
   PutMemorize,
   getUserMemorizes,
+  getTexts,
 } from "../../Apis/englishplusApi";
 import HeaderComponent from "../../Components/HeaderComponent";
 import { FaPlay, FaPause } from "react-icons/fa";
@@ -32,10 +33,12 @@ interface MemoTextAndNews {
 const API_BASE_URL = `${engleshPlusBaseApi}/ftp`;
 
 export default function TextPage() {
+  const [allTexts, setAllTexts] = useState([]);
   const [text, setText] = useState<Text>({
     title: "",
     content: [{ paragraph: "", audiotexturl: "" }],
   });
+
   const [audioIndex, setAudioIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [selectedWord, setSelectedWord] = useState<string>("");
@@ -49,7 +52,11 @@ export default function TextPage() {
   ]);
   const [Addflashcardverificationtoggle, setAddflashcardverificationtoggle] =
     useState<boolean>(false);
-  const { id: textid } = useParams<{ id: string }>();
+  const { id: textid, textindex } = useParams<{
+    id: string;
+    textindex: string;
+  }>();
+  const [currentTextIndex, setCurrentIndex] = useState(textindex);
   const audioRef = useRef<HTMLAudioElement>(null);
   const dataTextoAudio = text.content;
 
@@ -80,10 +87,26 @@ export default function TextPage() {
   }, [audioIndex]);
 
   useEffect(() => {
-    getSingleText(textid)
-      .then((res) => setText(res[0]))
-      .catch((error) => console.error("Error fetching text:", error));
-  }, [textid]);
+    getTexts().then((res) => {
+      setText(res[currentTextIndex]);
+      setAllTexts(res);
+    });
+  }, []);
+
+  const getRandomText = (currentIndex) => {
+    let randomIndex = Math.floor(Math.random() * allTexts.length);
+
+    // Gera um novo índice até que ele seja diferente do índice atual
+    while (randomIndex === currentIndex) {
+      randomIndex = Math.floor(Math.random() * allTexts.length);
+    }
+
+    // Atualiza o texto e o índice atual
+    setText(allTexts[randomIndex]);
+    setCurrentIndex(randomIndex);
+    setAudioIndex(0);
+    setIsPlaying(false);
+  };
 
   const handleClickWord = (word: string) => {
     fetchTranslation(word)
@@ -111,7 +134,6 @@ export default function TextPage() {
   useEffect(() => {
     getUserMemorizes(userId, token).then((response) => {
       setmemoTextAndNews(response[0]);
-      // console.log("SingleMemorizes", response[0]);
     });
   }, []);
 
@@ -129,8 +151,6 @@ export default function TextPage() {
       };
 
       PutMemorize(userId, JSON.stringify(data), token).then((response) => {
-        // console.log(response);
-        // console.log("Novo FlashCard Adicionado", response);
         setAddflashcardverificationtoggle((e) => !e);
         setmemoTextAndNews(response.MemoList);
       });
@@ -188,6 +208,12 @@ export default function TextPage() {
           text ? `${API_BASE_URL}/${text.content[audioIndex].audiotexturl}` : ""
         }
       />
+
+      <TextsControll>
+        <div className="btn" onClick={() => getRandomText(currentTextIndex)}>
+          Escolher outro aleatoriamente
+        </div>
+      </TextsControll>
     </Container>
   );
 }
@@ -195,4 +221,22 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   margin-top: 60px;
+`;
+
+const TextsControll = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .btn {
+    padding: 10px;
+    background-color: #25293b;
+    border-radius: 5px;
+    margin: 0px 5px;
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
 `;

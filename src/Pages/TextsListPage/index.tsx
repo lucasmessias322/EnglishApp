@@ -42,7 +42,7 @@ export default function TextsListPage() {
           <TextListWrapper>
             {levels?.map((text, textIndex) => (
               <TextItem key={textIndex}>
-                <Link to={`/text/${text._id}`}>
+                <Link to={`/text/${textIndex}`}>
                   <h4>
                     {text.title} - {text.level}
                   </h4>

@@ -29,7 +29,7 @@ export default function RouterComponent() {
         <Route path="/account/:accountType" element={<LoginSigning />} />
         <Route path="/newslist" element={<NewsPage />} />
         <Route path="/textslist" element={<TextsListPage />} />
-        <Route path="/text/:id" element={<TextPage />} />
+        <Route path="/text/:textindex" element={<TextPage />} />
 
         <Route path="/news" element={<NewsPage />} />
         <Route path="/article/:articleid" element={<ArticlePage />} />
