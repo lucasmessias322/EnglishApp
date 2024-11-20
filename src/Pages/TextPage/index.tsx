@@ -197,7 +197,6 @@ export default function TextPage() {
       />
 
       <audio
-        controls
         id="audio"
         ref={audioRef}
         onEnded={() =>
