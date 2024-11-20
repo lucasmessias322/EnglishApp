@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getTexts } from "../../Apis/englishplusApi";
 import { Link } from "react-router-dom";
 import LoadingComp from "../../Components/LoadingComp";
+import { FaVolumeMute } from "react-icons/fa";
 
 interface Text {
   _id: string;
@@ -39,12 +40,13 @@ export default function TextsListPage() {
       ) : (
         <LevelWrapper>
           <h2>Textos em Ingles</h2>
-          <TextListWrapper>
+          <TextListWrapper >
             {levels?.map((text, textIndex) => (
               <TextItem key={textIndex}>
                 <Link to={`/text/${textIndex}`}>
                   <h4>
-                    {text.title} - {text.level}
+                    {text.title} - {text.level}{" "}
+                    {text.content[0].audiotexturl === "" && "(Sem audio)"}
                   </h4>
                   <span>{text.resume}</span>
                 </Link>

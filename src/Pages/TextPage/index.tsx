@@ -20,6 +20,7 @@ import handleTextToSpeech from "../../utils/TextToSpeech";
 
 interface Text {
   title: string;
+  hasAudios: boolean;
   content: { paragraph: string; audiotexturl: string }[];
 }
 
@@ -36,6 +37,7 @@ export default function TextPage() {
   const [allTexts, setAllTexts] = useState([]);
   const [text, setText] = useState<Text>({
     title: "",
+    hasAudios: false,
     content: [{ paragraph: "", audiotexturl: "" }],
   });
 
@@ -174,16 +176,19 @@ export default function TextPage() {
       )}
 
       <HeaderComponent textPage fixed>
-        <div id="PlayPauseButton" onClick={() => setIsPlaying(!isPlaying)}>
-          {isPlaying ? (
-            <FaPause size={16} title="Pausar reproduçao" />
-          ) : (
-            <FaPlay size={16} title="Iniciar reproduçao" />
-          )}
-        </div>
+        {text.content[0].audiotexturl && (
+          <div id="PlayPauseButton" onClick={() => setIsPlaying(!isPlaying)}>
+            {isPlaying ? (
+              <FaPause size={16} title="Pausar reproduçao" />
+            ) : (
+              <FaPlay size={16} title="Iniciar reproduçao" />
+            )}
+          </div>
+        )}
       </HeaderComponent>
 
       <TextWrapperComponent
+        hasAudio={text.content[0].audiotexturl !== ""}
         audioIndex={audioIndex}
         dataTextoAudio={dataTextoAudio}
         handleTextToSpeech={handleTextToSpeech}
@@ -192,6 +197,7 @@ export default function TextPage() {
       />
 
       <audio
+        controls
         id="audio"
         ref={audioRef}
         onEnded={() =>
