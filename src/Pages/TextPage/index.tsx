@@ -2,9 +2,6 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import {
-  getSingleText,
-  engleshPlusBaseApi,
-  engleshPlusBaseApiLocal,
   PutMemorize,
   getUserMemorizes,
   getTexts,
@@ -31,7 +28,6 @@ interface translatedWordtype {
 interface MemoTextAndNews {
   flashcards: any[]; // You may define a proper interface for flashcards if needed
 }
-const API_BASE_URL = `${engleshPlusBaseApi}/ftp`;
 
 export default function TextPage() {
   const [allTexts, setAllTexts] = useState([]);
@@ -210,7 +206,9 @@ export default function TextPage() {
           })
         }
         src={
-          text ? `${API_BASE_URL}/${text.content[audioIndex].audiotexturl}` : ""
+          text.content[audioIndex]?.audiotexturl
+            ? `data:audio/mpeg;base64,${text.content[audioIndex].audiotexturl}`
+            : ""
         }
       />
 
