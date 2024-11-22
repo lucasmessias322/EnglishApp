@@ -130,9 +130,11 @@ export default function TextPage() {
   };
 
   useEffect(() => {
-    getUserMemorizes(userId, token).then((response) => {
-      setmemoTextAndNews(response[0]);
-    });
+    if (userId && token) {
+      getUserMemorizes(userId, token).then((response) => {
+        setmemoTextAndNews(response[0]);
+      });
+    }
   }, []);
 
   useEffect(() => {
