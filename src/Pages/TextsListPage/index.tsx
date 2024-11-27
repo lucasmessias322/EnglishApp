@@ -16,38 +16,42 @@ interface Text {
 
 export default function TextsListPage() {
   // Tipando o estado de levels como um array de Text
+  const [isLoading, setIsLoading] = useState(true);
   const [levels, setLevels] = useState<Text[]>([]);
 
   // Carregando os textos da API
   useEffect(() => {
+    setIsLoading(true);
     getTexts().then((res) => {
       setLevels(res); // Tipagem implícita do retorno de getTexts
+      setIsLoading(false);
     });
   }, []);
 
   return (
     <Container>
-      <HeaderComponent fixed />
-
-      {levels.length === 0 ? (
+      {isLoading ? (
         <LoadingComp />
       ) : (
-        <LevelWrapper>
-          <h2>Textos em Ingles</h2>
-          <TextListWrapper>
-            {levels.map((text) => (
-              <TextItem key={text._id}>
-                <Link to={`/text/${text._id}`}>
-                  <h4>
-                    {text.title} - {text.level}{" "}
-                    {text.content[0]?.audiotexturl === "" && "(Sem audio)"}
-                  </h4>
-                  <span>{text.resume}</span>
-                </Link>
-              </TextItem>
-            ))}
-          </TextListWrapper>
-        </LevelWrapper>
+        <>
+          <HeaderComponent fixed />
+          <LevelWrapper>
+            <h2>Textos em Ingles</h2>
+            <TextListWrapper>
+              {levels.map((text) => (
+                <TextItem key={text._id}>
+                  <Link to={`/text/${text._id}`}>
+                    <h4>
+                      {text.title} - {text.level}{" "}
+                      {/* {text.content[0]?.audiotexturl ? : } */}
+                    </h4>
+                    <span>{text.resume}</span>
+                  </Link>
+                </TextItem>
+              ))}
+            </TextListWrapper>
+          </LevelWrapper>
+        </>
       )}
     </Container>
   );

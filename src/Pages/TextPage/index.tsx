@@ -15,6 +15,7 @@ import TextWrapperComponent from "../../Components/TextPageComponents/TextWrappe
 import { AuthContext } from "../../Context/AuthContext";
 
 import handleTextToSpeech from "../../utils/TextToSpeech";
+import LoadingComp from "../../Components/LoadingComp";
 
 interface Text {
   title: string;
@@ -31,7 +32,7 @@ interface MemoTextAndNews {
 }
 
 export default function TextPage() {
-  const [allTexts, setAllTexts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [text, setText] = useState<Text>({
     title: "",
     hasAudios: false,
@@ -86,9 +87,11 @@ export default function TextPage() {
   }, [audioIndex]);
 
   useEffect(() => {
+    setIsLoading(true);
     getSingleText(currentTextIndex).then((res) => {
       setText(res[0]);
-     // console.log(res[0]);
+      setIsLoading(false);
+      // console.log(res[0]);
     });
   }, []);
 
@@ -147,58 +150,64 @@ export default function TextPage() {
 
   return (
     <Container>
-      {selectedWord && (
-        <WordPopUpComponent
-          handleTextToSpeech={handleTextToSpeech}
-          translatedWord={translatedWord}
-          setSelectedWord={setSelectedWord}
-          AddFlashCard={AddFlashCard}
-          memoTextAndNews={memoTextAndNews}
-          Addflashcardverificationtoggle={Addflashcardverificationtoggle}
-          token={token}
-        />
-      )}
-
-      <HeaderComponent textPage fixed>
-        {text.content[0].audiotexturl && (
-          <div id="PlayPauseButton" onClick={() => setIsPlaying(!isPlaying)}>
-            {isPlaying ? (
-              <FaPause size={16} title="Pausar reproduçao" />
-            ) : (
-              <FaPlay size={16} title="Iniciar reproduçao" />
+      {isLoading ? (
+        <LoadingComp />
+      ) : (
+        <>
+          {selectedWord && (
+            <WordPopUpComponent
+              handleTextToSpeech={handleTextToSpeech}
+              translatedWord={translatedWord}
+              setSelectedWord={setSelectedWord}
+              AddFlashCard={AddFlashCard}
+              memoTextAndNews={memoTextAndNews}
+              Addflashcardverificationtoggle={Addflashcardverificationtoggle}
+              token={token}
+            />
+          )}
+          <HeaderComponent textPage fixed>
+            {text.content[0].audiotexturl && (
+              <div
+                id="PlayPauseButton"
+                onClick={() => setIsPlaying(!isPlaying)}
+              >
+                {isPlaying ? (
+                  <FaPause size={16} title="Pausar reproduçao" />
+                ) : (
+                  <FaPlay size={16} title="Iniciar reproduçao" />
+                )}
+              </div>
             )}
-          </div>
-        )}
-      </HeaderComponent>
-
-      <TextWrapperComponent
-        hasAudio={text.content[0].audiotexturl !== ""}
-        audioIndex={audioIndex}
-        dataTextoAudio={dataTextoAudio}
-        handleTextToSpeech={handleTextToSpeech}
-        handleClickWord={handleClickWord}
-        text={text}
-      />
-
-      <audio
-        id="audio"
-        ref={audioRef}
-        onEnded={() =>
-          setAudioIndex((audioIndex) => {
-            if (audioIndex >= text.content.length - 1) {
-              setIsPlaying(false);
-              return 0;
-            } else {
-              return audioIndex + 1;
+          </HeaderComponent>
+          <TextWrapperComponent
+            hasAudio={text.content[0].audiotexturl !== ""}
+            audioIndex={audioIndex}
+            dataTextoAudio={dataTextoAudio}
+            handleTextToSpeech={handleTextToSpeech}
+            handleClickWord={handleClickWord}
+            text={text}
+          />
+          <audio
+            id="audio"
+            ref={audioRef}
+            onEnded={() =>
+              setAudioIndex((audioIndex) => {
+                if (audioIndex >= text.content.length - 1) {
+                  setIsPlaying(false);
+                  return 0;
+                } else {
+                  return audioIndex + 1;
+                }
+              })
             }
-          })
-        }
-        src={
-          text.content[audioIndex]?.audiotexturl
-            ? `data:audio/mpeg;base64,${text.content[audioIndex].audiotexturl}`
-            : ""
-        }
-      />
+            src={
+              text.content[audioIndex]?.audiotexturl
+                ? `data:audio/mpeg;base64,${text.content[audioIndex].audiotexturl}`
+                : ""
+            }
+          />
+        </>
+      )}
     </Container>
   );
 }
