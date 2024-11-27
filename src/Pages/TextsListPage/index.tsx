@@ -4,30 +4,24 @@ import { useEffect, useState } from "react";
 import { getTexts } from "../../Apis/englishplusApi";
 import { Link } from "react-router-dom";
 import LoadingComp from "../../Components/LoadingComp";
-import { FaVolumeMute } from "react-icons/fa";
 
+// Definindo a tipagem correta para os textos
 interface Text {
   _id: string;
   level: string;
   title: string;
   resume: string;
-  content: string;
+  content: { paragrafo: string; audiotexturl: string }[]; // Array de objetos com parágrafos e audioUrl
 }
 
 export default function TextsListPage() {
-  const [levels, setLevels] = useState<Text[]>([
-    // {
-    //   _id: "",
-    //   level: "A1",
-    //   resume: "",
-    //   title: "Carregando..",
-    //   content: "",
-    // },
-  ]);
+  // Tipando o estado de levels como um array de Text
+  const [levels, setLevels] = useState<Text[]>([]);
 
+  // Carregando os textos da API
   useEffect(() => {
     getTexts().then((res) => {
-      setLevels(res);
+      setLevels(res); // Tipagem implícita do retorno de getTexts
     });
   }, []);
 
@@ -40,13 +34,13 @@ export default function TextsListPage() {
       ) : (
         <LevelWrapper>
           <h2>Textos em Ingles</h2>
-          <TextListWrapper >
-            {levels?.map((text, textIndex) => (
-              <TextItem key={textIndex}>
-                <Link to={`/text/${textIndex}`}>
+          <TextListWrapper>
+            {levels.map((text) => (
+              <TextItem key={text._id}>
+                <Link to={`/text/${text._id}`}>
                   <h4>
                     {text.title} - {text.level}{" "}
-                    {text.content[0].audiotexturl === "" && "(Sem audio)"}
+                    {text.content[0]?.audiotexturl === "" && "(Sem audio)"}
                   </h4>
                   <span>{text.resume}</span>
                 </Link>
@@ -59,6 +53,7 @@ export default function TextsListPage() {
   );
 }
 
+// Styled-components
 const Container = styled.div`
   width: 100%;
   height: 100vh;
@@ -70,9 +65,7 @@ const LevelWrapper = styled.div`
   padding: 20px;
 
   @media (min-width: 500px) {
-    /* display: flex;
-    justify-content: center;
-    flex-direction: column; */
+    /* display: flex; justify-content: center; flex-direction: column; */
   }
 `;
 

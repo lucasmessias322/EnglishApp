@@ -5,6 +5,7 @@ import {
   PutMemorize,
   getUserMemorizes,
   getTexts,
+  getSingleText,
 } from "../../Apis/englishplusApi";
 import HeaderComponent from "../../Components/HeaderComponent";
 import { FaPlay, FaPause } from "react-icons/fa";
@@ -85,26 +86,11 @@ export default function TextPage() {
   }, [audioIndex]);
 
   useEffect(() => {
-    getTexts().then((res) => {
-      setText(res[currentTextIndex]);
-      setAllTexts(res);
+    getSingleText(currentTextIndex).then((res) => {
+      setText(res[0]);
+     // console.log(res[0]);
     });
   }, []);
-
-  const getRandomText = (currentIndex) => {
-    let randomIndex = Math.floor(Math.random() * allTexts.length);
-
-    // Gera um novo índice até que ele seja diferente do índice atual
-    while (randomIndex === currentIndex) {
-      randomIndex = Math.floor(Math.random() * allTexts.length);
-    }
-
-    // Atualiza o texto e o índice atual
-    setText(allTexts[randomIndex]);
-    setCurrentIndex(randomIndex);
-    setAudioIndex(0);
-    setIsPlaying(false);
-  };
 
   const handleClickWord = (word: string) => {
     fetchTranslation(word)
@@ -213,12 +199,6 @@ export default function TextPage() {
             : ""
         }
       />
-
-      <TextsControll>
-        <div className="btn" onClick={() => getRandomText(currentTextIndex)}>
-          Escolher outro aleatoriamente
-        </div>
-      </TextsControll>
     </Container>
   );
 }
