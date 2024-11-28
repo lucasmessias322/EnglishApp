@@ -200,7 +200,7 @@ export default function TextWrapperComponent({
 
   return (
     <Container>
-      <h2>{text.title}</h2>
+      <h2>{text.title.split("(Sem Audio)")}</h2>
       {text.content.map((paragraph, index) => (
         <p
           key={index}
