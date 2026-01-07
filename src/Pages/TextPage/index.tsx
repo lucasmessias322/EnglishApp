@@ -16,8 +16,10 @@ import { AuthContext } from "../../Context/AuthContext";
 
 import handleTextToSpeech from "../../utils/TextToSpeech";
 import LoadingComp from "../../Components/LoadingComp";
+import { MarkAsCompletedButton } from "./styles";
 
 interface Text {
+  _id: string;
   title: string;
   hasAudios: boolean;
   content: { paragraph: string; audiotexturl: string }[];
@@ -34,6 +36,7 @@ interface MemoTextAndNews {
 export default function TextPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [text, setText] = useState<Text>({
+    _id: "",
     title: "",
     hasAudios: false,
     content: [{ paragraph: "", audiotexturl: "" }],
@@ -61,6 +64,7 @@ export default function TextPage() {
   const dataTextoAudio = text.content;
 
   const { token, userId } = useContext(AuthContext);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
     if (isPlaying) {
@@ -91,7 +95,6 @@ export default function TextPage() {
     getSingleText(currentTextIndex).then((res) => {
       setText(res[0]);
       setIsLoading(false);
-      // console.log(res[0]);
     });
   }, []);
 
@@ -147,6 +150,35 @@ export default function TextPage() {
       console.log("Login necessario");
     }
   }
+  useEffect(() => {
+    if (!text._id) return;
+
+    const completed = JSON.parse(
+      localStorage.getItem("completed_texts") || "[]"
+    );
+
+    setIsCompleted(completed.includes(text._id));
+  }, [text._id]);
+
+  function toggleCompleted() {
+    if (!text._id) return;
+
+    const completed: string[] = JSON.parse(
+      localStorage.getItem("completed_texts") || "[]"
+    );
+
+    let updated: string[];
+
+    if (completed.includes(text._id)) {
+      updated = completed.filter((id) => id !== text._id);
+      setIsCompleted(false);
+    } else {
+      updated = [...completed, text._id];
+      setIsCompleted(true);
+    }
+
+    localStorage.setItem("completed_texts", JSON.stringify(updated));
+  }
 
   return (
     <Container>
@@ -165,7 +197,7 @@ export default function TextPage() {
               token={token}
             />
           )}
-          <HeaderComponent textPage fixed>
+          <HeaderComponent textPage bgcolor="#1C1F2D" fixed>
             {text.content[0].audiotexturl && (
               <div
                 id="PlayPauseButton"
@@ -206,6 +238,10 @@ export default function TextPage() {
                 : ""
             }
           />
+
+          <MarkAsCompletedButton onClick={toggleCompleted}>
+            <h2>{isCompleted ? "Concluído" : "Marcar como completo"}</h2>
+          </MarkAsCompletedButton>
         </>
       )}
     </Container>

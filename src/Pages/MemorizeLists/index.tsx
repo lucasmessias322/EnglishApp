@@ -38,7 +38,7 @@ export default function MemorizeLists() {
 
   return (
     <Container>
-      <HeaderComponent fixed loginSignin />
+      <HeaderComponent bgcolor="#212433" fixed loginSignin />
 
       {memoList.length === 0 ? (
         <LoadingComp />

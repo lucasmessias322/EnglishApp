@@ -10,6 +10,7 @@ interface HeaderProps {
   loginSignin?: boolean;
   children?: ReactNode;
   admin?: boolean;
+  bgcolor?: string;
 }
 
 export default function HeaderComponent({
@@ -18,13 +19,16 @@ export default function HeaderComponent({
   children,
   loginSignin,
   admin,
+  bgcolor
 }: HeaderProps) {
   const { token, logout, userData } = useContext(AuthContext);
 
   return (
-    <Header fixed={fixed}>
+    <Header fixed={fixed} bgcolor={bgcolor}>
       <Link to="/">
-        <h2>EngleshPlus+</h2>
+        <h2>
+          EngleshPlus<b>+</b>
+        </h2>
       </Link>
 
       {loginSignin && !token && (
@@ -64,9 +68,15 @@ const Header = styled.header<HeaderProps>`
   padding: 20px 10px;
   position: ${(props) => (props.fixed ? "fixed" : "block")};
   top: 0;
-  background-color: #212433;
+  background-color: ${(props) => (props.bgcolor ? props.bgcolor : 'transparent')};
   h2 {
-    font-size: 16px;
+    font-size: 20px;
+
+    font-family: poppins, sans-serif;
+
+    b {
+      color: #29aa8b;
+    }
   }
   display: flex;
   justify-content: space-between;
@@ -79,16 +89,20 @@ const ChildrenContainer = styled.div`
 const LoginSignin = styled.div`
   display: flex;
   align-items: center;
+  gap: 5px;
   a {
     span {
       color: white;
       font-size: 16px;
       padding: 5px 15px;
     }
-
+    span.login {
+      border-radius: 20px;
+      background-color: #292944;
+    }
     span.register {
       border-radius: 20px;
-      background-color: #6e86cc;
+      background-color: #4f67ca;
     }
   }
 `;

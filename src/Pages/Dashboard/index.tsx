@@ -24,23 +24,38 @@ export default function Dashboard() {
 
   return (
     <DashboardContainer>
-      <HeaderComponent admin={isAdmin} fixed={false} loginSignin />
+      <HeaderComponent admin={isAdmin} fixed={false} bgcolor="#212433" loginSignin />
       <SectionOne>
         <LogoAndImageLogo>
-          <img src="/logo.png" alt="" /> <h2>English Plus+</h2>
-          {userName ? (
+          <img src="/logo3.png" alt="" />{" "}
+          <h1>
+            English Plus<b>+</b>
+          </h1>
+          {/* {userName ? (
             <p>Bem vindo(a) de volta {userName}!</p>
           ) : (
             <p>Bem vindo(a), oque você quer fazer?</p>
-          )}
+          )} */}
+          <span>Vamos Começar sua Jornada no Ingles!</span>
+          {/* <p>Como voce quer aprender Hoje?</p> */}
         </LogoAndImageLogo>
       </SectionOne>
       <SectionTwo>
         <h2>Você pode aprender com:</h2>
         <div className="CardsContain">
-          <Card to="/textslist">
-            <FaTextHeight size={70} />
-            <p>Com Textos...</p>
+          <Card
+            to="/textslist"
+            bgColor="#4968EC"
+            bgColor2="#6EB1F7"
+            btnColor="#698EF9"
+            btnColor2="#4968EC"
+          >
+            <img src="/book.png" alt="Textos" />
+            {/* //<FaTextHeight size={70} /> */}
+
+            <h2>Com Textos</h2>
+            <p>Leia Textos e Marque as palavras para revisar</p>
+            <button>Começar</button>
           </Card>
           {/* <Card>
             <Link to="/news">
@@ -55,10 +70,16 @@ export default function Dashboard() {
               !userName &&
               "Voce prescisa fazer login para acessar esse recurso!"
             }
+            bgColor="#29AA8B"
+            bgColor2="#6ECCBA"
+            btnColor="#60CA83"
+            btnColor2="#29AA8B"
           >
-            <GiBrain size={70} />
+            <img src="/flashcards.png" alt="" />
+            <h2>Memorize Palavras</h2>
+            <p>Revisar Palavras com Flash cards interativos</p>
 
-            <p>Memorize Palavras</p>
+            <button>Começar</button>
           </Card>
         </div>
       </SectionTwo>
@@ -81,28 +102,21 @@ export default function Dashboard() {
 const DashboardContainer = styled.div`
   min-height: 100vh;
   width: 100%;
-`;
-
-const Header = styled.header`
-  padding: 20px;
-
-  h2 {
-    font-size: 16px;
-  }
-
-  background-color: #212433;
+  background-image: linear-gradient(to bottom, #212433, #12141d);
 `;
 
 const SectionOne = styled.section`
-  padding-bottom: 50px;
   width: 100%;
-  height: 250px;
-  background-color: #212433;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  //height: 300px;
+  padding: 50px 0px;
+ 
 
+  display: flex;
+
+  align-items: center;
+
+  flex-direction: column;
+  background-color: #212433;
   p {
     padding: 10px;
     font-size: 16px;
@@ -113,31 +127,37 @@ const LogoAndImageLogo = styled.div`
   flex-direction: column;
   justify-content: center flex-end;
   width: 100%;
-  padding: 10px 15px;
+  padding: 0px 15px;
   text-align: center;
 
   img {
-    width: 110px;
+    width: 100%;
+    height: 150px;
     object-fit: contain;
     margin: auto;
-    padding: 20px;
+    //padding: 20px;
   }
   h1 {
     color: white;
     font-size: 35px;
+
+    b {
+      color: #29aa8b;
+    }
   }
   span {
+    font-weight: medium;
+    padding: 0px 0px;
+    font-size: 18px;
   }
   p {
-    padding-top: 10px;
-    color: white;
+    padding-top: 0px;
+    color: #7089bd;
   }
 
   @media (max-width: 500px) {
     img {
-      width: 24vw;
-      object-fit: contain;
-      margin: auto;
+   
     }
     p {
       font-size: 14px;
@@ -146,11 +166,11 @@ const LogoAndImageLogo = styled.div`
 `;
 const SectionTwo = styled.section`
   width: 100%;
-
+  padding: 10px 0px;
   h2 {
     width: 100%;
-    padding: 30px 10px;
-    font-size: 18px;
+    padding: 25px 10px;
+    font-size: 25px;
     color: #6e88cc;
     text-align: center;
   }
@@ -158,29 +178,87 @@ const SectionTwo = styled.section`
   .CardsContain {
     display: flex;
     justify-content: center;
-    padding-top: 20px;
+
+    gap: 5px;
   }
 `;
 
-const Card = styled(Link)<{ disabled?: boolean }>`
-  width: 150px;
-  height: 150px;
-  border-radius: 10px;
+const Card = styled(Link)<{
+  disabled?: boolean;
+  bgColor?: string;
+  bgColor2?: string;
+  btnColor?: string;
+  btnColor2?: string;
+}>`
+  width: 250px;
+  height: 270px;
+  border-radius: 20px;
   margin: 5px;
   display: flex;
-  justify-content: center;
   align-items: center;
   text-align: center;
   flex-direction: column;
+  gap: 10px;
 
-  &:hover {
-    transform: scale(1.1);
+  img {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    width: 100%;
+    height: 100px;
+    object-fit: contain;
+    margin-bottom: 10px;
   }
 
-  padding: 10px;
-  background-color: #212433;
-  cursor: pointer;
+  button {
+    background-image: linear-gradient(
+      ${(props) => props.btnColor || "#212433"},
+      ${(props) => props.btnColor2 || "#212433"}
+    );
+    border: none;
 
+    border-top: 0px solid #525a81;
+    border-bottom: 1px solid #525a81;
+    border-left: 0.5px solid #525a81;
+    border-right: 0.5px solid #444a6b;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 20px;
+    padding: 10px;
+
+    width: 90%;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  padding: 2px;
+
+  h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    text-shadow: -2px 2px 4px #212433;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  background-image: linear-gradient(
+    to bottom,
+    ${(props) => props.bgColor || "#212433"},
+    ${(props) => props.bgColor2 || "#212433"}
+  );
+
+  color: #272e3a;
+  font-size: 14px;
+  cursor: pointer;
+  // box-shadow: 0px 0px 10px 1px ${(props) => props.btnColor || "#212433"};
   opacity: ${(props) => (props.disabled ? ".2" : "1")};
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 `;
@@ -216,7 +294,7 @@ const WhyLearning = styled.div`
 
 const Footer = styled.footer`
   width: 100%;
-  background-color: #212433;
+  //background-color: #212433;
   padding: 20px;
   position: relative;
   bottom: 0;

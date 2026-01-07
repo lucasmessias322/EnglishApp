@@ -30,8 +30,8 @@ export const WordContainer = styled.span`
   &:hover {
     cursor: pointer;
     color: #ffffff;
-    background-color: #52043b;
-    /* padding: 0px 5px; */
+    background-color: #4edb2bff;
+
     text-align: center;
   }
 `;
@@ -78,5 +78,22 @@ export const WordPopUp = styled.div`
 
     h4 {
     }
+  }
+`;
+
+export const MarkAsCompletedButton = styled.button`
+  width: 100%;
+  max-width: 600px;
+  padding: 10px;
+  border: 1px solid #353a52;
+  margin: auto;
+  border-radius: 10px;
+  background-color: transparent;
+  color: white;
+  display: flex;
+  cursor: pointer;
+  h2 {
+    text-align: center;
+    width: 100%;
   }
 `;

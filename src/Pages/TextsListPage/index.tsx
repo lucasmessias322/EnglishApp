@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { getTexts } from "../../Apis/englishplusApi";
 import { Link } from "react-router-dom";
 import LoadingComp from "../../Components/LoadingComp";
+import { FaC } from "react-icons/fa6";
+import { FaCheck } from "react-icons/fa";
 
 // Definindo a tipagem correta para os textos
 interface Text {
@@ -18,6 +20,7 @@ export default function TextsListPage() {
   // Tipando o estado de levels como um array de Text
   const [isLoading, setIsLoading] = useState(true);
   const [levels, setLevels] = useState<Text[]>([]);
+  const [completedTexts, setCompletedTexts] = useState<string[]>([]);
 
   // Carregando os textos da API
   useEffect(() => {
@@ -27,6 +30,13 @@ export default function TextsListPage() {
       setIsLoading(false);
     });
   }, []);
+  useEffect(() => {
+    const completed = JSON.parse(
+      localStorage.getItem("completed_texts") || "[]"
+    );
+    setCompletedTexts(completed);
+  }, []);
+  const isTextCompleted = (id: string) => completedTexts.includes(id);
 
   return (
     <Container>
@@ -34,7 +44,7 @@ export default function TextsListPage() {
         <LoadingComp />
       ) : (
         <>
-          <HeaderComponent fixed />
+          <HeaderComponent bgcolor="#1C1F2D" fixed />
           <LevelWrapper>
             <h2>Textos em Ingles</h2>
             <TextListWrapper>
@@ -47,6 +57,12 @@ export default function TextsListPage() {
                     </h4>
                     <span>{text.resume}</span>
                   </Link>
+
+                  {isTextCompleted(text._id) && (
+                    <div className="check">
+                      {isTextCompleted(text._id) && <FaCheck size={25} />}
+                    </div>
+                  )}
                 </TextItem>
               ))}
             </TextListWrapper>
@@ -61,7 +77,7 @@ export default function TextsListPage() {
 const Container = styled.div`
   width: 100%;
   height: 100vh;
-  margin-top: 60px;
+  margin-top: 80px;
 `;
 
 const LevelWrapper = styled.div`
@@ -78,7 +94,7 @@ const TextListWrapper = styled.ul`
   width: 100%;
 
   @media (min-width: 500px) {
-    max-width: 800px;
+    max-width: 900px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -89,12 +105,18 @@ const TextListWrapper = styled.ul`
 const TextItem = styled.li`
   width: 100%;
   list-style: none;
-  padding: 20px 0px;
-  border-bottom: 0.2px solid #353a52;
+  padding: 20px 20px;
+
+  border: 1px solid #353a52;
+  border-radius: 20px;
   margin: 10px 0px;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   a {
+    max-width: 900px;
     h4 {
       font-size: 18px;
       color: #a0bbdb;
@@ -102,6 +124,24 @@ const TextItem = styled.li`
     }
     span {
       font-size: 14px;
+    }
+  }
+
+  .check {
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    border: 1px solid #353a52;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #29aa8b;
+  }
+
+  @media (max-width: 500px) {
+    a {
+      max-width: 370px;
     }
   }
 `;

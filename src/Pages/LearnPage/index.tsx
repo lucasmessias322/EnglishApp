@@ -149,7 +149,7 @@ export default function LearnPage() {
         </h2>
         <h2>{currentRound > 0 ? `Rodada ${currentRound}` : "Finalizado"}</h2>
         <Link to={`/memolist/${memoid}`}>
-          <FaWindowClose color="#7583ff" size={30} />
+          <FaWindowClose color="#29aa8b" size={30} />
         </Link>
       </Header>
       <SectionWrapper>
@@ -259,20 +259,28 @@ const Container = styled.div`
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 20px 10px;
 
   h2 {
+    width: auto;
+    background-color: #292944;
+    border-radius: 10px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
     .icon {
       font-size: 25px;
       margin-right: 10px;
-      color: #7583ff;
+
+      color: #29aa8b;
     }
   }
 `;
 
 const SectionWrapper = styled.section`
   margin: auto;
-  // padding: 20px 10px;
+  padding: 20px 10px;
   width: 100%;
   max-width: 900px;
 `;
@@ -320,13 +328,27 @@ const AnswerOption = styled.li<AnswerOptionProps>`
 `;
 
 const NextButton = styled.button`
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #7583ff;
+  /* margin-top: 20px;
+
+ 
   color: #fff;
   border: none;
   border-radius: 5px;
-  cursor: pointer;
+  cursor: pointer; */
+
+  border: none;
+  background-color: #29aa8b;
+  border: 1px solid #134e40;
+
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 10px;
+  padding: 10px 20px;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
 const RoundSummary = styled.div`
@@ -379,11 +401,12 @@ const RoundSummary = styled.div`
 const FrontContent = styled.div`
   display: flex;
   align-items: center;
-
+  //  color: #3cffd2;
   .HiSpeakerWave {
     margin-right: 10px;
-
+    cursor: pointer;
     &:hover {
+      color: #29aa8b;
       transform: scale(1.1);
     }
   }

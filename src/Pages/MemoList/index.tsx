@@ -117,24 +117,26 @@ export default function MemoList() {
           </LearningOption> */}
         </LearningOptions>
 
-        {showResults ? (
-          <ResultsContainer>
-            <h3>Resultados</h3>
-            <span className="hits">Conheço a palavra: {correctCount}</span>
-            <span className="misses">Ainda Aprendendo: {incorrectCount}</span>
-            <p>FlashCards Revisados {cardsReviewed + 1}</p>
-          </ResultsContainer>
-        ) : (
-          <DeckComponent
-            handleCardFlip={handleCardFlip}
-            isFlipped={isFlipped}
-            cards={cards}
-            currentIndexCard={currentIndexCard}
-            handleCorrect={handleCorrect}
-            handleIncorrect={handleIncorrect}
-            cardsReviewed={cardsReviewed}
-          />
-        )}
+        <DeckContainer>
+          {showResults ? (
+            <ResultsContainer>
+              <h3>Resultados</h3>
+              <span className="hits">Conheço a palavra: {correctCount}</span>
+              <span className="misses">Ainda Aprendendo: {incorrectCount}</span>
+              <p>FlashCards Revisados {cardsReviewed + 1}</p>
+            </ResultsContainer>
+          ) : (
+            <DeckComponent
+              handleCardFlip={handleCardFlip}
+              isFlipped={isFlipped}
+              cards={cards}
+              currentIndexCard={currentIndexCard}
+              handleCorrect={handleCorrect}
+              handleIncorrect={handleIncorrect}
+              cardsReviewed={cardsReviewed}
+            />
+          )}
+        </DeckContainer>
       </SectionOne>
     </Container>
   );
@@ -143,15 +145,19 @@ export default function MemoList() {
 const Container = styled.div`
   width: 100%;
   height: 100vh;
+  overflow-y: hidden;
 `;
 
 const SectionOne = styled.section`
   max-width: 800px;
-  margin-top: 80px;
+
   padding: 15px 50px;
+  width: 100%;
+  margin: 80px auto;
+
   h2 {
     text-align: left;
-    padding-bottom: 20px;
+    padding: 0px;
   }
 
   @media (max-width: 500px) {
@@ -167,6 +173,7 @@ const LearningOptions = styled.div`
 
 const LearningOption = styled.div`
   margin: 5px;
+
   a {
     width: 100%;
     max-width: 200px;
@@ -181,7 +188,7 @@ const LearningOption = styled.div`
     .icon {
       font-size: 25px;
       margin-right: 10px;
-      color: #7583ff;
+      color: #29aa8b;
     }
   }
 
@@ -194,6 +201,9 @@ const LearningOption = styled.div`
   }
 `;
 
+const DeckContainer = styled.div`
+  width: 100%;
+`;
 const ResultsContainer = styled.div`
   width: 100%;
   display: flex;
