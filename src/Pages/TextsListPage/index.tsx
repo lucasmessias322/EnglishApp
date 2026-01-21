@@ -28,6 +28,8 @@ export default function TextsListPage() {
     getTexts().then((res) => {
       setLevels(res); // Tipagem implícita do retorno de getTexts
       setIsLoading(false);
+
+      console.log(res);
     });
   }, []);
   useEffect(() => {

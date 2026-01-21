@@ -5,7 +5,7 @@ import { FaUser, FaLock, FaEnvelope, FaEyeSlash, FaEye } from "react-icons/fa"; 
 import { postLogin, postRegister } from "../../Apis/englishplusApi";
 import { AuthContext } from "../../Context/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
-
+import GoogleLoginButton from "../../Components/GoogleLoginButton/GoogleLoginButton";
 interface FormValues {
   name?: string;
   email?: string;
@@ -29,7 +29,7 @@ export default function LoginSigning() {
             ? "Faça Login em sua conta."
             : "Crie uma conta para ter acesso a todos os recursos."}
         </p>
-
+        <GoogleLoginButton />
         {loginPage ? <Login /> : <Register />}
 
         {loginPage ? (
