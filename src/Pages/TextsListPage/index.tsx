@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import HeaderComponent from "../../Components/HeaderComponent";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getTexts } from "../../Apis/englishplusApi";
 import { Link } from "react-router-dom";
 import LoadingComp from "../../Components/LoadingComp";
 import { FaC } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa";
-
+import { MutatingDots, RotatingLines } from "react-loader-spinner";
 // Definindo a tipagem correta para os textos
 interface Text {
   _id: string;
@@ -21,20 +21,72 @@ export default function TextsListPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [levels, setLevels] = useState<Text[]>([]);
   const [completedTexts, setCompletedTexts] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [hasMore, setHasMore] = useState(true);
+  const loaderRef = useRef<HTMLDivElement | null>(null);
 
   // Carregando os textos da API
-  useEffect(() => {
-    setIsLoading(true);
-    getTexts().then((res) => {
-      setLevels(res); // Tipagem implícita do retorno de getTexts
-      setIsLoading(false);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   getTexts({ page: currentPage, limit: 5 }).then((res) => {
+  //     setLevels(res.data); // Tipagem implícita do retorno de getTexts
+  //     setIsLoading(false);
 
-      console.log(res);
+  //     console.log(res);
+  //   });
+  // }, []);
+
+  const isFetchingRef = useRef(false);
+
+  useEffect(() => {
+    if (!hasMore || isFetchingRef.current) return;
+
+    isFetchingRef.current = true;
+    setIsLoading(true);
+
+    getTexts({ page: currentPage, limit: 5 }).then((res) => {
+      setLevels((prev) => {
+        const ids = new Set(prev.map((t) => t._id));
+        const filtered = res.data.filter((t: Text) => !ids.has(t._id));
+        return [...prev, ...filtered];
+      });
+
+      console.log(res.data);
+
+      if (res.data.length < 5) {
+        setHasMore(false);
+      }
+
+      setIsLoading(false);
+      isFetchingRef.current = false;
     });
-  }, []);
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (!loaderRef.current || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isFetchingRef.current) {
+          setCurrentPage((prev) => prev + 1);
+        }
+      },
+      {
+        root: null,
+        rootMargin: "100px",
+        threshold: 0,
+      },
+    );
+
+    observer.observe(loaderRef.current);
+
+    return () => observer.disconnect();
+  }, [hasMore]);
+
   useEffect(() => {
     const completed = JSON.parse(
-      localStorage.getItem("completed_texts") || "[]"
+      localStorage.getItem("completed_texts") || "[]",
     );
     setCompletedTexts(completed);
   }, []);
@@ -42,39 +94,47 @@ export default function TextsListPage() {
 
   return (
     <Container>
-      {isLoading ? (
-        <LoadingComp />
-      ) : (
-        <>
-          <HeaderComponent bgcolor="#1C1F2D" fixed />
-          <LevelWrapper>
-            <h2>Textos em Ingles</h2>
-            <TextListWrapper>
-              {levels.map((text) => (
-                <TextItem key={text._id}>
-                  <Link to={`/text/${text._id}`}>
-                    <h4>
-                      {text.title} - {text.level}{" "}
-                      {/* {text.content[0]?.audiotexturl ? : } */}
-                    </h4>
-                    <span>{text.resume}</span>
-                  </Link>
+      <>
+        <HeaderComponent bgcolor="#1C1F2D" fixed />
+        <LevelWrapper>
+          <h2>Textos em Ingles</h2>
+          <TextListWrapper>
+            {levels.map((text) => (
+              <TextItem key={text._id}>
+                <Link to={`/text/${text._id}`}>
+                  <h4>
+                    {text.title} - {text.level}
+                  </h4>
+                  <span>{text.resume}</span>
+                </Link>
 
-                  {isTextCompleted(text._id) && (
-                    <div className="check">
-                      {isTextCompleted(text._id) && <FaCheck size={25} />}
-                    </div>
-                  )}
-                </TextItem>
-              ))}
-            </TextListWrapper>
-          </LevelWrapper>
-        </>
-      )}
+                {isTextCompleted(text._id) && (
+                  <div className="check">
+                    {isTextCompleted(text._id) && <FaCheck size={25} />}
+                  </div>
+                )}
+              </TextItem>
+            ))}
+          </TextListWrapper>
+          {hasMore && (
+            <LoadingWrapper ref={loaderRef}>
+              {isLoading && <span>Carregando...</span>}
+            </LoadingWrapper>
+          )}
+        </LevelWrapper>
+      </>
     </Container>
   );
 }
 
+const LoadingWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  color: white;
+`;
 // Styled-components
 const Container = styled.div`
   width: 100%;

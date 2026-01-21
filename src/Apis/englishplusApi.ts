@@ -71,9 +71,9 @@ export async function postRegister(data: any) {
     .catch((error) => console.log(error));
 }
 
-export async function getTexts() {
+export async function getTexts({page=1, limit=5}) {
   const get = engleshPlusApi
-    .get(`/api/texts`)
+    .get(`/api/texts/?page=${page}&limit=${limit}`)
     .then((response) => response.data)
     .catch((error) => console.log(error));
 
