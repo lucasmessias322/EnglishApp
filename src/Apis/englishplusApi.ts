@@ -3,7 +3,7 @@ import axios from "axios";
 export const engleshPlusBaseApiLocal = `http://localhost:8081`;
 export const engleshPlusBaseApi = "https://engleshplus-api.vercel.app";
 
-const engleshPlusApi = axios.create({
+export const engleshPlusApi = axios.create({
   baseURL: engleshPlusBaseApi,
 });
 
