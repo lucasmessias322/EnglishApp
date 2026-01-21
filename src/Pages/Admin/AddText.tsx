@@ -158,8 +158,8 @@ function AddText({ token }: AddTextProps) {
 
             <Field>
               <label>Texto do parágrafo</label>
-              <input
-                type="text"
+              <textarea
+               
                 value={paragraph.paragraph}
                 onChange={(e) => updateParagraphText(index, e.target.value)}
                 required
@@ -239,6 +239,7 @@ const Field = styled.div`
     border-radius: 6px;
     background-color: transparent;
     border: 1px solid #555b7e;
+    background-color: #1C1F2D;
     color: white;
     outline: none;
     font-size: 14px;

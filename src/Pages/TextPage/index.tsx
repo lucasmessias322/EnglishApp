@@ -161,6 +161,8 @@ export default function TextPage() {
     if (userId && token) {
       getUserMemorizes(userId, token).then((response) => {
         setmemoTextAndNews(response[0]);
+        console.log(response[0]);
+        
       });
     }
   }, []);
@@ -248,7 +250,7 @@ export default function TextPage() {
               translatedWord={translatedWord}
               setSelectedWord={setSelectedWord}
               AddFlashCard={AddFlashCard}
-              // memoTextAndNews={memoTextAndNews}
+               memoTextAndNews={memoTextAndNews}
               Addflashcardverificationtoggle={Addflashcardverificationtoggle}
               token={token}
             />
