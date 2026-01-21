@@ -22,26 +22,6 @@ export async function PostText(data: any, userId: string, token: string) {
   return await post;
 }
 
-export async function UploadAudios(
-  folderName: string,
-  data: any,
-  token: string
-) {
-  const config = {
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  const post = engleshPlusApi
-    .post(`/api/texts/upload/${folderName}`, data, config)
-    .then((response) => response.data)
-    .catch((error) => console.log(error));
-
-  return await post;
-}
-
 export async function getSingleUser(userId: string, token: string) {
   const config = {
     headers: {
@@ -71,7 +51,7 @@ export async function postRegister(data: any) {
     .catch((error) => console.log(error));
 }
 
-export async function getTexts({page=1, limit=5}) {
+export async function getTexts({ page = 1, limit = 5 }) {
   const get = engleshPlusApi
     .get(`/api/texts/?page=${page}&limit=${limit}`)
     .then((response) => response.data)
@@ -87,6 +67,32 @@ export async function getSingleText(textid?: string) {
     .catch((error) => console.log(error));
 
   return await get;
+}
+
+export async function postText(data: any, token: string) {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const post = engleshPlusApi.post(`/api/texts`, data, config);
+
+  return await post;
+}
+
+export async function deleteText(textid: any, token: string) {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const del = engleshPlusApi.delete(`/api/texts/${textid}`, config);
+
+  return await del;
 }
 
 export async function getMemorizes(token: string) {

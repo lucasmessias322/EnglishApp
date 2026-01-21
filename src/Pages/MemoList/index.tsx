@@ -92,7 +92,7 @@ export default function MemoList() {
 
   return (
     <Container>
-      <HeaderComponent fixed  />
+      <HeaderComponent fixed={false} />
       <SectionOne>
         <h2>{Memo?.title}</h2>
 
@@ -153,7 +153,6 @@ const SectionOne = styled.section`
 
   padding: 15px 50px;
   width: 100%;
-  margin: 80px auto;
 
   h2 {
     text-align: left;

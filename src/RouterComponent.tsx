@@ -7,6 +7,7 @@ import MemoList from "./Pages/MemoList";
 import LoginSigning from "./Pages/LoginSigning";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import LearnPage from "./Pages/LearnPage";
+import Admin from "./Pages/Admin";
 
 export default function RouterComponent() {
   return (
@@ -22,6 +23,10 @@ export default function RouterComponent() {
         <Route path="/account/:accountType" element={<LoginSigning />} />
         <Route path="/textslist" element={<TextsListPage />} />
         <Route path="/text/:textindex" element={<TextPage />} />
+
+        <Route element={<PrivateRoutes requiredRoles={["admin"]} />}>
+          <Route path="/admin" element={<Admin />} />
+        </Route>
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

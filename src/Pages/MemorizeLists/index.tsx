@@ -38,7 +38,7 @@ export default function MemorizeLists() {
 
   return (
     <Container>
-      <HeaderComponent bgcolor="#212433" fixed loginSignin />
+      <HeaderComponent />
 
       {memoList.length === 0 ? (
         <LoadingComp />
@@ -54,7 +54,7 @@ export default function MemorizeLists() {
                     <span>{item.flashcards.length} palavras</span>
                   </Link>
                 </DeckItem>
-              ) : null
+              ) : null,
             )}
           </DecksList>
         </DefaultDecksWrapper>
@@ -69,7 +69,7 @@ const Container = styled.div`
 `;
 
 const DefaultDecksWrapper = styled.section`
-  margin-top: 60px;
+  /* margin-top: 60px; */
   padding: 20px;
 `;
 

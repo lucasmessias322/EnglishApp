@@ -60,7 +60,7 @@ export default function HeaderComponent({
         <ChildrenContainer>
           <LoginSignin>
             {admin && (
-              <Link to="/admin/AddNewText">
+              <Link to="/admin">
                 <span className="register">Admin</span>
               </Link>
             )}
@@ -136,3 +136,5 @@ const GoBackButton = styled.a`
     background-color: #52527f;
   }
 `;
+
+

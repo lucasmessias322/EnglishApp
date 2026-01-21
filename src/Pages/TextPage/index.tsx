@@ -32,6 +32,12 @@ interface translatedWordtype {
 interface MemoTextAndNews {
   flashcards: any[]; // You may define a proper interface for flashcards if needed
 }
+interface Question {
+  id: number;
+  question: string;
+  options: string[];
+  correctIndex: number;
+}
 
 export default function TextPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -65,6 +71,34 @@ export default function TextPage() {
 
   const { token, userId } = useContext(AuthContext);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [questions] = useState<Question[]>([
+    {
+      id: 1,
+      question: "Why did the narrator wake up early on Saturday?",
+      options: [
+        "Because he had to work",
+        "Because he was excited about the weekend adventure",
+        "Because he could not sleep",
+        "Because he was traveling alone",
+      ],
+      correctIndex: 1,
+    },
+    {
+      id: 2,
+      question: "Where did the family go hiking?",
+      options: [
+        "At the beach",
+        "In a park",
+        "In the nearby mountains",
+        "In the city",
+      ],
+      correctIndex: 2,
+    },
+  ]);
+
+  const [answers, setAnswers] = useState<{ [key: number]: number }>({});
+  const [submitted, setSubmitted] = useState(false);
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
     if (isPlaying) {
@@ -94,6 +128,8 @@ export default function TextPage() {
     setIsLoading(true);
     getSingleText(currentTextIndex).then((res) => {
       setText(res[0]);
+      console.log(res[0]);
+      
       setIsLoading(false);
     });
   }, []);
@@ -111,8 +147,8 @@ export default function TextPage() {
   const fetchTranslation = async (word: string): Promise<object> => {
     const response = await fetch(
       `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=pt&dt=t&q=${encodeURIComponent(
-        word
-      )}`
+        word,
+      )}`,
     );
     const data = await response.json();
     const ptClean = data[0][0][0].replace(",", "").replace(".", "");
@@ -154,7 +190,7 @@ export default function TextPage() {
     if (!text._id) return;
 
     const completed = JSON.parse(
-      localStorage.getItem("completed_texts") || "[]"
+      localStorage.getItem("completed_texts") || "[]",
     );
 
     setIsCompleted(completed.includes(text._id));
@@ -164,7 +200,7 @@ export default function TextPage() {
     if (!text._id) return;
 
     const completed: string[] = JSON.parse(
-      localStorage.getItem("completed_texts") || "[]"
+      localStorage.getItem("completed_texts") || "[]",
     );
 
     let updated: string[];
@@ -178,6 +214,26 @@ export default function TextPage() {
     }
 
     localStorage.setItem("completed_texts", JSON.stringify(updated));
+  }
+  function handleAnswer(questionId: number, optionIndex: number) {
+    setAnswers((prev) => ({
+      ...prev,
+      [questionId]: optionIndex,
+    }));
+  }
+
+  function handleSubmitQuestions(e: React.FormEvent) {
+    e.preventDefault();
+
+    let correct = 0;
+    questions.forEach((q) => {
+      if (answers[q.id] === q.correctIndex) {
+        correct++;
+      }
+    });
+
+    setScore(correct);
+    setSubmitted(true);
   }
 
   return (
@@ -197,7 +253,12 @@ export default function TextPage() {
               token={token}
             />
           )}
-          <HeaderComponent textPage bgcolor="#1C1F2D" fixed backbtn="/textslist">
+          <HeaderComponent
+            textPage
+            bgcolor="#1C1F2D"
+            fixed
+            backbtn="/textslist"
+          >
             {text.content[0].audiotexturl && (
               <div
                 id="PlayPauseButton"
@@ -239,6 +300,39 @@ export default function TextPage() {
             }
           />
 
+          <QuestionForm onSubmit={handleSubmitQuestions}>
+            <h2>Perguntas de Compreensão</h2>
+
+            {questions.map((q) => (
+              <fieldset key={q.id}>
+                <legend>{q.question}</legend>
+
+                {q.options.map((opt, index) => (
+                  <label key={index}>
+                    <input
+                      type="radio"
+                      name={`question-${q.id}`}
+                      value={index}
+                      disabled={submitted}
+                      checked={answers[q.id] === index}
+                      onChange={() => handleAnswer(q.id, index)}
+                    />
+                    <span className="custom-radio" />
+                    <span className="option-text">{opt}</span>
+                  </label>
+                ))}
+              </fieldset>
+            ))}
+
+            {!submitted ? (
+              <button type="submit">Enviar respostas</button>
+            ) : (
+              <Result>
+                Você acertou {score} de {questions.length} perguntas.
+              </Result>
+            )}
+          </QuestionForm>
+
           <MarkAsCompletedButton onClick={toggleCompleted}>
             <h2>{isCompleted ? "Concluído" : "Marcar como completo"}</h2>
           </MarkAsCompletedButton>
@@ -253,20 +347,89 @@ const Container = styled.div`
   margin-top: 60px;
 `;
 
-const TextsControll = styled.div`
+const Result = styled.div`
+  margin-top: 15px;
+  font-weight: bold;
+`;
+const QuestionForm = styled.form`
+  width: 100%;
+  max-width: 600px;
+  margin: 30px auto;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
 
-  .btn {
-    padding: 10px;
-    background-color: #25293b;
-    border-radius: 5px;
-    margin: 0px 5px;
+  fieldset {
+    border: 1px solid #444;
+    padding: 15px;
+    border-radius: 8px;
+  }
+
+  legend {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     cursor: pointer;
+    margin-bottom: 10px;
+    position: relative;
 
-    &:hover {
-      transform: scale(1.1);
+    input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
     }
+
+    .custom-radio {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #6c73ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .custom-radio::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #6c73ff;
+      transform: scale(0);
+      transition: transform 0.2s ease;
+    }
+
+    input:checked + .custom-radio::before {
+      transform: scale(1);
+    }
+
+    input:checked + .custom-radio {
+      border-color: #6c73ff;
+    }
+
+    input:disabled + .custom-radio {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .option-text {
+      user-select: none;
+    }
+
+    &:hover .custom-radio {
+      border-color: #9aa0ff;
+    }
+  }
+
+  button {
+    padding: 10px;
+    font-weight: bold;
+    cursor: pointer;
   }
 `;

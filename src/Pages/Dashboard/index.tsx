@@ -9,7 +9,7 @@ import { useContext, useEffect, useState } from "react";
 export default function Dashboard() {
   const { token, userData } = useContext(AuthContext);
   const [userName, setUserName] = useState("");
-  const [isAdmin, setIsAdmin] = useState();
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (userData) {
@@ -18,7 +18,9 @@ export default function Dashboard() {
       const firstTwoWords = nameWords.slice(0, 2); // Pega as duas primeiras palavras
       setUserName(firstTwoWords.join(" ")); // Define as duas primeiras palavras como userName
 
-     /// setIsAdmin(userData.role === "admin");
+      setIsAdmin(userData.role === "admin");
+      console.log(userData);
+      
     }
   }, [userData]);
 
@@ -30,7 +32,7 @@ export default function Dashboard() {
           <img src="/logo3.png" alt="" />{" "}
           <h1>
             English Plus<b>+</b>
-            
+           
           </h1>
           {/* {userName ? (
             <p>Bem vindo(a) de volta {userName}!</p>
