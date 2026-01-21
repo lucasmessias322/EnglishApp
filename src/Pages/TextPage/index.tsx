@@ -192,12 +192,12 @@ export default function TextPage() {
               translatedWord={translatedWord}
               setSelectedWord={setSelectedWord}
               AddFlashCard={AddFlashCard}
-              memoTextAndNews={memoTextAndNews}
+              // memoTextAndNews={memoTextAndNews}
               Addflashcardverificationtoggle={Addflashcardverificationtoggle}
               token={token}
             />
           )}
-          <HeaderComponent textPage bgcolor="#1C1F2D" fixed>
+          <HeaderComponent textPage bgcolor="#1C1F2D" fixed backbtn="/textslist">
             {text.content[0].audiotexturl && (
               <div
                 id="PlayPauseButton"

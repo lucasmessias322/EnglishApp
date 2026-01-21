@@ -92,7 +92,7 @@ export default function MemoList() {
 
   return (
     <Container>
-      <HeaderComponent fixed loginSignin />
+      <HeaderComponent fixed  />
       <SectionOne>
         <h2>{Memo?.title}</h2>
 

@@ -118,7 +118,19 @@ export default function TextsListPage() {
           </TextListWrapper>
           {hasMore && (
             <LoadingWrapper ref={loaderRef}>
-              {isLoading && <span>Carregando...</span>}
+              {isLoading && (
+                <MutatingDots
+                  visible={true}
+                  height="100"
+                  width="100"
+                  color=" #a0bbdb"
+                  secondaryColor=" #a0bbdb"
+                  radius="12.5"
+                  ariaLabel="mutating-dots-loading"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                />
+              )}
             </LoadingWrapper>
           )}
         </LevelWrapper>

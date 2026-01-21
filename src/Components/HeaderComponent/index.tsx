@@ -4,6 +4,8 @@ import { ReactNode, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 
+import { IoIosArrowBack } from "react-icons/io";
+
 interface HeaderProps {
   fixed?: boolean;
   textPage?: boolean;
@@ -11,6 +13,7 @@ interface HeaderProps {
   children?: ReactNode;
   admin?: boolean;
   bgcolor?: string;
+  backbtn?: string;
 }
 
 export default function HeaderComponent({
@@ -19,17 +22,26 @@ export default function HeaderComponent({
   children,
   loginSignin,
   admin,
-  bgcolor
+  bgcolor,
+  backbtn,
 }: HeaderProps) {
   const { token, logout, userData } = useContext(AuthContext);
 
   return (
     <Header fixed={fixed} bgcolor={bgcolor}>
-      <Link to="/">
-        <h2>
-          EngleshPlus<b>+</b>
-        </h2>
-      </Link>
+      {backbtn ? (
+        <Link to={backbtn}>
+          <GoBackButton title="Voltar">
+            <IoIosArrowBack />
+          </GoBackButton>
+        </Link>
+      ) : (
+        <Link to="/">
+          <h2>
+            EngleshPlus<b>+</b>
+          </h2>
+        </Link>
+      )}
 
       {loginSignin && !token && (
         <ChildrenContainer>
@@ -68,7 +80,8 @@ const Header = styled.header<HeaderProps>`
   padding: 20px 10px;
   position: ${(props) => (props.fixed ? "fixed" : "block")};
   top: 0;
-  background-color: ${(props) => (props.bgcolor ? props.bgcolor : 'transparent')};
+  background-color: ${(props) =>
+    props.bgcolor ? props.bgcolor : "transparent"};
   h2 {
     font-size: 20px;
 
@@ -104,5 +117,22 @@ const LoginSignin = styled.div`
       border-radius: 20px;
       background-color: #4f67ca;
     }
+  }
+`;
+
+const GoBackButton = styled.a`
+  background-color: #6565a1;
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #52527f;
   }
 `;
