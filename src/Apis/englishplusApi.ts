@@ -21,6 +21,20 @@ export async function PostText(data: any, userId: string, token: string) {
 
   return await post;
 }
+export async function PutText(textId: string, data: any, token: string) {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const put = engleshPlusApi
+    .put(`/api/texts/${textId}`, data, config)
+    .then((response) => response.data)
+    .catch((error) => console.log(error));
+
+  return await put;
+}
 
 export async function getSingleUser(userId: string, token: string) {
   const config = {

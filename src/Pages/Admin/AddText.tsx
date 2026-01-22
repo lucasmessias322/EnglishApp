@@ -15,6 +15,16 @@ type Level = "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
 type AddTextProps = {
   token: string;
 };
+type Quiz = {
+  question: string;
+  alternatives: {
+    A: string;
+    B: string;
+    C: string;
+    D: string;
+  };
+  correctAnswer?: "A" | "B" | "C" | "D";
+};
 
 function AddText({ token }: AddTextProps) {
   const [title, setTitle] = useState("");
@@ -24,6 +34,7 @@ function AddText({ token }: AddTextProps) {
   const [paragraphs, setParagraphs] = useState<Paragraph[]>([
     { paragraph: "", audiotexturl: null },
   ]);
+  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
 
   const addParagraph = () => {
     setParagraphs((prev) => [...prev, { paragraph: "", audiotexturl: null }]);
@@ -79,7 +90,9 @@ function AddText({ token }: AddTextProps) {
         resume,
         hasAudios: contentWithBase64.some((p) => p.audiotexturl !== null),
         content: contentWithBase64,
+        quizzes, // 👈 aqui
       };
+
       await postText(data, token)
         .then(() => {
           toast.success("Texto cadastrado com sucesso!");
@@ -98,6 +111,40 @@ function AddText({ token }: AddTextProps) {
       console.error(error);
       toast.error("Erro ao cadastrar o texto. Tente novamente.");
     }
+  };
+
+  const addQuiz = () => {
+    setQuizzes((prev) => [
+      ...prev,
+      {
+        question: "",
+        alternatives: { A: "", B: "", C: "", D: "" },
+        correctAnswer: "A",
+      },
+    ]);
+  };
+
+  const removeQuiz = (index: number) => {
+    setQuizzes((prev) => prev.filter((_, i) => i !== index));
+  };
+  const updateQuizQuestion = (index: number, value: string) => {
+    const updated = [...quizzes];
+    updated[index].question = value;
+    setQuizzes(updated);
+  };
+  const updateQuizAlternative = (
+    index: number,
+    key: "A" | "B" | "C" | "D",
+    value: string,
+  ) => {
+    const updated = [...quizzes];
+    updated[index].alternatives[key] = value;
+    setQuizzes(updated);
+  };
+  const updateCorrectAnswer = (index: number, value: "A" | "B" | "C" | "D") => {
+    const updated = [...quizzes];
+    updated[index].correctAnswer = value;
+    setQuizzes(updated);
   };
 
   return (
@@ -159,7 +206,6 @@ function AddText({ token }: AddTextProps) {
             <Field>
               <label>Texto do parágrafo</label>
               <textarea
-               
                 value={paragraph.paragraph}
                 onChange={(e) => updateParagraphText(index, e.target.value)}
                 required
@@ -182,6 +228,65 @@ function AddText({ token }: AddTextProps) {
         <AddParagraphButton type="button" onClick={addParagraph}>
           <FaPlus />
           Adicionar parágrafo
+        </AddParagraphButton>
+
+        {quizzes.length > 0 &&
+          quizzes.map((quiz, index) => (
+            <ParagraphCard key={index}>
+              <ParagraphHeader>
+                <span>Quiz {index + 1}</span>
+
+                <RemoveButton
+                  type="button"
+                  onClick={() => removeQuiz(index)}
+                  // disabled={quizzes.length === 1}
+                >
+                  <FaTrash />
+                </RemoveButton>
+              </ParagraphHeader>
+
+              <Field>
+                <label>Pergunta</label>
+                <textarea
+                  value={quiz.question}
+                  onChange={(e) => updateQuizQuestion(index, e.target.value)}
+                  required
+                />
+              </Field>
+
+              {(["A", "B", "C", "D"] as const).map((alt) => (
+                <Field key={alt}>
+                  <label>Alternativa {alt}</label>
+                  <input
+                    type="text"
+                    value={quiz.alternatives[alt]}
+                    onChange={(e) =>
+                      updateQuizAlternative(index, alt, e.target.value)
+                    }
+                    required
+                  />
+                </Field>
+              ))}
+
+              <Field>
+                <label>Resposta correta</label>
+                <select
+                  value={quiz.correctAnswer}
+                  onChange={(e) =>
+                    updateCorrectAnswer(index, e.target.value as any)
+                  }
+                >
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                  <option value="D">D</option>
+                </select>
+              </Field>
+            </ParagraphCard>
+          ))}
+        <AddParagraphButton type="button" onClick={addQuiz}>
+          <FaPlus />
+          Adicionar quiz
         </AddParagraphButton>
 
         <SubmitButton type="submit">Salvar texto</SubmitButton>
@@ -239,7 +344,7 @@ const Field = styled.div`
     border-radius: 6px;
     background-color: transparent;
     border: 1px solid #555b7e;
-    background-color: #1C1F2D;
+    background-color: #1c1f2d;
     color: white;
     outline: none;
     font-size: 14px;

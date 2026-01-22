@@ -33,10 +33,10 @@ interface MemoTextAndNews {
   flashcards: any[]; // You may define a proper interface for flashcards if needed
 }
 interface Question {
-  id: number;
+  _id: string;
   question: string;
-  options: string[];
-  correctIndex: number;
+  alternatives: { A: string; B: string; C: string; D: string };
+  correctAnswer: string;
 }
 
 export default function TextPage() {
@@ -71,32 +71,11 @@ export default function TextPage() {
 
   const { token, userId } = useContext(AuthContext);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [questions] = useState<Question[]>([
-    {
-      id: 1,
-      question: "Why did the narrator wake up early on Saturday?",
-      options: [
-        "Because he had to work",
-        "Because he was excited about the weekend adventure",
-        "Because he could not sleep",
-        "Because he was traveling alone",
-      ],
-      correctIndex: 1,
-    },
-    {
-      id: 2,
-      question: "Where did the family go hiking?",
-      options: [
-        "At the beach",
-        "In a park",
-        "In the nearby mountains",
-        "In the city",
-      ],
-      correctIndex: 2,
-    },
-  ]);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const optionKeys = ["A", "B", "C", "D"] as const;
 
-  const [answers, setAnswers] = useState<{ [key: number]: number }>({});
+  const [answers, setAnswers] = useState<{ [key: string]: string }>({});
+
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
 
@@ -128,8 +107,9 @@ export default function TextPage() {
     setIsLoading(true);
     getSingleText(currentTextIndex).then((res) => {
       setText(res[0]);
+      setQuestions(res[0].quizzes || []);
       console.log(res[0]);
-      
+
       setIsLoading(false);
     });
   }, []);
@@ -161,8 +141,7 @@ export default function TextPage() {
     if (userId && token) {
       getUserMemorizes(userId, token).then((response) => {
         setmemoTextAndNews(response[0]);
-        console.log(response[0]);
-        
+        //console.log(response[0]);
       });
     }
   }, []);
@@ -198,29 +177,53 @@ export default function TextPage() {
     setIsCompleted(completed.includes(text._id));
   }, [text._id]);
 
-  function toggleCompleted() {
+  function markAsCompleted() {
     if (!text._id) return;
 
     const completed: string[] = JSON.parse(
       localStorage.getItem("completed_texts") || "[]",
     );
 
-    let updated: string[];
+    if (completed.includes(text._id)) return;
 
-    if (completed.includes(text._id)) {
-      updated = completed.filter((id) => id !== text._id);
-      setIsCompleted(false);
-    } else {
-      updated = [...completed, text._id];
-      setIsCompleted(true);
+    const updated = [...completed, text._id];
+    localStorage.setItem("completed_texts", JSON.stringify(updated));
+    setIsCompleted(true);
+  }
+
+  function toggleCompleted() {
+    const hasQuiz = questions.length > 0;
+    const quizPassed = !hasQuiz || (submitted && score === questions.length);
+
+    if (!quizPassed) {
+      alert("Você precisa concluir o quiz e acertar todas as perguntas.");
+      return;
     }
 
-    localStorage.setItem("completed_texts", JSON.stringify(updated));
+    if (isCompleted) {
+      const completed: string[] = JSON.parse(
+        localStorage.getItem("completed_texts") || "[]",
+      );
+
+      const updated = completed.filter((id) => id !== text._id);
+      localStorage.setItem("completed_texts", JSON.stringify(updated));
+      setIsCompleted(false);
+    } else {
+      markAsCompleted();
+    }
   }
-  function handleAnswer(questionId: number, optionIndex: number) {
+  useEffect(() => {
+    const hasQuiz = questions.length > 0;
+
+    if (hasQuiz && submitted && score === questions.length && !isCompleted) {
+      markAsCompleted();
+    }
+  }, [submitted, score, questions.length]);
+
+  function handleAnswer(questionId: string, option: "A" | "B" | "C" | "D") {
     setAnswers((prev) => ({
       ...prev,
-      [questionId]: optionIndex,
+      [questionId]: option,
     }));
   }
 
@@ -228,8 +231,9 @@ export default function TextPage() {
     e.preventDefault();
 
     let correct = 0;
+
     questions.forEach((q) => {
-      if (answers[q.id] === q.correctIndex) {
+      if (answers[q._id] === q.correctAnswer) {
         correct++;
       }
     });
@@ -237,6 +241,10 @@ export default function TextPage() {
     setScore(correct);
     setSubmitted(true);
   }
+  const hasQuiz = questions.length > 0;
+  const quizPassed = hasQuiz && submitted && score === questions.length;
+  const canMarkAsCompleted =
+    !hasQuiz || (submitted && score === questions.length);
 
   return (
     <Container>
@@ -250,7 +258,7 @@ export default function TextPage() {
               translatedWord={translatedWord}
               setSelectedWord={setSelectedWord}
               AddFlashCard={AddFlashCard}
-               memoTextAndNews={memoTextAndNews}
+              memoTextAndNews={memoTextAndNews}
               Addflashcardverificationtoggle={Addflashcardverificationtoggle}
               token={token}
             />
@@ -302,47 +310,67 @@ export default function TextPage() {
             }
           />
 
-          <QuestionForm onSubmit={handleSubmitQuestions}>
-            <h2>Perguntas de Compreensão</h2>
+          {questions.length > 0 && (
+            <QuestionForm onSubmit={handleSubmitQuestions}>
+              <h2>Perguntas de Compreensão</h2>
 
-            {questions.map((q) => (
-              <fieldset key={q.id}>
-                <legend>{q.question}</legend>
+              {questions.map((q) => (
+                <fieldset key={q._id}>
+                  <legend>{q.question}</legend>
 
-                {q.options.map((opt, index) => (
-                  <label key={index}>
-                    <input
-                      type="radio"
-                      name={`question-${q.id}`}
-                      value={index}
-                      disabled={submitted}
-                      checked={answers[q.id] === index}
-                      onChange={() => handleAnswer(q.id, index)}
-                    />
-                    <span className="custom-radio" />
-                    <span className="option-text">{opt}</span>
-                  </label>
-                ))}
-              </fieldset>
-            ))}
+                  {optionKeys.map((key) => (
+                    <label key={key}>
+                      <input
+                        type="radio"
+                        name={`question-${q._id}`}
+                        checked={answers[q._id] === key}
+                        onChange={() => handleAnswer(q._id, key)}
+                        value={key}
+                        disabled={quizPassed}
+                      />
+                      <span className="custom-radio" />
+                      <span className="option-text">
+                        {key}. {q.alternatives[key]}
+                      </span>
+                    </label>
+                  ))}
+                </fieldset>
+              ))}
 
-            {!submitted ? (
-              <button type="submit">Enviar respostas</button>
-            ) : (
-              <Result>
-                Você acertou {score} de {questions.length} perguntas.
-              </Result>
-            )}
-          </QuestionForm>
+              <button type="submit" disabled={quizPassed}>
+                {submitted ? "Reenviar respostas" : "Enviar respostas"}
+              </button>
 
-          <MarkAsCompletedButton onClick={toggleCompleted}>
-            <h2>{isCompleted ? "Concluído" : "Marcar como completo"}</h2>
+              {submitted && (
+                <Result style={{ color: quizPassed ? "green" : "red" }}>
+                  {quizPassed
+                    ? `🎉 Você acertou ${score} de ${questions.length}. Texto concluído!`
+                    : `❌ Você acertou ${score} de ${questions.length}. Corrija para continuar.`}
+                </Result>
+              )}
+            </QuestionForm>
+          )}
+
+          <MarkAsCompletedButton
+            onClick={toggleCompleted}
+            disabled={!canMarkAsCompleted}
+          >
+            <h2>
+              {isCompleted
+                ? "Concluído"
+                : hasQuiz && !submitted
+                  ? "Finalize o quiz"
+                  : hasQuiz && score !== questions.length
+                    ? "Acerte todas as perguntas"
+                    : "Marcar como completo"}
+            </h2>
           </MarkAsCompletedButton>
         </>
       )}
     </Container>
   );
 }
+
 const Container = styled.div`
   width: 100%;
   height: 100vh;
