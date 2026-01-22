@@ -85,13 +85,13 @@ export const MarkAsCompletedButton = styled.button`
   width: 100%;
   max-width: 600px;
   padding: 10px;
-  border: 1px solid #353a52;
+  border: none;
   margin: auto;
   border-radius: 10px;
   background-color: transparent;
   color: white;
   display: flex;
-  cursor: pointer;
+
   h2 {
     text-align: center;
     width: 100%;

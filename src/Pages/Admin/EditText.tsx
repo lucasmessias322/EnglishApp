@@ -61,6 +61,7 @@ export default function EditText({ token }: { token: string }) {
   ]);
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [openEditPopup, setOpenEditPopup] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!hasMore || isFetchingRef.current) return;
@@ -154,75 +155,10 @@ export default function EditText({ token }: { token: string }) {
       console.error(err);
     }
   };
-  const addParagraph = () => {
-    setParagraphs((prev) => [...prev, { paragraph: "", audiotexturl: null }]);
-  };
-  const removeParagraph = (index: number) => {
-    if (paragraphs.length === 1) return;
-    setParagraphs((prev) => prev.filter((_, i) => i !== index));
-  };
-  const updateParagraphText = (index: number, value: string) => {
-    const updated = [...paragraphs];
-    updated[index].paragraph = value;
-    setParagraphs(updated);
-  };
-
-  const updateParagraphAudio = (index: number, file: File | null) => {
-    if (!file) return;
-
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      const result = reader.result as string;
-
-      // remove: data:audio/mpeg;base64,
-      const base64Only = result.split(",")[1];
-
-      const updated = [...paragraphs];
-      updated[index].audiotexturl = base64Only;
-      setParagraphs(updated);
-    };
-
-    reader.readAsDataURL(file);
-  };
-
-  const addQuiz = () => {
-    setQuizzes((prev) => [
-      ...prev,
-      {
-        question: "",
-        alternatives: { A: "", B: "", C: "", D: "" },
-        correctAnswer: "A",
-      },
-    ]);
-  };
-
-  const removeQuiz = (index: number) => {
-    setQuizzes((prev) => prev.filter((_, i) => i !== index));
-  };
-  const updateQuizQuestion = (index: number, value: string) => {
-    const updated = [...quizzes];
-    updated[index].question = value;
-    setQuizzes(updated);
-  };
-  const updateQuizAlternative = (
-    index: number,
-    key: "A" | "B" | "C" | "D",
-    value: string,
-  ) => {
-    const updated = [...quizzes];
-    updated[index].alternatives[key] = value;
-    setQuizzes(updated);
-  };
-  const updateCorrectAnswer = (index: number, value: "A" | "B" | "C" | "D") => {
-    const updated = [...quizzes];
-    updated[index].correctAnswer = value;
-    setQuizzes(updated);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    if (isSubmitting) return; // 👈 BLOQUEIO REAL
     if (!editingTextId) {
       toast.error("Texto inválido para edição");
       return;
@@ -259,6 +195,8 @@ export default function EditText({ token }: { token: string }) {
     } catch (err) {
       console.error(err);
       toast.error("Erro ao atualizar texto");
+    } finally {
+      setIsSubmitting(false); // 👈 LIBERA
     }
   };
 
@@ -290,7 +228,13 @@ export default function EditText({ token }: { token: string }) {
                 </div>
                 <div className="editToolsIcons">
                   <div className="icon">
-                    <FaEdit onClick={() => HandleEdit(text._id)} />
+                    <FaEdit
+                      onClick={() => !isSubmitting && HandleEdit(text._id)}
+                      style={{
+                        opacity: isSubmitting ? 0.4 : 1,
+                        pointerEvents: isSubmitting ? "none" : "auto",
+                      }}
+                    />
                   </div>
                   <div className="icon">
                     <FaTrash
@@ -366,6 +310,7 @@ export default function EditText({ token }: { token: string }) {
             setOpenEditPopup(false);
             setEditingTextId(null);
           }}
+          isSubmitting={isSubmitting}
         />
       )}
     </C.Container>
@@ -386,6 +331,8 @@ interface EditPopUpProps {
   setQuizzes: React.Dispatch<React.SetStateAction<Quiz[]>>;
 
   handleSubmit: (e: React.FormEvent) => void;
+
+  isSubmitting: boolean;
   onClose: () => void;
 }
 function EditPopUp({
@@ -400,6 +347,7 @@ function EditPopUp({
   quizzes,
   setQuizzes,
   handleSubmit,
+  isSubmitting,
   onClose,
 }: EditPopUpProps) {
   const addParagraph = () =>
@@ -501,32 +449,33 @@ function EditPopUp({
               </select>
             </C.Field>
           </C.Section>
+          <C.ParagraphsContainer>
+            {paragraphs.map((p, i) => (
+              <C.ParagraphCard key={i}>
+                <C.ParagraphHeader>
+                  <span>Parágrafo {i + 1}</span>
+                  <C.RemoveButton onClick={() => removeParagraph(i)}>
+                    <FaTrash />
+                  </C.RemoveButton>
+                </C.ParagraphHeader>
+                <C.Field>
+                  <textarea
+                    required
+                    value={p.paragraph}
+                    onChange={(e) => updateParagraphText(i, e.target.value)}
+                  />
 
-          {paragraphs.map((p, i) => (
-            <C.ParagraphCard key={i}>
-              <C.ParagraphHeader>
-                <span>Parágrafo {i + 1}</span>
-                <C.RemoveButton onClick={() => removeParagraph(i)}>
-                  <FaTrash />
-                </C.RemoveButton>
-              </C.ParagraphHeader>
-              <C.Field>
-                <textarea
-                  required
-                  value={p.paragraph}
-                  onChange={(e) => updateParagraphText(i, e.target.value)}
-                />
-
-                <input
-                  type="file"
-                  accept="audio/*"
-                  onChange={(e) =>
-                    updateParagraphAudio(i, e.target.files?.[0] || null)
-                  }
-                />
-              </C.Field>
-            </C.ParagraphCard>
-          ))}
+                  <input
+                    type="file"
+                    accept="audio/*"
+                    onChange={(e) =>
+                      updateParagraphAudio(i, e.target.files?.[0] || null)
+                    }
+                  />
+                </C.Field>
+              </C.ParagraphCard>
+            ))}
+          </C.ParagraphsContainer>
 
           <C.AddParagraphButton onClick={addParagraph}>
             <FaPlus />
@@ -542,7 +491,7 @@ function EditPopUp({
                 </C.RemoveButton>
               </C.ParagraphHeader>
               <C.Field>
-                <textarea
+                <input
                   required
                   value={quiz.question}
                   onChange={(e) => updateQuizQuestion(i, e.target.value)}
@@ -550,8 +499,8 @@ function EditPopUp({
               </C.Field>
 
               {(["A", "B", "C", "D"] as const).map((alt) => (
-                <C.Field>
-                  <label>Alternativa {alt}</label>
+                <C.Field flexDirection="row">
+                  <label>Alternativa {alt}:</label>
                   <input
                     required
                     key={alt}
@@ -559,10 +508,11 @@ function EditPopUp({
                     onChange={(e) =>
                       updateQuizAlternative(i, alt, e.target.value)
                     }
-                  />{" "}
+                  />
                 </C.Field>
               ))}
-              <C.Field>
+              <C.Field flexDirection="row">
+                <label>Alternativa correta: </label>
                 <select
                   value={quiz.correctAnswer}
                   onChange={(e) =>
@@ -583,8 +533,11 @@ function EditPopUp({
           </C.AddParagraphButton>
 
           <div className="buttons">
-            <button type="submit">Salvar</button>
-            <button type="button" onClick={onClose}>
+            <button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Salvando..." : "Salvar"}
+            </button>
+
+            <button type="button" onClick={onClose} disabled={isSubmitting}>
               Cancelar
             </button>
           </div>

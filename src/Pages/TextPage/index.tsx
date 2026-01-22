@@ -245,6 +245,8 @@ export default function TextPage() {
   const quizPassed = hasQuiz && submitted && score === questions.length;
   const canMarkAsCompleted =
     !hasQuiz || (submitted && score === questions.length);
+  const allQuestionsAnswered =
+    questions.length > 0 && questions.every((q) => answers[q._id]);
 
   return (
     <Container>
@@ -337,9 +339,17 @@ export default function TextPage() {
                 </fieldset>
               ))}
 
-              <button type="submit" disabled={quizPassed}>
+              <button
+                type="submit"
+                disabled={quizPassed || !allQuestionsAnswered}
+              >
                 {submitted ? "Reenviar respostas" : "Enviar respostas"}
               </button>
+              {!allQuestionsAnswered && !submitted && (
+                <Result style={{ color: "orange" }}>
+                  ⚠️ Responda todas as perguntas para enviar o quiz.
+                </Result>
+              )}
 
               {submitted && (
                 <Result style={{ color: quizPassed ? "green" : "red" }}>
@@ -350,21 +360,6 @@ export default function TextPage() {
               )}
             </QuestionForm>
           )}
-
-          <MarkAsCompletedButton
-            onClick={toggleCompleted}
-            disabled={!canMarkAsCompleted}
-          >
-            <h2>
-              {isCompleted
-                ? "Concluído"
-                : hasQuiz && !submitted
-                  ? "Finalize o quiz"
-                  : hasQuiz && score !== questions.length
-                    ? "Acerte todas as perguntas"
-                    : "Marcar como completo"}
-            </h2>
-          </MarkAsCompletedButton>
         </>
       )}
     </Container>
@@ -378,7 +373,8 @@ const Container = styled.div`
 `;
 
 const Result = styled.div`
-  margin-top: 15px;
+  margin: 15px;
+
   font-weight: bold;
 `;
 const QuestionForm = styled.form`

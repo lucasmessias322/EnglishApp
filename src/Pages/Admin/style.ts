@@ -148,9 +148,10 @@ export const PopUpContent = styled.div`
 
 export const EditPopupContent = styled.div`
   background-color: #212433;
+  overflow: auto;
   padding: 20px;
   border-radius: 10px;
-  width: 90%;
+  width: 100%;
   color: white;
   display: flex;
   flex-direction: column;
@@ -168,6 +169,7 @@ export const EditPopupContent = styled.div`
     display: flex;
     justify-content: flex-end;
     gap: 10px;
+    padding-bottom: 40px;
     button {
       padding: 8px 16px;
 
@@ -190,14 +192,13 @@ export const EditPopupContent = styled.div`
 `;
 
 export const EditForm = styled.form`
-  max-width: 1000px;
+  max-width: 100%;
   height: 100vh;
 
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 24px;
-  overflow: auto;
 `;
 
 export const Title = styled.h2`
@@ -211,17 +212,17 @@ export const Section = styled.div`
   gap: 16px;
 `;
 
-export const Field = styled.div`
+export const Field = styled.div<{ flexDirection? }>`
   display: flex;
-  flex-direction: column;
+  flex-direction: ${(props) =>
+    props.flexDirection ? props.flexDirection : "column"};
+  align-items: ${(props) => (props.flexDirection ? "center" : "")};
   gap: 6px;
 
   label {
     color: #cfd4ff;
     font-size: 14px;
   }
-
-
 
   input,
   select,
@@ -234,15 +235,17 @@ export const Field = styled.div`
     color: white;
     outline: none;
     font-size: 14px;
+    min-width: 400px;
   }
 
   textarea {
     min-height: 80px;
     resize: vertical;
   }
-
+ 
   select option {
     background-color: #2e3553;
+   
   }
 `;
 
@@ -261,6 +264,17 @@ export const SubmitButton = styled.button`
   &:hover {
     background-color: #2fb37d;
   }
+`;
+
+export const ParagraphsContainer = styled.div`
+  width: 100%;
+  padding: 20px 5px;
+
+  overflow: auto;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 export const ParagraphCard = styled.div`

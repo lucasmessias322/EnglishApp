@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import styled from "styled-components";
 
@@ -125,7 +124,7 @@ const WordContainer = styled.span`
   &:hover {
     cursor: pointer;
     color: #ffffff;
-    background-color:#4968EC;
+    background-color: #37406e;
     text-align: center;
   }
 `;
