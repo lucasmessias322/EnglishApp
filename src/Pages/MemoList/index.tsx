@@ -1,240 +1,380 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-
 import HeaderComponent from "../../Components/HeaderComponent";
 import DeckComponent from "../../Components/MemoListComponents/DeckComponent";
 import { Link, useParams } from "react-router-dom";
-import { DeletMemorize, getOneEspecific } from "../../Apis/englishplusApi";
+import { getOneEspecific } from "../../Apis/englishplusApi";
 import { AuthContext } from "../../Context/AuthContext";
 import { PiCardsFill } from "react-icons/pi";
 import { FaBook } from "react-icons/fa";
-import { IoDocuments } from "react-icons/io5";
-
-interface MemoListTypes {
-  isFlipped?: boolean;
-}
 
 interface CardType {
   frontContent: string;
   backContent: string;
 }
-interface memotypes {
+
+interface MemoType {
   _id: string;
   title: string;
-  flashcards: [];
+  flashcards: CardType[];
 }
 
 export default function MemoList() {
   const { memoid } = useParams();
+  const { token } = useContext(AuthContext);
 
   const [isFlipped, setIsFlipped] = useState(false);
   const [cards, setCards] = useState<CardType[]>([
-    { frontContent: "Carregando..", backContent: "Carregando.." },
+    { frontContent: "Carregando...", backContent: "Carregando..." },
   ]);
-  const [Memo, setMemo] = useState<memotypes>();
+  const [memo, setMemo] = useState<MemoType>();
   const [currentIndexCard, setCurrentIndexCard] = useState(0);
   const [cardsReviewed, setCardsReviewed] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
   const [showResults, setShowResults] = useState(false);
-  const { token } = useContext(AuthContext);
+
+  useEffect(() => {
+    getOneEspecific(memoid, token).then((res) => {
+      const memoResponse = res[0];
+      const shuffledCards = shuffleCards(memoResponse.flashcards);
+
+      setMemo(memoResponse);
+      setCards(shuffledCards);
+    });
+  }, [memoid, token]);
 
   const handleCardFlip = () => {
-    setIsFlipped(!isFlipped);
+    setIsFlipped((prev) => !prev);
   };
 
   const handleCorrect = () => {
     setIsFlipped(false);
-    setCorrectCount(correctCount + 1);
+    setCorrectCount((prev) => prev + 1);
     changeCard();
   };
 
   const handleIncorrect = () => {
     setIsFlipped(false);
-    setIncorrectCount(incorrectCount + 1);
+    setIncorrectCount((prev) => prev + 1);
     changeCard();
   };
 
   const changeCard = () => {
-    setIsFlipped(false);
     setCurrentIndexCard((prevIndex) => {
       if (prevIndex < cards.length - 1) {
         setCardsReviewed(prevIndex + 1);
-      } else {
-        // displayResults();
-        // setCardsReviewed(0);
-        // setCorrectCount(0);
-        // setIncorrectCount(0);
-        setShowResults(true);
+        return prevIndex + 1;
       }
-      return (prevIndex + 1) % cards.length;
+
+      setShowResults(true);
+      return prevIndex;
     });
   };
 
-  useEffect(() => {
-    getOneEspecific(memoid, token).then((res) => {
-      // console.log(res[0]);
-      setMemo(res[0]);
-
-      setCards(res[0].flashcards);
-    });
-    shuffleCards();
-  }, []);
-
-  const shuffleCards = () => {
-    const shuffledCards = [...cards].sort(() => Math.random() - 0.5);
-    setCards(shuffledCards);
-  };
-
-  function HandleDeleteMemorize(memoID: string) {
-    DeletMemorize(memoID, token);
+  function restartSession() {
+    setShowResults(false);
+    setIsFlipped(false);
+    setCurrentIndexCard(0);
+    setCardsReviewed(0);
+    setCorrectCount(0);
+    setIncorrectCount(0);
+    setCards((prev) => shuffleCards(prev));
   }
+
+  const reviewedTotal = showResults
+    ? cards.length
+    : Math.min(cardsReviewed + 1, cards.length);
+  const totalCards = cards.length;
+  const accuracy =
+    correctCount + incorrectCount > 0
+      ? Math.round((correctCount / (correctCount + incorrectCount)) * 100)
+      : 0;
 
   return (
     <Container>
-      <HeaderComponent fixed={false} />
-      <SectionOne>
-        <h2>{Memo?.title}</h2>
+      <HeaderComponent fixed showlogo bgcolor="#161616" />
 
-        <LearningOptions>
-          {/* <LearningOption>
-            <Link to="">
+      <Content>
+        <HeroCard>
+          <TopLabel>Deck de memorizacao</TopLabel>
+          <h1>{memo?.title || "Carregando deck"}</h1>
+          <p>
+            Vire os cards, marque o que voce ja conhece e deixe a revisao mais
+            objetiva com um visual mais focado.
+          </p>
+
+          <MetricsGrid>
+            <MetricCard>
               <PiCardsFill className="icon" />
-              <h4>Cartões</h4>
-            </Link>
-          </LearningOption> */}
-          <LearningOption>
-            <Link to={`/learn/${memoid}`}>
-              <FaBook className="icon" />
-              <h4>Aprender</h4>
-            </Link>
-          </LearningOption>
-          {/* <LearningOption>
-            <Link to="">
-              <IoDocuments className="icon" />
-              <h4>Avaliar</h4>
-            </Link>
-          </LearningOption> */}
-        </LearningOptions>
+              <div>
+                <strong>{totalCards}</strong>
+                <span>flashcards</span>
+              </div>
+            </MetricCard>
+            <MetricCard>
+              <strong>{reviewedTotal}</strong>
+              <span>cards vistos</span>
+            </MetricCard>
+            <MetricCard>
+              <strong>{accuracy}%</strong>
+              <span>acerto da sessao</span>
+            </MetricCard>
+          </MetricsGrid>
 
-        <DeckContainer>
+          <LearningOptions>
+            <LearningOption to={`/learn/${memoid}`}>
+              <FaBook className="icon" />
+              <div>
+                <strong>Modo aprender</strong>
+                <span>Treino com alternativas e rodadas guiadas.</span>
+              </div>
+            </LearningOption>
+          </LearningOptions>
+        </HeroCard>
+
+        <DeckStage>
           {showResults ? (
             <ResultsContainer>
-              <h3>Resultados</h3>
-              <span className="hits">Conheço a palavra: {correctCount}</span>
-              <span className="misses">Ainda Aprendendo: {incorrectCount}</span>
-              <p>FlashCards Revisados {cardsReviewed + 1}</p>
+              <span className="eyebrow">Sessao finalizada</span>
+              <h2>Resumo da revisao</h2>
+              <ResultPill className="hits">
+                Conheco a palavra: {correctCount}
+              </ResultPill>
+              <ResultPill className="misses">
+                Ainda aprendendo: {incorrectCount}
+              </ResultPill>
+              <p>
+                Voce revisou {totalCards} cards com {accuracy}% de acerto.
+              </p>
+
+              <ActionsRow>
+                <RestartButton onClick={restartSession}>
+                  Reiniciar sessao
+                </RestartButton>
+                <BackLink to="/memorizelists">Voltar para decks</BackLink>
+              </ActionsRow>
             </ResultsContainer>
           ) : (
-            <DeckComponent
-              handleCardFlip={handleCardFlip}
-              isFlipped={isFlipped}
-              cards={cards}
-              currentIndexCard={currentIndexCard}
-              handleCorrect={handleCorrect}
-              handleIncorrect={handleIncorrect}
-              cardsReviewed={cardsReviewed}
-            />
+            <DeckShell>
+              <DeckComponent
+                handleCardFlip={handleCardFlip}
+                isFlipped={isFlipped}
+                cards={cards}
+                currentIndexCard={currentIndexCard}
+                handleCorrect={handleCorrect}
+                handleIncorrect={handleIncorrect}
+                cardsReviewed={cardsReviewed}
+              />
+            </DeckShell>
           )}
-        </DeckContainer>
-      </SectionOne>
+        </DeckStage>
+      </Content>
     </Container>
   );
 }
 
+function shuffleCards(cards: CardType[]) {
+  return [...cards].sort(() => Math.random() - 0.5);
+}
+
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
-  overflow-y: hidden;
+  min-height: 100vh;
 `;
 
-const SectionOne = styled.section`
-  max-width: 800px;
-
-  padding: 15px 50px;
+const Content = styled.main`
   width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 108px 16px 48px;
+`;
 
-  h2 {
-    text-align: left;
-    padding: 0px;
+const HeroCard = styled.section`
+  padding: 28px;
+  border-radius: 32px;
+  border: 1px solid rgba(76, 85, 125, 0.45);
+  background:
+    linear-gradient(145deg, rgba(73, 104, 236, 0.12), transparent 40%),
+    rgba(24, 27, 40, 0.9);
+  box-shadow: 0 26px 52px rgba(7, 10, 20, 0.28);
+
+  h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.08;
+    font-family: "Google Sans", "Poppins", sans-serif;
   }
 
-  @media (max-width: 500px) {
-    padding: 15px;
+  p {
+    max-width: 640px;
+    margin-top: 12px;
+    color: #a9b4d8;
+    line-height: 1.8;
+  }
+`;
+
+const TopLabel = styled.span`
+  display: inline-flex;
+  margin-bottom: 10px;
+  color: #8fe5d0;
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+`;
+
+const MetricsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+
+  @media (max-width: 720px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const MetricCard = styled.div`
+  padding: 18px;
+  border-radius: 22px;
+  background: rgba(33, 36, 51, 0.76);
+  border: 1px solid rgba(76, 85, 125, 0.38);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  .icon {
+    font-size: 1.8rem;
+    color: #29aa8b;
+  }
+
+  strong {
+    display: block;
+    font-size: 1.5rem;
+  }
+
+  span {
+    color: #99a4c8;
+    font-size: 0.95rem;
   }
 `;
 
 const LearningOptions = styled.div`
+  margin-top: 20px;
+`;
+
+const LearningOption = styled(Link)`
   display: flex;
-  flex-wrap: wrap;
-  padding: 20px 0px;
-`;
-
-const LearningOption = styled.div`
-  margin: 5px;
-
-  a {
-    width: 100%;
-    max-width: 200px;
-    background-color: #353a52;
-
-    border-radius: 10px;
-    padding: 15px;
-
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    .icon {
-      font-size: 25px;
-      margin-right: 10px;
-      color: #29aa8b;
-    }
-  }
-
-  @media (max-width: 600px) {
-    max-width: 400px;
-  }
-
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
-
-const DeckContainer = styled.div`
-  width: 100%;
-`;
-const ResultsContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   align-items: center;
+  gap: 16px;
+  width: fit-content;
+  padding: 16px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(76, 85, 125, 0.45);
+  background: rgba(33, 36, 51, 0.76);
+  color: #eef1ff;
 
-  margin: auto;
-  padding-top: 50px;
-
-  h3 {
-    padding-bottom: 10px;
+  .icon {
+    font-size: 1.5rem;
+    color: #29aa8b;
   }
 
-  p {
-    padding-top: 15px;
+  strong {
+    display: block;
+    margin-bottom: 4px;
   }
 
   span {
-    max-width: 250px;
-    border-radius: 20px;
-    padding: 10px 20px;
-    margin: 5px;
-    font-size: 16px;
+    color: #99a4c8;
+    font-size: 0.92rem;
+  }
+`;
+
+const DeckStage = styled.section`
+  margin-top: 28px;
+`;
+
+const DeckShell = styled.div`
+  padding: 22px;
+  border-radius: 32px;
+  border: 1px solid rgba(76, 85, 125, 0.42);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 25%),
+    rgba(24, 27, 40, 0.88);
+  box-shadow: 0 26px 52px rgba(7, 10, 20, 0.24);
+`;
+
+const ResultsContainer = styled.div`
+  padding: 32px;
+  border-radius: 32px;
+  border: 1px solid rgba(76, 85, 125, 0.42);
+  background:
+    linear-gradient(145deg, rgba(41, 170, 139, 0.08), transparent 38%),
+    rgba(24, 27, 40, 0.88);
+  box-shadow: 0 26px 52px rgba(7, 10, 20, 0.24);
+  text-align: center;
+
+  .eyebrow {
+    display: inline-flex;
+    margin-bottom: 10px;
+    color: #8fe5d0;
+    font-size: 0.88rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
   }
 
-  span.hits {
-    background-color: #0e3b44;
-    color: #59e8b1;
+  h2 {
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
   }
-  span.misses {
-    background-color: #46201f;
-    color: #f3812f;
+
+  p {
+    margin-top: 14px;
+    color: #a9b4d8;
+    line-height: 1.75;
   }
+`;
+
+const ResultPill = styled.span`
+  display: block;
+  max-width: 320px;
+  margin: 14px auto 0;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 1rem;
+
+  &.hits {
+    background: rgba(14, 59, 68, 0.85);
+    color: #8fe5d0;
+  }
+
+  &.misses {
+    background: rgba(70, 32, 31, 0.85);
+    color: #f4a061;
+  }
+`;
+
+const ActionsRow = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+`;
+
+const RestartButton = styled.button`
+  border: none;
+  padding: 12px 18px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #4968ec, #6e88cc);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+`;
+
+const BackLink = styled(Link)`
+  padding: 12px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(76, 85, 125, 0.45);
+  background: rgba(33, 36, 51, 0.76);
+  color: #eef1ff;
+  font-weight: 600;
 `;

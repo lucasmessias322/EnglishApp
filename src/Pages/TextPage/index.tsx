@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import {
   PutMemorize,
@@ -17,6 +17,7 @@ import { AuthContext } from "../../Context/AuthContext";
 import handleTextToSpeech from "../../utils/TextToSpeech";
 import LoadingComp from "../../Components/LoadingComp";
 import { MarkAsCompletedButton } from "./styles";
+import { IoIosArrowBack } from "react-icons/io";
 
 interface Text {
   _id: string;
@@ -40,6 +41,7 @@ interface Question {
 }
 
 export default function TextPage() {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [text, setText] = useState<Text>({
     _id: "",
@@ -265,25 +267,28 @@ export default function TextPage() {
               token={token}
             />
           )}
-          <HeaderComponent
-            textPage
-            bgcolor="#1C1F2D"
-            fixed
-            backbtn="/textslist"
-          >
-            {text.content[0].audiotexturl && (
-              <div
-                id="PlayPauseButton"
-                onClick={() => setIsPlaying(!isPlaying)}
+          <Header fixed>
+            <HeaderBTNsContainer>
+              <BackBtn
+                className="backbtn"
+                onClick={() => navigate("/textslist")}
               >
-                {isPlaying ? (
-                  <FaPause size={16} title="Pausar reproduçao" />
-                ) : (
-                  <FaPlay size={16} title="Iniciar reproduçao" />
-                )}
-              </div>
-            )}
-          </HeaderComponent>
+                <IoIosArrowBack size={25} />
+              </BackBtn>
+              {text.content[0].audiotexturl && (
+                <div
+                  id="PlayPauseButton"
+                  onClick={() => setIsPlaying(!isPlaying)}
+                >
+                  {isPlaying ? (
+                    <FaPause size={20} title="Pausar reproduçao" />
+                  ) : (
+                    <FaPlay size={20} title="Iniciar reproduçao" />
+                  )}
+                </div>
+              )}
+            </HeaderBTNsContainer>
+          </Header>
           <TextWrapperComponent
             hasAudio={text.content[0].audiotexturl !== ""}
             audioIndex={audioIndex}
@@ -317,7 +322,7 @@ export default function TextPage() {
               <h2>Perguntas de Compreensão</h2>
 
               {questions.map((q) => (
-                <fieldset key={q._id}>
+                <div key={q._id}>
                   <legend>{q.question}</legend>
 
                   {optionKeys.map((key) => (
@@ -331,12 +336,10 @@ export default function TextPage() {
                         disabled={quizPassed}
                       />
                       <span className="custom-radio" />
-                      <span className="option-text">
-                        {key}. {q.alternatives[key]}
-                      </span>
+                      <span className="option-text">{q.alternatives[key]}</span>
                     </label>
                   ))}
-                </fieldset>
+                </div>
               ))}
 
               <button
@@ -370,6 +373,7 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   margin-top: 60px;
+  // padding: 10px;
 `;
 
 const Result = styled.div`
@@ -384,15 +388,16 @@ const QuestionForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding: 0px 10px;
 
-  fieldset {
-    border: 1px solid #444;
+  div {
+    border: 1px solid #2f334b;
     padding: 15px;
     border-radius: 8px;
   }
 
   legend {
-    font-weight: bold;
+    font-weight: normal;
     margin-bottom: 10px;
   }
 
@@ -458,4 +463,24 @@ const QuestionForm = styled.form`
     font-weight: bold;
     cursor: pointer;
   }
+`;
+
+const BackBtn = styled.div`
+  cursor: pointer;
+`;
+
+const HeaderBTNsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const Header = styled.div`
+  width: 100%;
+  position: fixed;
+  top: 0;
+  padding: 20px;
+  background-color: #161616;
+  z-index: 999999;
 `;

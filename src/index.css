@@ -1,10 +1,66 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap");
+
+:root {
+  --bg: #161616;
+  --bg-secondary: #12141d;
+  --surface: #1b1f2d;
+  --surface-strong: #212433;
+  --surface-soft: #292f46;
+  --border: #353a52;
+  --border-strong: #4c557d;
+  --text: #f5f7ff;
+  --muted: #99a4c8;
+  --primary: #6e88cc;
+  --primary-strong: #4968ec;
+  --primary-soft: #6eb1f7;
+  --accent: #29aa8b;
+  --accent-soft: #6eccba;
+  --warning: #f3812f;
+  --shadow: 0 24px 60px rgba(7, 10, 20, 0.4);
+}
+
 * {
   margin: 0;
   box-sizing: border-box;
-
   font-family: "Poppins", sans-serif;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at top left, rgba(73, 104, 236, 0.18), transparent 34%),
+    radial-gradient(circle at top right, rgba(41, 170, 139, 0.12), transparent 28%),
+    linear-gradient(to bottom, #191b27 0%, #12141d 50%, #161616 100%);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px
+  );
+  background-size: 80px 80px;
+  opacity: 0.12;
 }
 
 a {
@@ -12,31 +68,31 @@ a {
   color: inherit;
 }
 
-html,
-body {
-  width: 100%;
-  height: 100%;
-  background-color: #1c1f2d;
-  color: whitesmoke;
+button,
+input,
+textarea,
+select {
+  font: inherit;
 }
 
-/* width */
+::selection {
+  background-color: rgba(110, 136, 204, 0.38);
+  color: white;
+}
+
 ::-webkit-scrollbar {
   width: 5px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
   background-color: #13151f;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background-color: #343952;
   border-radius: 50px;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #6e88cc;
 }

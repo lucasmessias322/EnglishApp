@@ -8,6 +8,15 @@ interface TranslatedWord {
   backContent: string;
 }
 
+interface MemoFlashcard {
+  frontContent: string;
+  backContent: string;
+}
+
+interface MemoTextAndNews {
+  flashcards: MemoFlashcard[];
+}
+
 interface WordPopUpTypes {
   translatedWord?: TranslatedWord;
   handleTextToSpeech?: (word: string) => void;
@@ -16,10 +25,6 @@ interface WordPopUpTypes {
   memoTextAndNews?: MemoTextAndNews;
   Addflashcardverificationtoggle?: boolean;
   token?: string;
-}
-
-interface MemoTextAndNews {
-  flashcards: any[]; // You may define a proper interface for flashcards if needed
 }
 
 export default function WordPopUpComponent({
@@ -32,8 +37,7 @@ export default function WordPopUpComponent({
   token,
 }: WordPopUpTypes) {
   const popupRef = useRef<HTMLDivElement>(null);
-
-  const [WordAreadiExist, setWordAreadiExist] = useState(false);
+  const [wordAlreadyExists, setWordAlreadyExists] = useState(false);
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -41,7 +45,7 @@ export default function WordPopUpComponent({
         popupRef.current &&
         !popupRef.current.contains(event.target as Node)
       ) {
-        setSelectedWord(""); // Limpa a palavra selecionada
+        setSelectedWord?.("");
       }
     };
 
@@ -50,54 +54,63 @@ export default function WordPopUpComponent({
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, []);
+  }, [setSelectedWord]);
 
   useEffect(() => {
-    if (token) {
-      // console.log(memoTextAndNews.flashcards);
-      if (memoTextAndNews.flashcards.length > 0) {
-        memoTextAndNews?.flashcards?.map((elem) => {
-          // console.log("elem", elem);
-          if (elem != null) {
-            if (elem.frontContent === translatedWord?.frontContent) {
-              // console.log("Ja existe");
-              setWordAreadiExist(true);
-            }
-          }
-        });
-      }
-    }
-  }, [Addflashcardverificationtoggle]);
+    const alreadySaved =
+      memoTextAndNews?.flashcards?.some(
+        (elem) => elem?.frontContent === translatedWord?.frontContent,
+      ) || false;
+
+    setWordAlreadyExists(alreadySaved);
+  }, [memoTextAndNews, translatedWord, Addflashcardverificationtoggle]);
 
   return (
     <Container>
       <WordPopUp ref={popupRef} token={token}>
-        <div>
-          <FaVolumeHigh
-            onClick={() => handleTextToSpeech(translatedWord?.frontContent)}
-          />
-          <h4>{translatedWord?.frontContent}</h4>
+        <TopArea>
+          <ActionIcon
+            type="button"
+            onClick={() => handleTextToSpeech?.(translatedWord?.frontContent || "")}
+          >
+            <FaVolumeHigh />
+          </ActionIcon>
 
-          {WordAreadiExist ? (
-            <FaBookmark
-              title="Essa palavra ja existe na lista de Memorizaçao"
-              className="ico"
-            />
+          <WordInfo>
+            <span>Word selected</span>
+            <h4>{translatedWord?.frontContent}</h4>
+          </WordInfo>
+
+          {wordAlreadyExists ? (
+            <BookmarkState
+              title="Essa palavra ja esta salva na lista de memorizacao."
+            >
+              <FaBookmark />
+            </BookmarkState>
           ) : (
-            <FaRegBookmark
+            <ActionIcon
+              type="button"
               title={
                 token
-                  ? "Adicionar a lista de Memorizaçao"
-                  : "Faça login para salvar card"
+                  ? "Adicionar a lista de memorizacao"
+                  : "Faca login para salvar este card"
               }
-              className="ico"
-              onClick={() => {token && AddFlashCard()}}
-            
-            />
+              disabled={!token}
+              onClick={() => {
+                if (token) {
+                  AddFlashCard?.();
+                }
+              }}
+            >
+              <FaRegBookmark />
+            </ActionIcon>
           )}
-        </div>
+        </TopArea>
 
-        <span>Traduçao: {translatedWord?.backContent}</span>
+        <TranslationCard>
+          <span>Traducao</span>
+          <strong>{translatedWord?.backContent}</strong>
+        </TranslationCard>
       </WordPopUp>
     </Container>
   );
@@ -106,53 +119,100 @@ export default function WordPopUpComponent({
 const Container = styled.div`
   width: 100%;
   height: 100vh;
-
-  background: #1a19198d;
-  z-index: 9999;
   position: fixed;
-  top: 0;
-
-  /* padding: 20px 0px; */
+  inset: 0;
+  z-index: 9999;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 16px;
+  background: rgba(10, 12, 20, 0.72);
+  backdrop-filter: blur(10px);
 `;
 
-const WordPopUp = styled.div<WordPopUpTypes>`
-  /* width: 90%; */
-  margin: auto;
-  border: 5px solid #222635;
-  max-width: 250px;
-  border-radius: 10px;
-  padding: 15px;
-  background-color: #1c1f2d;
+const WordPopUp = styled.div<{ token?: string }>`
+  width: 100%;
+  max-width: 380px;
+  border-radius: 28px;
+  padding: 22px;
+  border: 1px solid rgba(76, 85, 125, 0.42);
+  background:
+    linear-gradient(145deg, rgba(73, 104, 236, 0.12), transparent 38%),
+    rgba(24, 27, 40, 0.94);
+  box-shadow: 0 28px 60px rgba(7, 10, 20, 0.34);
+`;
+
+const TopArea = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+`;
+
+const ActionIcon = styled.button`
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  border: 1px solid rgba(76, 85, 125, 0.45);
+  background: rgba(33, 36, 51, 0.76);
+  color: #eef1ff;
   display: flex;
-  box-shadow: 5px 5px 10px #11131b;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 
-  flex-direction: column;
-
-  div {
-    display: flex;
-    padding: 5px 0px;
-    margin-bottom: 10px;
-    border-bottom: 1px solid gray;
-    align-items: center;
-    justify-content: space-around;
-
-    .ico {
-      color: ${(props) => (props.token ? "white" : "gray")};
-      font-size: 16px;
-    }
-
-    h4 {
-      margin: 0px 10px;
-      text-align: center;
-    }
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
   }
 `;
 
-/*
+const WordInfo = styled.div`
+  span {
+    display: block;
+    color: #8fe5d0;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
 
-Eu tenho o memoTextAndNews cujo conteudo é assim
+  h4 {
+    margin-top: 4px;
+    font-size: 1.4rem;
+    line-height: 1.2;
+  }
+`;
 
-*/
+const BookmarkState = styled.div`
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  border: 1px solid rgba(41, 170, 139, 0.32);
+  background: rgba(41, 170, 139, 0.12);
+  color: #8fe5d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const TranslationCard = styled.div`
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(76, 85, 125, 0.38);
+  background: rgba(33, 36, 51, 0.76);
+
+  span {
+    display: block;
+    margin-bottom: 8px;
+    color: #8fe5d0;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  strong {
+    font-size: 1.2rem;
+    color: #f5f7ff;
+  }
+`;
