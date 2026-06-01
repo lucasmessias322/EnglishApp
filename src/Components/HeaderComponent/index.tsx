@@ -26,7 +26,7 @@ export default function HeaderComponent({
   const firstName = userData?.name?.split(" ")[0];
 
   return (
-    <Header fixed={fixed} bgcolor={bgcolor}>
+    <Header $fixed={fixed} $bgcolor={bgcolor}>
       <HeaderInner>
         <LeftSide>
           {showlogo && (
@@ -75,14 +75,19 @@ export default function HeaderComponent({
   );
 }
 
-const Header = styled.header<HeaderProps>`
+interface StyledHeaderProps {
+  $fixed?: boolean;
+  $bgcolor?: string;
+}
+
+const Header = styled.header<StyledHeaderProps>`
   width: 100%;
   padding: 14px 16px;
-  position: ${(props) => (props.fixed ? "fixed" : "relative")};
-  z-index: ${(props) => (props.fixed ? "9999" : "20")};
+  position: ${(props) => (props.$fixed ? "fixed" : "relative")};
+  z-index: ${(props) => (props.$fixed ? "9999" : "20")};
   top: 0;
   border-bottom: 1px solid rgba(76, 85, 125, 0.35);
- // background: ${(props) => props.bgcolor || "rgba(18, 20, 30, 0.78)"};
+ // background: ${(props) => props.$bgcolor || "rgba(18, 20, 30, 0.78)"};
   backdrop-filter: blur(16px);
 
   @media (max-width: 480px) {

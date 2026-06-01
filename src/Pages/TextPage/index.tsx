@@ -193,6 +193,7 @@ export default function TextPage() {
     setIsCompleted(true);
   }
 
+  
   function toggleCompleted() {
     const hasQuiz = questions.length > 0;
     const quizPassed = !hasQuiz || (submitted && score === questions.length);
@@ -214,6 +215,7 @@ export default function TextPage() {
       markAsCompleted();
     }
   }
+
   useEffect(() => {
     const hasQuiz = questions.length > 0;
 
@@ -249,6 +251,9 @@ export default function TextPage() {
     !hasQuiz || (submitted && score === questions.length);
   const allQuestionsAnswered =
     questions.length > 0 && questions.every((q) => answers[q._id]);
+  const textHasAudio = text.content.some((paragraph) =>
+    Boolean(paragraph.audiotexturl?.trim()),
+  );
 
   return (
     <Container>
@@ -267,7 +272,7 @@ export default function TextPage() {
               token={token}
             />
           )}
-          <Header fixed>
+          <Header>
             <HeaderBTNsContainer>
               <BackBtn
                 className="backbtn"
@@ -275,7 +280,7 @@ export default function TextPage() {
               >
                 <IoIosArrowBack size={25} />
               </BackBtn>
-              {text.content[0].audiotexturl && (
+              {textHasAudio && (
                 <div
                   id="PlayPauseButton"
                   onClick={() => setIsPlaying(!isPlaying)}
@@ -290,7 +295,7 @@ export default function TextPage() {
             </HeaderBTNsContainer>
           </Header>
           <TextWrapperComponent
-            hasAudio={text.content[0].audiotexturl !== ""}
+            hasAudio={textHasAudio}
             audioIndex={audioIndex}
             dataTextoAudio={dataTextoAudio}
             handleTextToSpeech={handleTextToSpeech}
@@ -371,9 +376,9 @@ export default function TextPage() {
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  min-height: calc(100vh - 60px);
   margin-top: 60px;
-  // padding: 10px;
+  padding-bottom: 48px;
 `;
 
 const Result = styled.div`
@@ -481,6 +486,6 @@ const Header = styled.div`
   position: fixed;
   top: 0;
   padding: 20px;
-  background-color: #161616;
+ // background-color: #161616;
   z-index: 999999;
 `;

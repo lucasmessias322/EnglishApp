@@ -25,9 +25,12 @@ export default function TextWrapperComponent({
 }: TextWrapperComponentProps) {
   const dataLen = dataTextoAudio.length - 1;
   const calc = audioIndex - 1;
+  const shouldUseAudioHighlight =
+    hasAudio &&
+    dataTextoAudio.some((paragraph) => Boolean(paragraph.audiotexturl?.trim()));
 
   useEffect(() => {
-    if (!hasAudio) return;
+    if (!shouldUseAudioHighlight) return;
 
     const paragraphs = document.querySelectorAll(".SelectedP");
     paragraphs.forEach((paragraph) => {
@@ -52,10 +55,10 @@ export default function TextWrapperComponent({
         lastParagraph.classList.remove("SelectedP");
       }
     }
-  }, [audioIndex, dataTextoAudio, hasAudio, calc, dataLen]);
+  }, [audioIndex, dataTextoAudio, shouldUseAudioHighlight, calc, dataLen]);
 
   useEffect(() => {
-    if (!hasAudio) return;
+    if (!shouldUseAudioHighlight) return;
 
     const paragraphs = document.querySelectorAll(".SelectedP");
     paragraphs.forEach((paragraph) => {
@@ -66,7 +69,7 @@ export default function TextWrapperComponent({
     if (firstParagraph) {
       firstParagraph.classList.add("SelectedP");
     }
-  }, [text, hasAudio]);
+  }, [text, shouldUseAudioHighlight]);
 
   return (
     <Container>
@@ -80,7 +83,9 @@ export default function TextWrapperComponent({
           <Paragraph
             key={index}
             id={`${index}`}
-            className={hasAudio && index === audioIndex ? "SelectedP" : ""}
+            className={
+              shouldUseAudioHighlight && index === audioIndex ? "SelectedP" : ""
+            }
           >
             {paragraph.paragraph.split(/\s+/).map((word, wordIndex) => (
               <WordContainer

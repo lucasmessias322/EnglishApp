@@ -24,7 +24,7 @@ export default function TextsListPage() {
   const isFetchingRef = useRef(false);
 
   useEffect(() => {
-    if (!hasMore || isFetchingRef.current) return;
+    //if (!hasMore || isFetchingRef.current) return;
 
     let isCancelled = false;
     isFetchingRef.current = true;
@@ -43,6 +43,9 @@ export default function TextsListPage() {
         if (res.data.length < 6) {
           setHasMore(false);
         }
+
+        console.log(res);
+        
       })
       .catch(() => {
         if (!isCancelled) {
@@ -113,7 +116,7 @@ export default function TextsListPage() {
             const completed = isTextCompleted(text._id);
 
             return (
-              <TextItem key={text._id} completed={completed}>
+              <TextItem key={text._id} $completed={completed}>
                 <Link to={`/text/${text._id}`}>
                   <CardTop>
                     <LevelBadge>{text.level}</LevelBadge>
@@ -263,7 +266,7 @@ const TextListWrapper = styled.ul`
   padding: 0;
 `;
 
-const TextItem = styled.li<{ completed?: boolean }>`
+const TextItem = styled.li<{ $completed?: boolean }>`
   list-style: none;
 
   a {
@@ -276,7 +279,7 @@ const TextItem = styled.li<{ completed?: boolean }>`
     gap: 16px;
     border: 1px solid
       ${(props) =>
-        props.completed ? "rgba(41, 170, 139, 0.55)" : "rgba(76, 85, 125, 0.45)"};
+        props.$completed ? "rgba(41, 170, 139, 0.55)" : "rgba(76, 85, 125, 0.45)"};
     background:
       linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 45%),
       rgba(24, 27, 40, 0.86);

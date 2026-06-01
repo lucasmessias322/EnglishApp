@@ -44,6 +44,9 @@ body {
     radial-gradient(circle at top left, rgba(73, 104, 236, 0.18), transparent 34%),
     radial-gradient(circle at top right, rgba(41, 170, 139, 0.12), transparent 28%),
     linear-gradient(to bottom, #191b27 0%, #12141d 50%, #161616 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
   color: var(--text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
