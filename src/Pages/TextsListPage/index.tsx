@@ -24,7 +24,7 @@ export default function TextsListPage() {
   const isFetchingRef = useRef(false);
 
   useEffect(() => {
-    //if (!hasMore || isFetchingRef.current) return;
+    if (!hasMore || isFetchingRef.current) return;
 
     let isCancelled = false;
     isFetchingRef.current = true;

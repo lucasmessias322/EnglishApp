@@ -31,9 +31,9 @@ export default function HeaderComponent({
         <LeftSide>
           {showlogo && (
             <LogoLink to="/">
-              <span className="orb" />
+             
               <h2>
-                EngleshPlus<b>+</b>
+                EngleshPlus <b>+</b>{" "}
               </h2>
             </LogoLink>
           )}
@@ -87,7 +87,7 @@ const Header = styled.header<StyledHeaderProps>`
   z-index: ${(props) => (props.$fixed ? "9999" : "20")};
   top: 0;
   border-bottom: 1px solid rgba(76, 85, 125, 0.35);
- // background: ${(props) => props.$bgcolor || "rgba(18, 20, 30, 0.78)"};
+  // background: ${(props) => props.$bgcolor || "rgba(18, 20, 30, 0.78)"};
   backdrop-filter: blur(16px);
 
   @media (max-width: 480px) {
@@ -140,20 +140,12 @@ const LogoLink = styled(Link)`
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 16px;
+  padding: 8px 14px;
   border-radius: 999px;
   border: 1px solid rgba(76, 85, 125, 0.55);
   background: rgba(33, 36, 51, 0.76);
   box-shadow: 0 12px 28px rgba(7, 10, 20, 0.28);
   flex-shrink: 0;
-
-  .orb {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #6e88cc, #29aa8b);
-    box-shadow: 0 0 0 6px rgba(41, 170, 139, 0.12);
-  }
 
   h2 {
     font-size: 20px;
@@ -164,20 +156,21 @@ const LogoLink = styled(Link)`
   b {
     color: #29aa8b;
   }
+  .brand-logo {
+    display: block;
+    width: auto;
+    height: 42px;
+    object-fit: contain;
+  }
 
   @media (max-width: 480px) {
-    gap: 6px;
     padding: 8px 10px;
-
-    .orb {
-      width: 9px;
-      height: 9px;
-      box-shadow: 0 0 0 4px rgba(41, 170, 139, 0.12);
-    }
-
     h2 {
       font-size: 13px;
       white-space: nowrap;
+    }
+    .brand-logo {
+      height: 32px;
     }
   }
 `;

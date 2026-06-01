@@ -33,7 +33,7 @@ export default function Dashboard() {
       <HeroSection>
         <HeroContent>
           <HeroCopy>
-            <HeroBadge>English with context and revision</HeroBadge>
+            <HeroBadge>Ingles com contexto e revisão</HeroBadge>
             <h1>
               Aprenda ingles com textos reais, palavras salvas e revisao
               constante.
@@ -43,19 +43,23 @@ export default function Dashboard() {
               bonito e mais claro para voce manter ritmo todos os dias.
             </p>
 
+            <img src="./logo3.png" alt="EngleshPlus" />
             <ActionRow>
               <PrimaryAction to="/textslist">Explorar textos</PrimaryAction>
-              <SecondaryAction to={userName ? "/memorizelists" : "/account/login"}>
+              <SecondaryAction
+                to={userName ? "/memorizelists" : "/account/login"}
+              >
                 {userName ? "Abrir memorizacao" : "Entrar para revisar"}
               </SecondaryAction>
             </ActionRow>
-
             <HighlightsGrid>
               <HighlightCard>
                 <FaTextHeight />
                 <div>
                   <strong>Leitura guiada</strong>
-                  <span>Toque nas palavras e salve o vocabulario no fluxo.</span>
+                  <span>
+                    Toque nas palavras e salve o vocabulario no fluxo.
+                  </span>
                 </div>
               </HighlightCard>
 
@@ -71,7 +75,9 @@ export default function Dashboard() {
                 <FaRegNewspaper />
                 <div>
                   <strong>Estudo consistente</strong>
-                  <span>Organizacao visual melhor para manter foco no app.</span>
+                  <span>
+                    Organizacao visual melhor para manter foco no app.
+                  </span>
                 </div>
               </HighlightCard>
             </HighlightsGrid>
@@ -83,7 +89,9 @@ export default function Dashboard() {
               <span className="kicker">
                 {userName ? `Sessao de ${userName}` : "Jornada English Plus"}
               </span>
-              <h2>Seu treino pode comecar pela leitura e terminar na revisao.</h2>
+              <h2>
+                Seu treino pode comecar pela leitura e terminar na revisao.
+              </h2>
               <p>
                 Leia um texto, destaque palavras novas e leve tudo para os decks
                 de memorizacao sem sair da rotina de estudo.
@@ -160,7 +168,9 @@ export default function Dashboard() {
       </WhyLearning>
 
       <Footer>
-        <span>English Plus+ • leitura, compreensao e memorizacao no mesmo lugar</span>
+        <span>
+          English Plus+ • leitura, compreensao e memorizacao no mesmo lugar
+        </span>
       </Footer>
     </DashboardContainer>
   );
@@ -169,7 +179,12 @@ export default function Dashboard() {
 const DashboardContainer = styled.div`
   min-height: 100vh;
   width: 100%;
-  background-image: linear-gradient(to bottom, #212433 0%, #151824 45%, #12141d 100%);
+  background-image: linear-gradient(
+    to bottom,
+    #212433 0%,
+    #151824 45%,
+    #12141d 100%
+  );
 `;
 
 const HeroSection = styled.section`
@@ -208,6 +223,13 @@ const HeroCopy = styled.div`
     font-size: 1.02rem;
     line-height: 1.7;
   }
+
+  img {
+    margin: 0 auto;
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+  }
 `;
 
 const HeroBadge = styled.span`
@@ -223,6 +245,7 @@ const HeroBadge = styled.span`
 `;
 
 const ActionRow = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -237,6 +260,7 @@ const PrimaryAction = styled(Link)`
   color: white;
   font-weight: 600;
   box-shadow: 0 18px 35px rgba(73, 104, 236, 0.25);
+ 
 `;
 
 const SecondaryAction = styled(Link)`
@@ -298,7 +322,11 @@ const PanelGlow = styled.div`
   position: absolute;
   inset: 32px 16px 16px 32px;
   border-radius: 32px;
-  background: linear-gradient(180deg, rgba(73, 104, 236, 0.35), rgba(41, 170, 139, 0.1));
+  background: linear-gradient(
+    180deg,
+    rgba(73, 104, 236, 0.35),
+    rgba(41, 170, 139, 0.1)
+  );
   filter: blur(28px);
 `;
 

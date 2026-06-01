@@ -188,6 +188,10 @@ const Content = styled.main`
   max-width: 1080px;
   margin: 0 auto;
   padding: 108px 16px 48px;
+
+  @media (max-width: 560px) {
+    padding: 82px 10px 28px;
+  }
 `;
 
 const HeroCard = styled.section`
@@ -211,6 +215,26 @@ const HeroCard = styled.section`
     color: #a9b4d8;
     line-height: 1.8;
   }
+
+  @media (max-width: 560px) {
+    padding: 18px;
+    border-radius: 22px;
+
+    h1 {
+      font-size: 1.65rem;
+      line-height: 1.15;
+    }
+
+    p {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+  }
+
+  @media (max-width: 340px) {
+    padding: 16px;
+  }
 `;
 
 const TopLabel = styled.span`
@@ -220,6 +244,11 @@ const TopLabel = styled.span`
   font-size: 0.88rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+
+  @media (max-width: 560px) {
+    margin-bottom: 8px;
+    font-size: 0.72rem;
+  }
 `;
 
 const MetricsGrid = styled.div`
@@ -229,7 +258,14 @@ const MetricsGrid = styled.div`
   margin-top: 24px;
 
   @media (max-width: 720px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  @media (max-width: 340px) {
     grid-template-columns: 1fr;
+    gap: 8px;
   }
 `;
 
@@ -256,10 +292,52 @@ const MetricCard = styled.div`
     color: #99a4c8;
     font-size: 0.95rem;
   }
+
+  @media (max-width: 720px) {
+    min-height: 86px;
+    padding: 14px;
+    border-radius: 16px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+
+    &:first-child {
+      grid-column: 1 / -1;
+      min-height: auto;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .icon {
+      font-size: 1.35rem;
+    }
+
+    strong {
+      font-size: 1.28rem;
+      line-height: 1;
+    }
+
+    span {
+      display: block;
+      margin-top: 4px;
+      font-size: 0.76rem;
+      line-height: 1.3;
+    }
+  }
+
+  @media (max-width: 340px) {
+    min-height: auto;
+    flex-direction: row;
+    align-items: center;
+  }
 `;
 
 const LearningOptions = styled.div`
   margin-top: 20px;
+
+  @media (max-width: 560px) {
+    margin-top: 14px;
+  }
 `;
 
 const LearningOption = styled(Link)`
@@ -287,10 +365,35 @@ const LearningOption = styled(Link)`
     color: #99a4c8;
     font-size: 0.92rem;
   }
+
+  @media (max-width: 560px) {
+    width: 100%;
+    padding: 14px;
+    border-radius: 16px;
+    gap: 12px;
+
+    .icon {
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    strong {
+      font-size: 0.86rem;
+    }
+
+    span {
+      font-size: 0.76rem;
+      line-height: 1.45;
+    }
+  }
 `;
 
 const DeckStage = styled.section`
   margin-top: 28px;
+
+  @media (max-width: 560px) {
+    margin-top: 18px;
+  }
 `;
 
 const DeckShell = styled.div`
@@ -301,6 +404,15 @@ const DeckShell = styled.div`
     linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 25%),
     rgba(24, 27, 40, 0.88);
   box-shadow: 0 26px 52px rgba(7, 10, 20, 0.24);
+
+  @media (max-width: 560px) {
+    padding: 14px;
+    border-radius: 22px;
+  }
+
+  @media (max-width: 340px) {
+    padding: 10px;
+  }
 `;
 
 const ResultsContainer = styled.div`
@@ -330,6 +442,11 @@ const ResultsContainer = styled.div`
     margin-top: 14px;
     color: #a9b4d8;
     line-height: 1.75;
+  }
+
+  @media (max-width: 560px) {
+    padding: 22px 16px;
+    border-radius: 22px;
   }
 `;
 

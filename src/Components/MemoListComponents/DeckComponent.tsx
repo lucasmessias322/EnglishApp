@@ -85,6 +85,15 @@ const Card = styled.div<{ isFlipped?: boolean }>`
   position: relative;
   transform: ${(props) =>
     props.isFlipped ? "rotateY(180deg)" : "rotateY(0deg)"};
+
+  @media (max-width: 560px) {
+    min-height: 280px;
+    border-radius: 20px;
+  }
+
+  @media (max-width: 340px) {
+    min-height: 240px;
+  }
 `;
 
 const CardFace = styled.div`
@@ -100,6 +109,16 @@ const CardFace = styled.div`
   gap: 18px;
   border: 1px solid rgba(76, 85, 125, 0.42);
   box-shadow: 0 30px 60px rgba(7, 10, 20, 0.3);
+
+  @media (max-width: 560px) {
+    padding: 18px;
+    border-radius: 20px;
+    gap: 12px;
+  }
+
+  @media (max-width: 340px) {
+    padding: 14px;
+  }
 `;
 
 const Front = styled(CardFace)`
@@ -126,6 +145,11 @@ const CardLabel = styled.span`
   font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+
+  @media (max-width: 560px) {
+    padding: 7px 10px;
+    font-size: 0.68rem;
+  }
 `;
 
 const CardContent = styled.div`
@@ -139,12 +163,28 @@ const CardContent = styled.div`
   line-height: 1.2;
   color: #f5f7ff;
   padding: 0 8px;
+
+  @media (max-width: 560px) {
+    font-size: 1.65rem;
+    line-height: 1.18;
+    padding: 0;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 340px) {
+    font-size: 1.35rem;
+  }
 `;
 
 const CardHint = styled.span`
   color: #99a4c8;
   line-height: 1.6;
   font-size: 0.94rem;
+
+  @media (max-width: 560px) {
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -154,6 +194,13 @@ const ButtonContainer = styled.div`
   gap: 12px;
   padding-top: 22px;
   flex-wrap: wrap;
+
+  @media (max-width: 560px) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding-top: 14px;
+  }
 `;
 
 const ActionButton = styled.button`
@@ -170,6 +217,15 @@ const ActionButton = styled.button`
   svg {
     font-size: 1.1rem;
   }
+
+  @media (max-width: 560px) {
+    justify-content: center;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    font-size: 0.82rem;
+  }
 `;
 
 const ProgressPill = styled.span`
@@ -183,4 +239,15 @@ const ProgressPill = styled.span`
   background: rgba(73, 104, 236, 0.12);
   color: #d7def9;
   font-weight: 600;
+
+  @media (max-width: 560px) {
+    grid-column: 1 / -1;
+    order: -1;
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    font-size: 0.86rem;
+  }
 `;
