@@ -3,7 +3,7 @@ import HeaderComponent from "../../Components/HeaderComponent";
 import { useEffect, useRef, useState } from "react";
 import { getTexts } from "../../Apis/englishplusApi";
 import { Link } from "react-router-dom";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { MutatingDots } from "react-loader-spinner";
 
 interface Text {
@@ -11,7 +11,8 @@ interface Text {
   level: string;
   title: string;
   resume: string;
-  content: { paragrafo: string; audiotexturl: string }[];
+  hasAudios?: boolean | string;
+  content?: { paragraph: string; audiotexturl?: string | null }[];
 }
 
 export default function TextsListPage() {
@@ -94,6 +95,24 @@ export default function TextsListPage() {
 
   const isTextCompleted = (id: string) => completedTexts.includes(id);
 
+  const textHasAudio = (text: Text) => {
+    if (typeof text.hasAudios === "boolean") {
+      return text.hasAudios;
+    }
+
+    if (typeof text.hasAudios === "string") {
+      const normalizedValue = text.hasAudios.trim().toLowerCase();
+
+      if (["true", "sim", "yes", "1"].includes(normalizedValue)) {
+        return true;
+      }
+    }
+
+    return text.content?.some((paragraph) =>
+      Boolean(paragraph.audiotexturl?.trim()),
+    ) ?? false;
+  };
+
   return (
     <Container>
       <HeaderComponent showlogo fixed bgcolor="#161616" />
@@ -110,18 +129,29 @@ export default function TextsListPage() {
         <TextListWrapper>
           {levels.map((text) => {
             const completed = isTextCompleted(text._id);
+            const hasAudio = textHasAudio(text);
 
             return (
               <TextItem key={text._id} $completed={completed}>
                 <Link to={`/text/${text._id}`}>
                   <CardTop>
                     <LevelBadge>{text.level}</LevelBadge>
-                    {completed && (
-                      <CompletedBadge>
-                        <FaCheck size={12} />
-                        Concluido
-                      </CompletedBadge>
-                    )}
+                    <BadgeGroup>
+                      <AudioBadge $hasAudio={hasAudio}>
+                        {hasAudio ? (
+                          <FaVolumeUp size={12} />
+                        ) : (
+                          <FaVolumeMute size={12} />
+                        )}
+                        {hasAudio ? "Com audio" : "Sem audio"}
+                      </AudioBadge>
+                      {completed && (
+                        <CompletedBadge>
+                          <FaCheck size={12} />
+                          Concluido
+                        </CompletedBadge>
+                      )}
+                    </BadgeGroup>
                   </CardTop>
 
                   <h3>{text.title}</h3>
@@ -252,6 +282,14 @@ const CardTop = styled.div`
   flex-wrap: wrap;
 `;
 
+const BadgeGroup = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+`;
+
 const LevelBadge = styled.span`
   display: inline-flex;
   align-items: center;
@@ -264,6 +302,19 @@ const LevelBadge = styled.span`
   font-size: 0.86rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+`;
+
+const AudioBadge = styled.span<{ $hasAudio: boolean }>`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: ${(props) =>
+    props.$hasAudio ? "rgba(73, 104, 236, 0.15)" : "rgba(128, 139, 170, 0.12)"};
+  color: ${(props) => (props.$hasAudio ? "#bdd0ff" : "#aeb7d4")};
+  font-size: 0.84rem;
+  white-space: nowrap;
 `;
 
 const CompletedBadge = styled.span`

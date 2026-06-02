@@ -181,14 +181,17 @@ export default function EditText({ token }: { token: string }) {
     }
 
     try {
+      const content = paragraphs.map((p) => ({
+        paragraph: p.paragraph,
+        audiotexturl: p.audiotexturl, // base64 ou string antiga
+      }));
+
       const payload = {
         title,
         resume,
         level,
-        content: paragraphs.map((p) => ({
-          paragraph: p.paragraph,
-          audiotexturl: p.audiotexturl, // base64 ou string antiga
-        })),
+        hasAudios: content.some((p) => Boolean(p.audiotexturl?.trim())),
+        content,
         quizzes,
       };
 
@@ -299,7 +302,10 @@ export default function EditText({ token }: { token: string }) {
               </button>
 
               <button
-                onClick={() => setOpenEditPopup(false)}
+                onClick={() => {
+                  setShowPopUp(false);
+                  setTextToDelete(null);
+                }}
                 disabled={isDeleting}
               >
                 Cancelar
@@ -515,11 +521,10 @@ function EditPopUp({
               </C.Field>
 
               {(["A", "B", "C", "D"] as const).map((alt) => (
-                <C.Field flexDirection="row">
+                <C.Field key={alt} flexDirection="row">
                   <label>Alternativa {alt}:</label>
                   <input
                     required
-                    key={alt}
                     value={quiz.alternatives[alt]}
                     onChange={(e) =>
                       updateQuizAlternative(i, alt, e.target.value)

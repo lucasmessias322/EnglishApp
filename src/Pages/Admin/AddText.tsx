@@ -88,7 +88,9 @@ function AddText({ token }: AddTextProps) {
         level,
         title,
         resume,
-        hasAudios: contentWithBase64.some((p) => p.audiotexturl !== null),
+        hasAudios: contentWithBase64.some((p) =>
+          Boolean(p.audiotexturl?.trim()),
+        ),
         content: contentWithBase64,
         quizzes, // 👈 aqui
       };
@@ -150,7 +152,14 @@ function AddText({ token }: AddTextProps) {
   return (
     <div>
       <FormWrapper onSubmit={handleSubmit}>
-        <Title>Adicionar texto em inglês</Title>
+        <FormHeader>
+          <span>Novo conteudo</span>
+          <Title>Adicionar texto em ingles</Title>
+          <p>
+            Cadastre a leitura, os audios por paragrafo e as perguntas de
+            compreensao em um unico fluxo.
+          </p>
+        </FormHeader>
 
         <Section>
           <Field>
@@ -312,19 +321,50 @@ function AddText({ token }: AddTextProps) {
 export default AddText;
 const FormWrapper = styled.form`
   max-width: 900px;
-
-  padding: 20px;
+  width: 100%;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+
+  @media (max-width: 560px) {
+    padding: 16px;
+  }
+`;
+
+const FormHeader = styled.div`
+  padding-bottom: 8px;
+
+  span {
+    display: inline-flex;
+    margin-bottom: 8px;
+    color: #8fe5d0;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  p {
+    max-width: 620px;
+    margin-top: 8px;
+    color: #99a4c8;
+    line-height: 1.7;
+  }
 `;
 
 const Title = styled.h2`
-  color: white;
-  font-family: poppins, sans-serif;
+  color: #eef1ff;
+  font-family: "Google Sans", "Poppins", sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+  line-height: 1.15;
 `;
 
 const Section = styled.div`
+  padding: 18px;
+  border: 1px solid rgba(76, 85, 125, 0.38);
+  border-radius: 22px;
+  background: rgba(24, 27, 40, 0.76);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -343,18 +383,30 @@ const Field = styled.div`
   input,
   select,
   textarea {
-    padding: 8px 10px;
-    border-radius: 6px;
-    background-color: transparent;
-    border: 1px solid #555b7e;
-    background-color: #1c1f2d;
-    color: white;
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(76, 85, 125, 0.62);
+    background-color: rgba(18, 20, 30, 0.82);
+    color: #f5f7ff;
     outline: none;
     font-size: 14px;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: rgba(143, 229, 208, 0.62);
+    background-color: rgba(18, 20, 30, 0.96);
+    box-shadow: 0 0 0 3px rgba(41, 170, 139, 0.12);
   }
 
   textarea {
-    min-height: 80px;
+    min-height: 110px;
     resize: vertical;
   }
 
@@ -366,43 +418,56 @@ const Field = styled.div`
 const SubmitButton = styled.button`
   margin-top: 20px;
   align-self: flex-end;
-  padding: 10px 22px;
-  border-radius: 6px;
-  background-color: #3ccf91;
-  color: #0f1b16;
+  min-height: 48px;
+  padding: 12px 22px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #29aa8b, #8fe5d0);
+  color: #07121b;
   border: none;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 800;
+  box-shadow: 0 16px 30px rgba(41, 170, 139, 0.18);
 
   &:hover {
-    background-color: #2fb37d;
+    background: linear-gradient(135deg, #23a383, #72dac6);
   }
 `;
 
 const ParagraphCard = styled.div`
-  background-color: #2e3553;
-  border-radius: 8px;
-  padding: 16px;
+  border: 1px solid rgba(76, 85, 125, 0.42);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 44%),
+    rgba(24, 27, 40, 0.84);
+  border-radius: 22px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  box-shadow: 0 18px 36px rgba(7, 10, 20, 0.16);
 `;
 
 const ParagraphHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: white;
-  font-weight: 500;
+  gap: 12px;
+  color: #eef1ff;
+  font-weight: 700;
 `;
 
 const RemoveButton = styled.button`
-  background: transparent;
-  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.2);
   color: #ff6b6b;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   &:disabled {
     opacity: 0.3;
@@ -416,18 +481,21 @@ const RemoveButton = styled.button`
 
 const AddParagraphButton = styled.button`
   align-self: center;
+  min-height: 46px;
   padding: 10px 18px;
-  border-radius: 20px;
-  background-color: #4f67ca;
-  color: white;
-  border: none;
+  border-radius: 16px;
+  background: rgba(73, 104, 236, 0.15);
+  color: #dce5ff;
+  border: 1px solid rgba(110, 136, 204, 0.42);
   cursor: pointer;
   font-size: 14px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 8px;
 
   &:hover {
-    background-color: #3b4aa1;
+    background: rgba(73, 104, 236, 0.24);
+    border-color: rgba(143, 229, 208, 0.44);
   }
 `;

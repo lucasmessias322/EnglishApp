@@ -1,15 +1,65 @@
 import styled from "styled-components";
-import { FaRegNewspaper, FaTextHeight } from "react-icons/fa";
+import {
+  FaDownload,
+  FaMobileAlt,
+  FaRegNewspaper,
+  FaShareAlt,
+  FaTextHeight,
+  FaTimes,
+} from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { GiBrain } from "react-icons/gi";
 import HeaderComponent from "../../Components/HeaderComponent";
 import { AuthContext } from "../../Context/AuthContext";
 import { useContext, useEffect, useState } from "react";
 
+type BeforeInstallPromptChoice = {
+  outcome: "accepted" | "dismissed";
+  platform: string;
+};
+
+type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<BeforeInstallPromptChoice>;
+};
+
+const MOBILE_INSTALL_QUERY = "(max-width: 768px), (pointer: coarse)";
+
+function isStandalonePwa() {
+  return (
+    window.matchMedia("(display-mode: standalone)").matches ||
+    Boolean((window.navigator as Navigator & { standalone?: boolean }).standalone)
+  );
+}
+
+function isIosDevice() {
+  return (
+    /iPad|iPhone|iPod/.test(window.navigator.userAgent) ||
+    (window.navigator.platform === "MacIntel" &&
+      window.navigator.maxTouchPoints > 1)
+  );
+}
+
+function listenToMediaQuery(query: MediaQueryList, listener: () => void) {
+  if ("addEventListener" in query) {
+    query.addEventListener("change", listener);
+    return () => query.removeEventListener("change", listener);
+  }
+
+  query.addListener(listener);
+  return () => query.removeListener(listener);
+}
+
 export default function Dashboard() {
   const { userData } = useContext(AuthContext);
   const [userName, setUserName] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  const [installPrompt, setInstallPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isInstalled, setIsInstalled] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+  const [installBannerDismissed, setInstallBannerDismissed] = useState(false);
 
   useEffect(() => {
     if (userData?.name) {
@@ -19,6 +69,63 @@ export default function Dashboard() {
       setIsAdmin(Boolean(userData.role?.includes("admin")));
     }
   }, [userData]);
+
+  useEffect(() => {
+    const mobileQuery = window.matchMedia(MOBILE_INSTALL_QUERY);
+    const standaloneQuery = window.matchMedia("(display-mode: standalone)");
+
+    const updateInstallVisibility = () => {
+      setIsMobile(mobileQuery.matches);
+      setIsInstalled(isStandalonePwa());
+    };
+
+    const handleBeforeInstallPrompt = (event: Event) => {
+      event.preventDefault();
+      setInstallPrompt(event as BeforeInstallPromptEvent);
+      setInstallBannerDismissed(false);
+      updateInstallVisibility();
+    };
+
+    const handleAppInstalled = () => {
+      setInstallPrompt(null);
+      setIsInstalled(true);
+      setInstallBannerDismissed(true);
+    };
+
+    updateInstallVisibility();
+    setIsIOS(isIosDevice());
+
+    const cleanupMobileQuery = listenToMediaQuery(
+      mobileQuery,
+      updateInstallVisibility,
+    );
+    const cleanupStandaloneQuery = listenToMediaQuery(
+      standaloneQuery,
+      updateInstallVisibility,
+    );
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.addEventListener("appinstalled", handleAppInstalled);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener("appinstalled", handleAppInstalled);
+      cleanupMobileQuery();
+      cleanupStandaloneQuery();
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!installPrompt) return;
+
+    await installPrompt.prompt();
+    await installPrompt.userChoice;
+    setInstallPrompt(null);
+    setInstallBannerDismissed(true);
+  };
+
+  const shouldShowInstallBanner =
+    isMobile && !isInstalled && !installBannerDismissed;
 
   return (
     <DashboardContainer>
@@ -31,6 +138,47 @@ export default function Dashboard() {
       />
 
       <HeroSection>
+        {shouldShowInstallBanner && (
+          <InstallPromptCard>
+            <InstallPromptIcon>
+              <FaMobileAlt />
+            </InstallPromptIcon>
+
+            <InstallPromptText>
+              <strong>Use o EnglishPlus como app</strong>
+              <span>
+                {installPrompt
+                  ? "Baixe no celular para abrir mais rapido e estudar direto da tela inicial."
+                  : isIOS
+                    ? "No Safari, toque em Compartilhar e depois em Adicionar a Tela de Inicio."
+                    : "Abra o menu do navegador e escolha instalar o app quando a opcao aparecer."}
+              </span>
+            </InstallPromptText>
+
+            <InstallPromptActions>
+              {installPrompt ? (
+                <InstallPromptButton type="button" onClick={handleInstallClick}>
+                  <FaDownload />
+                  Baixar app
+                </InstallPromptButton>
+              ) : (
+                <InstallPromptHint>
+                  <FaShareAlt />
+                  Menu do navegador
+                </InstallPromptHint>
+              )}
+
+              <DismissInstallPrompt
+                type="button"
+                aria-label="Fechar aviso de instalacao"
+                onClick={() => setInstallBannerDismissed(true)}
+              >
+                <FaTimes />
+              </DismissInstallPrompt>
+            </InstallPromptActions>
+          </InstallPromptCard>
+        )}
+
         <HeroContent>
           <HeroCopy>
             <HeroBadge>Ingles com contexto e revisão</HeroBadge>
@@ -190,6 +338,137 @@ const DashboardContainer = styled.div`
 const HeroSection = styled.section`
   width: 100%;
   padding: 120px 16px 56px;
+`;
+
+const InstallPromptCard = styled.aside`
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto 22px;
+  padding: 16px;
+  border-radius: 24px;
+  border: 1px solid rgba(143, 229, 208, 0.32);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(41, 170, 139, 0.18),
+      rgba(73, 104, 236, 0.15)
+    ),
+    rgba(24, 27, 40, 0.94);
+  box-shadow: 0 22px 44px rgba(7, 10, 20, 0.28);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+
+  @media (min-width: 769px) {
+    display: none;
+  }
+
+  @media (max-width: 540px) {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: flex-start;
+  }
+`;
+
+const InstallPromptIcon = styled.div`
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(19, 23, 35, 0.42);
+  color: #8fe5d0;
+  flex-shrink: 0;
+
+  svg {
+    font-size: 1.35rem;
+  }
+`;
+
+const InstallPromptText = styled.div`
+  min-width: 0;
+
+  strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #eef1ff;
+    font-size: 0.96rem;
+    line-height: 1.3;
+  }
+
+  span {
+    display: block;
+    color: #b9c2e4;
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+`;
+
+const InstallPromptActions = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: fit-content;
+
+  @media (max-width: 540px) {
+    grid-column: 1 / -1;
+    width: 100%;
+    justify-content: space-between;
+  }
+`;
+
+const InstallPromptButton = styled.button`
+  min-height: 42px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #29aa8b, #4968ec);
+  color: white;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 14px 26px rgba(41, 170, 139, 0.18);
+
+  svg {
+    font-size: 0.95rem;
+  }
+`;
+
+const InstallPromptHint = styled.span`
+  min-height: 42px;
+  padding: 0 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(143, 229, 208, 0.22);
+  color: #d8def6;
+  background: rgba(19, 23, 35, 0.36);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+`;
+
+const DismissInstallPrompt = styled.button`
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  border: 1px solid rgba(216, 222, 246, 0.16);
+  background: rgba(19, 23, 35, 0.34);
+  color: #d8def6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  svg {
+    font-size: 0.92rem;
+  }
 `;
 
 const HeroContent = styled.div`
