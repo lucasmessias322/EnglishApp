@@ -31,23 +31,29 @@ const DeckComponent: React.FC<DeckComponentProps> = ({
 
   return (
     <DeckWrapper>
-      <Card onClick={handleCardFlip} isFlipped={isFlipped}>
+      <Card type="button" onClick={handleCardFlip} isFlipped={isFlipped}>
         <Front>
-          <CardLabel>English</CardLabel>
+          <CardTop>
+            <CardLabel>English</CardLabel>
+            <SidePill>Frente</SidePill>
+          </CardTop>
           <CardContent>{currentCard.frontContent}</CardContent>
-          <CardHint>Toque para ver a traducao</CardHint>
+          <CardHint>{cardsReviewed + 1} de {cards.length}</CardHint>
         </Front>
 
         <Back>
-          <CardLabel>Meaning</CardLabel>
+          <CardTop>
+            <CardLabel>Meaning</CardLabel>
+            <SidePill>Verso</SidePill>
+          </CardTop>
           <CardContent>{currentCard.backContent}</CardContent>
-          <CardHint>Marque se voce ja conhece ou quer revisar depois</CardHint>
+          <CardHint>{cardsReviewed + 1} de {cards.length}</CardHint>
         </Back>
       </Card>
 
       <ButtonContainer>
         {isFlipped && (
-          <ActionButton type="button" onClick={handleCorrect}>
+          <ActionButton type="button" onClick={handleCorrect} $variant="known">
             <FaCheck />
             Conheco
           </ActionButton>
@@ -58,7 +64,7 @@ const DeckComponent: React.FC<DeckComponentProps> = ({
         </ProgressPill>
 
         {isFlipped && (
-          <ActionButton type="button" onClick={handleIncorrect}>
+          <ActionButton type="button" onClick={handleIncorrect} $variant="review">
             <IoClose />
             Revisar
           </ActionButton>
@@ -75,10 +81,13 @@ const DeckWrapper = styled.div`
   perspective: 1200px;
 `;
 
-const Card = styled.div<{ isFlipped?: boolean }>`
+const Card = styled.button<{ isFlipped?: boolean }>`
   width: 100%;
-  min-height: 360px;
-  border-radius: 28px;
+  min-height: 390px;
+  border: none;
+  border-radius: 30px;
+  padding: 0;
+  background: transparent;
   transition: transform 0.6s;
   transform-style: preserve-3d;
   cursor: pointer;
@@ -87,32 +96,33 @@ const Card = styled.div<{ isFlipped?: boolean }>`
     props.isFlipped ? "rotateY(180deg)" : "rotateY(0deg)"};
 
   @media (max-width: 560px) {
-    min-height: 280px;
-    border-radius: 20px;
+    min-height: min(390px, calc(100vh - 360px));
+    border-radius: 24px;
   }
 
   @media (max-width: 340px) {
-    min-height: 240px;
+    min-height: 270px;
   }
 `;
 
 const CardFace = styled.div`
   position: absolute;
   inset: 0;
-  border-radius: 28px;
-  padding: 24px;
+  border-radius: 30px;
+  padding: 22px;
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 18px;
+  gap: 16px;
   border: 1px solid rgba(76, 85, 125, 0.42);
   box-shadow: 0 30px 60px rgba(7, 10, 20, 0.3);
+  overflow: hidden;
 
   @media (max-width: 560px) {
     padding: 18px;
-    border-radius: 20px;
+    border-radius: 24px;
     gap: 12px;
   }
 
@@ -123,17 +133,23 @@ const CardFace = styled.div`
 
 const Front = styled(CardFace)`
   background:
-    radial-gradient(circle at top right, rgba(73, 104, 236, 0.2), transparent 35%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 40%),
     rgba(33, 36, 51, 0.96);
 `;
 
 const Back = styled(CardFace)`
   background:
-    radial-gradient(circle at top right, rgba(41, 170, 139, 0.18), transparent 35%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 40%),
     rgba(33, 36, 51, 0.96);
   transform: rotateY(180deg);
+`;
+
+const CardTop = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 `;
 
 const CardLabel = styled.span`
@@ -143,13 +159,27 @@ const CardLabel = styled.span`
   background: rgba(255, 255, 255, 0.06);
   color: #cdd7fb;
   font-size: 0.82rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0;
 
   @media (max-width: 560px) {
     padding: 7px 10px;
     font-size: 0.68rem;
   }
+`;
+
+const SidePill = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: #8fe5d0;
+  background: rgba(41, 170, 139, 0.12);
+  font-size: 0.76rem;
+  font-weight: 800;
 `;
 
 const CardContent = styled.div`
@@ -159,16 +189,17 @@ const CardContent = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  font-size: clamp(1.8rem, 7vw, 2.75rem);
+  font-weight: 800;
   line-height: 1.2;
   color: #f5f7ff;
   padding: 0 8px;
+  overflow-wrap: anywhere;
 
   @media (max-width: 560px) {
-    font-size: 1.65rem;
+    font-size: clamp(1.7rem, 9vw, 2.35rem);
     line-height: 1.18;
     padding: 0;
-    overflow-wrap: anywhere;
   }
 
   @media (max-width: 340px) {
@@ -177,41 +208,54 @@ const CardContent = styled.div`
 `;
 
 const CardHint = styled.span`
+  align-self: center;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 7px 12px;
   color: #99a4c8;
-  line-height: 1.6;
-  font-size: 0.94rem;
+  background: rgba(15, 18, 28, 0.38);
+  font-size: 0.82rem;
+  font-weight: 700;
 
   @media (max-width: 560px) {
-    font-size: 0.78rem;
-    line-height: 1.45;
+    font-size: 0.76rem;
   }
 `;
 
 const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
-  padding-top: 22px;
-  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 14px;
 
   @media (max-width: 560px) {
-    display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-    padding-top: 14px;
   }
 `;
 
-const ActionButton = styled.button`
+const ActionButton = styled.button<{ $variant: "known" | "review" }>`
+  min-height: 52px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  padding: 12px 18px;
-  border-radius: 999px;
-  border: 1px solid rgba(76, 85, 125, 0.45);
-  background: rgba(33, 36, 51, 0.85);
-  color: #eef1ff;
+  padding: 12px 14px;
+  border-radius: 18px;
+  border: 1px solid
+    ${(props) =>
+      props.$variant === "known"
+        ? "rgba(41, 170, 139, 0.42)"
+        : "rgba(243, 129, 47, 0.38)"};
+  background: ${(props) =>
+    props.$variant === "known"
+      ? "linear-gradient(135deg, #29aa8b, #8fe5d0)"
+      : "rgba(70, 32, 31, 0.86)"};
+  color: ${(props) => (props.$variant === "known" ? "#07121b" : "#f4a061")};
+  font-weight: 800;
   cursor: pointer;
 
   svg {
@@ -219,11 +263,9 @@ const ActionButton = styled.button`
   }
 
   @media (max-width: 560px) {
-    justify-content: center;
     width: 100%;
-    min-height: 44px;
-    padding: 10px 12px;
-    border-radius: 14px;
+    min-height: 50px;
+    border-radius: 16px;
     font-size: 0.82rem;
   }
 `;
@@ -232,22 +274,23 @@ const ProgressPill = styled.span`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 118px;
-  padding: 12px 18px;
-  border-radius: 999px;
+  min-width: 104px;
+  min-height: 52px;
+  padding: 10px 14px;
+  border-radius: 18px;
   border: 1px solid rgba(110, 136, 204, 0.3);
   background: rgba(73, 104, 236, 0.12);
   color: #d7def9;
-  font-weight: 600;
+  font-weight: 800;
 
   @media (max-width: 560px) {
     grid-column: 1 / -1;
     order: -1;
     width: 100%;
     min-width: 0;
-    min-height: 42px;
+    min-height: 44px;
     padding: 10px 12px;
-    border-radius: 14px;
+    border-radius: 16px;
     font-size: 0.86rem;
   }
 `;
