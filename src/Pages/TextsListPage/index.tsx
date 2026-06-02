@@ -3,7 +3,7 @@ import HeaderComponent from "../../Components/HeaderComponent";
 import { useEffect, useRef, useState } from "react";
 import { getTexts } from "../../Apis/englishplusApi";
 import { Link } from "react-router-dom";
-import { FaCheck, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
+import { FaCheck, FaQuestionCircle, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { MutatingDots } from "react-loader-spinner";
 
 interface Text {
@@ -12,7 +12,9 @@ interface Text {
   title: string;
   resume: string;
   hasAudios?: boolean | string;
+  hasQuiz?: boolean | string;
   content?: { paragraph: string; audiotexturl?: string | null }[];
+  quizzes?: unknown[];
 }
 
 export default function TextsListPage() {
@@ -113,6 +115,22 @@ export default function TextsListPage() {
     ) ?? false;
   };
 
+  const textHasQuiz = (text: Text) => {
+    if (typeof text.hasQuiz === "boolean") {
+      return text.hasQuiz;
+    }
+
+    if (typeof text.hasQuiz === "string") {
+      const normalizedValue = text.hasQuiz.trim().toLowerCase();
+
+      if (["true", "sim", "yes", "1"].includes(normalizedValue)) {
+        return true;
+      }
+    }
+
+    return Boolean(text.quizzes?.length);
+  };
+
   return (
     <Container>
       <HeaderComponent showlogo fixed bgcolor="#161616" />
@@ -130,6 +148,7 @@ export default function TextsListPage() {
           {levels.map((text) => {
             const completed = isTextCompleted(text._id);
             const hasAudio = textHasAudio(text);
+            const hasQuiz = textHasQuiz(text);
 
             return (
               <TextItem key={text._id} $completed={completed}>
@@ -145,6 +164,10 @@ export default function TextsListPage() {
                         )}
                         {hasAudio ? "Com audio" : "Sem audio"}
                       </AudioBadge>
+                      <QuizBadge $hasQuiz={hasQuiz}>
+                        <FaQuestionCircle size={12} />
+                        {hasQuiz ? "Com quiz" : "Sem quiz"}
+                      </QuizBadge>
                       {completed && (
                         <CompletedBadge>
                           <FaCheck size={12} />
@@ -313,6 +336,19 @@ const AudioBadge = styled.span<{ $hasAudio: boolean }>`
   background: ${(props) =>
     props.$hasAudio ? "rgba(73, 104, 236, 0.15)" : "rgba(128, 139, 170, 0.12)"};
   color: ${(props) => (props.$hasAudio ? "#bdd0ff" : "#aeb7d4")};
+  font-size: 0.84rem;
+  white-space: nowrap;
+`;
+
+const QuizBadge = styled.span<{ $hasQuiz: boolean }>`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: ${(props) =>
+    props.$hasQuiz ? "rgba(253, 190, 85, 0.15)" : "rgba(128, 139, 170, 0.12)"};
+  color: ${(props) => (props.$hasQuiz ? "#ffd38a" : "#aeb7d4")};
   font-size: 0.84rem;
   white-space: nowrap;
 `;
