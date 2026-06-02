@@ -1,8 +1,25 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
-import { getSingleUser } from "../Apis/englishplusApi";
+import {
+  ReactNode,
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import {
+  clearEnglishPlusApiCache,
+  getSingleUser,
+} from "../Apis/englishplusApi";
 
 interface AuthProvidertypes {
   children?: ReactNode;
+}
+
+export interface UserData {
+  _id?: string;
+  role?: string[];
+  name?: string;
+  username?: string;
+  email?: string;
 }
 
 interface initialState {
@@ -10,8 +27,8 @@ interface initialState {
   userId: string;
   setToken: (token: string) => void;
   setuserId: (userId: string) => void;
-  userData: { role?: []; name?: string; username?: string; email?: string };
-  setUserData?: (userData: object) => void;
+  userData: UserData;
+  setUserData?: (userData: UserData) => void;
   logout: () => void;
 }
 
@@ -34,15 +51,15 @@ function useStorage(
     return window.localStorage.getItem(key) || null;
   });
 
-  const setValue = (value: string) => {
+  const setValue = useCallback((value: string) => {
     setStoredValue(value);
     window.localStorage.setItem(key, value);
-  };
+  }, [key]);
 
-  const clearValue = () => {
+  const clearValue = useCallback(() => {
     setStoredValue(null);
     window.localStorage.removeItem(key);
-  };
+  }, [key]);
 
   return [storedValue, setValue, clearValue];
 }
@@ -50,7 +67,14 @@ function useStorage(
 export default function AuthProvider({ children }: AuthProvidertypes) {
   const [token, setToken, clearToken] = useStorage("token");
   const [userId, setuserId, clearuserId] = useStorage("userid");
-  const [userData, setUserData] = useState({ name: "", role: [] });
+  const [userData, setUserData] = useState<UserData>({ name: "", role: [] });
+
+  const logout = useCallback(() => {
+    clearEnglishPlusApiCache();
+    clearToken();
+    clearuserId();
+    window.location.reload();
+  }, [clearToken, clearuserId]);
 
   const contextValue: initialState = {
     token: token || "",
@@ -68,18 +92,12 @@ export default function AuthProvider({ children }: AuthProvidertypes) {
           setUserData(res);
           // console.log(res);
         })
-        .catch((err) => {
+        .catch(() => {
           logout();
           console.log("logout");
         });
     }
-  }, [token]);
-
-  function logout() {
-    clearToken();
-    clearuserId();
-    window.location.reload();
-  }
+  }, [token, userId, logout]);
 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>

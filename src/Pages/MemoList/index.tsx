@@ -35,13 +35,23 @@ export default function MemoList() {
   const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
+    if (!memoid || !token) return;
+
+    let isCancelled = false;
+
     getOneEspecific(memoid, token).then((res) => {
       const memoResponse = res[0];
+      if (isCancelled || !memoResponse) return;
+
       const shuffledCards = shuffleCards(memoResponse.flashcards);
 
       setMemo(memoResponse);
       setCards(shuffledCards);
     });
+
+    return () => {
+      isCancelled = true;
+    };
   }, [memoid, token]);
 
   const handleCardFlip = () => {

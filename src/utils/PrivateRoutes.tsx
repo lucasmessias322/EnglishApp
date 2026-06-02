@@ -1,19 +1,26 @@
 import { useContext } from "react";
-import { Outlet, Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
 
-const PrivateRoutes = ({ requiredRoles }) => {
-  const { userData } = useContext(AuthContext);
+interface PrivateRoutesProps {
+  requiredRoles: string[];
+}
 
-  // Verifica se o usuário está autenticado
-  if (!userData) {
+const PrivateRoutes = ({ requiredRoles }: PrivateRoutesProps) => {
+  const { token, userData } = useContext(AuthContext);
+
+  if (!token) {
     return <Navigate to="/account/login" />;
   }
 
-  // Verifica se o usuário possui as roles necessárias
+  if (!userData.role?.length) {
+    return null;
+  }
+
   const hasRequiredRoles = requiredRoles.some((role) =>
-    userData.role.includes(role)
+    userData.role?.includes(role),
   );
+
   if (!hasRequiredRoles) {
     return <Navigate to="/access-denied" />;
   }

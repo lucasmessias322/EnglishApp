@@ -16,7 +16,7 @@ export default function Dashboard() {
       const nameWords = userData.name.split(" ");
       const firstTwoWords = nameWords.slice(0, 2);
       setUserName(firstTwoWords.join(" "));
-      setIsAdmin(userData.role === "admin");
+      setIsAdmin(Boolean(userData.role?.includes("admin")));
     }
   }, [userData]);
 

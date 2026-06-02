@@ -42,9 +42,18 @@ export default function LearnPage() {
   const cardsPerRound = 10;
 
   useEffect(() => {
+    if (!memoid || !token) return;
+
+    let isCancelled = false;
+
     getOneEspecific(memoid, token).then((res) => {
+      if (isCancelled) return;
       setMemo(res[0]);
     });
+
+    return () => {
+      isCancelled = true;
+    };
   }, [memoid, token]);
 
   useEffect(() => {
@@ -186,7 +195,8 @@ export default function LearnPage() {
               <PromptTop>
                 <span>Palavra da vez</span>
                 <small>
-                  Card {currentCardIndex + 1} de {totalCards}
+                  Card {currentCardIndex + 1} de {totalCards} -{" "}
+                  {Math.min(roundProgress + 1, cardsPerRound)}/{cardsPerRound}
                 </small>
               </PromptTop>
 

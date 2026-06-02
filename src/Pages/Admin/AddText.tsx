@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import HeaderComponent from "../../Components/HeaderComponent";
 import styled from "styled-components";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { postText } from "../../Apis/englishplusApi";
@@ -7,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 type Paragraph = {
   paragraph: string;
-  audiotexturl: string | null; // base64
+  audiotexturl: File | string | null;
 };
 
 type Level = "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
@@ -78,9 +77,10 @@ function AddText({ token }: AddTextProps) {
       const contentWithBase64 = await Promise.all(
         paragraphs.map(async (p) => ({
           paragraph: p.paragraph,
-          audiotexturl: p.audiotexturl
-            ? await fileToBase64(p.audiotexturl as unknown as File)
-            : null,
+          audiotexturl:
+            p.audiotexturl instanceof File
+              ? await fileToBase64(p.audiotexturl)
+              : p.audiotexturl,
         })),
       );
 
@@ -273,7 +273,10 @@ function AddText({ token }: AddTextProps) {
                 <select
                   value={quiz.correctAnswer}
                   onChange={(e) =>
-                    updateCorrectAnswer(index, e.target.value as any)
+                    updateCorrectAnswer(
+                      index,
+                      e.target.value as "A" | "B" | "C" | "D",
+                    )
                   }
                 >
                   <option value="A">A</option>

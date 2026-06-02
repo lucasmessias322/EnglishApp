@@ -20,21 +20,38 @@ export default function MemorizeLists() {
   const { token, userId } = useContext(AuthContext);
 
   useEffect(() => {
+    if (!token || !userId) {
+      setIsLoading(false);
+      return;
+    }
+
+    let isCancelled = false;
+
     async function getAllMemos() {
       try {
+        setIsLoading(true);
+
         const [publicResponse, userResponse] = await Promise.all([
           getMemorizes(token),
           getUserMemorizes(userId, token),
         ]);
 
+        if (isCancelled) return;
+
         setPublicMemos(publicResponse);
         setMemoTextAndNews(userResponse);
       } finally {
-        setIsLoading(false);
+        if (!isCancelled) {
+          setIsLoading(false);
+        }
       }
     }
 
     getAllMemos();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [token, userId]);
 
   useEffect(() => {

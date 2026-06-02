@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -29,13 +29,62 @@ interface translatedWordtype {
   frontContent: string;
 }
 interface MemoTextAndNews {
-  flashcards: any[]; // You may define a proper interface for flashcards if needed
+  flashcards: translatedWordtype[];
 }
 interface Question {
   _id: string;
   question: string;
   alternatives: { A: string; B: string; C: string; D: string };
   correctAnswer: string;
+}
+
+const TRANSLATION_CACHE_KEY = "englishplus_translation_cache_v1";
+const MAX_TRANSLATION_CACHE_ITEMS = 300;
+const translationMemoryCache = new Map<string, translatedWordtype>();
+
+function getTranslationCacheKey(word: string) {
+  return word
+    .trim()
+    .toLowerCase()
+    .replace(/^[^a-z]+|[^a-z]+$/g, "");
+}
+
+function readTranslationCache() {
+  try {
+    return JSON.parse(
+      localStorage.getItem(TRANSLATION_CACHE_KEY) || "{}",
+    ) as Record<string, translatedWordtype>;
+  } catch {
+    return {};
+  }
+}
+
+function getCachedTranslation(key: string) {
+  const memoryHit = translationMemoryCache.get(key);
+  if (memoryHit) return memoryHit;
+
+  const storageHit = readTranslationCache()[key];
+  if (storageHit) {
+    translationMemoryCache.set(key, storageHit);
+  }
+
+  return storageHit;
+}
+
+function saveTranslationCache(key: string, translation: translatedWordtype) {
+  translationMemoryCache.set(key, translation);
+
+  const cache = readTranslationCache();
+  delete cache[key];
+  cache[key] = translation;
+
+  const trimmedEntries = Object.entries(cache).slice(
+    -MAX_TRANSLATION_CACHE_ITEMS,
+  );
+  localStorage.setItem(
+    TRANSLATION_CACHE_KEY,
+    JSON.stringify(Object.fromEntries(trimmedEntries)),
+  );
 }
 
 export default function TextPage() {
@@ -55,14 +104,16 @@ export default function TextPage() {
     backContent: "Carregando..",
     frontContent: "",
   });
-  const [newflashCard, setNewsFlashCard] = useState({});
+  const [newflashCard, setNewsFlashCard] = useState<translatedWordtype>({
+    backContent: "",
+    frontContent: "",
+  });
   const [memoTextAndNews, setmemoTextAndNews] = useState<MemoTextAndNews>({
     flashcards: [],
   });
   const [Addflashcardverificationtoggle, setAddflashcardverificationtoggle] =
     useState<boolean>(false);
-  const { id: textid, textindex } = useParams<{
-    id: string;
+  const { textindex } = useParams<{
     textindex: string;
   }>();
   const currentTextIndex = textindex;
@@ -101,22 +152,37 @@ export default function TextPage() {
         }
       }
     }
-  }, [audioIndex]);
+  }, [audioIndex, isPlaying, text]);
 
   useEffect(() => {
+    if (!currentTextIndex) return;
+
+    let isCancelled = false;
     setIsLoading(true);
+
     getSingleText(currentTextIndex).then((res) => {
-      setText(res[0]);
-      setQuestions(res[0].quizzes || []);
-      console.log(res[0]);
+      if (isCancelled) return;
+
+      const currentText = res[0];
+
+      if (currentText) {
+        setText(currentText);
+        setQuestions(currentText.quizzes || []);
+      }
 
       setIsLoading(false);
     });
+
+    return () => {
+      isCancelled = true;
+    };
   }, [currentTextIndex]);
 
   const handleClickWord = (word: string) => {
+    if (!getTranslationCacheKey(word)) return;
+
     fetchTranslation(word)
-      .then((translation: any) => {
+      .then((translation) => {
         setTranslatedWord(translation);
         setSelectedWord(word);
         // console.log(translation);
@@ -124,16 +190,24 @@ export default function TextPage() {
       .catch((error) => console.error("Error translating word:", error));
   };
 
-  const fetchTranslation = async (word: string): Promise<object> => {
+  const fetchTranslation = async (word: string): Promise<translatedWordtype> => {
+    const cacheKey = getTranslationCacheKey(word);
+    const cachedTranslation = getCachedTranslation(cacheKey);
+
+    if (cachedTranslation) return cachedTranslation;
+
     const response = await fetch(
       `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=pt&dt=t&q=${encodeURIComponent(
-        word,
+        cacheKey,
       )}`,
     );
     const data = await response.json();
-    const ptClean = data[0][0][0].replace(",", "").replace(".", "");
-    const engClean = data[0][0][1].replace(",", "").replace(".", "");
+    const ptClean = String(data?.[0]?.[0]?.[0] || word).replace(/[,.]/g, "");
+    const engClean = String(data?.[0]?.[0]?.[1] || word).replace(/[,.]/g, "");
     const translation = { backContent: ptClean, frontContent: engClean };
+
+    saveTranslationCache(cacheKey, translation);
+
     return translation;
   };
 
@@ -144,7 +218,7 @@ export default function TextPage() {
         //console.log(response[0]);
       });
     }
-  }, []);
+  }, [userId, token]);
 
   useEffect(() => {
     setNewsFlashCard({
@@ -177,7 +251,7 @@ export default function TextPage() {
     setIsCompleted(completed.includes(text._id));
   }, [text._id]);
 
-  function markAsCompleted() {
+  const markAsCompleted = useCallback(() => {
     if (!text._id) return;
 
     const completed: string[] = JSON.parse(
@@ -189,7 +263,7 @@ export default function TextPage() {
     const updated = [...completed, text._id];
     localStorage.setItem("completed_texts", JSON.stringify(updated));
     setIsCompleted(true);
-  }
+  }, [text._id]);
 
   
   function toggleCompleted() {
@@ -220,7 +294,7 @@ export default function TextPage() {
     if (hasQuiz && submitted && score === questions.length && !isCompleted) {
       markAsCompleted();
     }
-  }, [submitted, score, questions.length]);
+  }, [submitted, score, questions.length, isCompleted, markAsCompleted]);
 
   function handleAnswer(questionId: string, option: "A" | "B" | "C" | "D") {
     setAnswers((prev) => ({

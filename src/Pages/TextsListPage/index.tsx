@@ -24,7 +24,7 @@ export default function TextsListPage() {
   const isFetchingRef = useRef(false);
 
   useEffect(() => {
-    if (!hasMore || isFetchingRef.current) return;
+    //if (!hasMore || isFetchingRef.current) return;
 
     let isCancelled = false;
     isFetchingRef.current = true;
@@ -34,18 +34,17 @@ export default function TextsListPage() {
       .then((res) => {
         if (isCancelled) return;
 
+        const texts = res.data || [];
+
         setLevels((prev) => {
           const ids = new Set(prev.map((text) => text._id));
-          const filtered = res.data.filter((text: Text) => !ids.has(text._id));
+          const filtered = texts.filter((text: Text) => !ids.has(text._id));
           return [...prev, ...filtered];
         });
 
-        if (res.data.length < 6) {
+        if (texts.length < 6) {
           setHasMore(false);
         }
-
-        console.log(res);
-        
       })
       .catch(() => {
         if (!isCancelled) {
@@ -61,6 +60,7 @@ export default function TextsListPage() {
 
     return () => {
       isCancelled = true;
+      isFetchingRef.current = false;
     };
   }, [currentPage, hasMore]);
 
@@ -91,10 +91,6 @@ export default function TextsListPage() {
     );
     setCompletedTexts(completed);
   }, []);
-
-  const completedCount = levels.filter((text) =>
-    completedTexts.includes(text._id),
-  ).length;
 
   const isTextCompleted = (id: string) => completedTexts.includes(id);
 
@@ -176,67 +172,6 @@ const Content = styled.main`
   max-width: 1180px;
   margin: 0 auto;
   padding: 108px 16px 48px;
-`;
-
-const IntroCard = styled.section`
-  padding: 28px;
-  border-radius: 32px;
-  border: 1px solid rgba(76, 85, 125, 0.45);
-  background:
-    linear-gradient(145deg, rgba(73, 104, 236, 0.12), transparent 40%),
-    rgba(24, 27, 40, 0.9);
-  box-shadow: 0 26px 52px rgba(7, 10, 20, 0.28);
-
-  .eyebrow {
-    display: inline-flex;
-    margin-bottom: 10px;
-    color: #8fe5d0;
-    font-size: 0.88rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  h1 {
-    max-width: 680px;
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    line-height: 1.1;
-    font-family: "Google Sans", "Poppins", sans-serif;
-  }
-
-  p {
-    max-width: 620px;
-    margin-top: 12px;
-    color: #a9b4d8;
-    line-height: 1.8;
-  }
-`;
-
-const StatsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 24px;
-
-  @media (max-width: 720px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const StatCard = styled.div`
-  padding: 18px;
-  border-radius: 22px;
-  background: rgba(33, 36, 51, 0.76);
-  border: 1px solid rgba(76, 85, 125, 0.38);
-
-  strong {
-    display: block;
-    font-size: 1.6rem;
-  }
-
-  span {
-    color: #99a4c8;
-    font-size: 0.95rem;
-  }
 `;
 
 const SectionHeader = styled.div`

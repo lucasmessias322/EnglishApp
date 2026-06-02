@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import * as C from "./style";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -66,26 +65,43 @@ export default function EditText({ token }: { token: string }) {
   useEffect(() => {
     if (!hasMore || isFetchingRef.current) return;
 
+    let isCancelled = false;
     isFetchingRef.current = true;
     setIsLoading(true);
 
-    getTexts({ page: currentPage, limit: 5 }).then((res) => {
-      setLevels((prev) => {
-        const ids = new Set(prev.map((t) => t._id));
-        const filtered = res.data.filter((t: Text) => !ids.has(t._id));
-        return [...prev, ...filtered];
+    getTexts({ page: currentPage, limit: 5 })
+      .then((res) => {
+        if (isCancelled) return;
+
+        const texts = res.data || [];
+
+        setLevels((prev) => {
+          const ids = new Set(prev.map((t) => t._id));
+          const filtered = texts.filter((t: Text) => !ids.has(t._id));
+          return [...prev, ...filtered];
+        });
+
+        if (texts.length < 5) {
+          setHasMore(false);
+        }
+      })
+      .catch(() => {
+        if (!isCancelled) {
+          setHasMore(false);
+        }
+      })
+      .finally(() => {
+        if (!isCancelled) {
+          setIsLoading(false);
+          isFetchingRef.current = false;
+        }
       });
 
-      console.log(res.data);
-
-      if (res.data.length < 5) {
-        setHasMore(false);
-      }
-
-      setIsLoading(false);
+    return () => {
+      isCancelled = true;
       isFetchingRef.current = false;
-    });
-  }, [currentPage]);
+    };
+  }, [currentPage, hasMore]);
 
   useEffect(() => {
     if (!loaderRef.current || !hasMore) return;
@@ -143,7 +159,7 @@ export default function EditText({ token }: { token: string }) {
       setLevel(res[0].level);
       setQuizzes(res[0].quizzes);
       setParagraphs(
-        res[0].content.map((para: any) => ({
+        res[0].content.map((para: Paragraph) => ({
           paragraph: para.paragraph,
           audiotexturl: para.audiotexturl || null,
         })),
@@ -516,7 +532,7 @@ function EditPopUp({
                 <select
                   value={quiz.correctAnswer}
                   onChange={(e) =>
-                    updateCorrectAnswer(i, e.target.value as any)
+                    updateCorrectAnswer(i, e.target.value as "A" | "B" | "C" | "D")
                   }
                 >
                   <option value="A">A</option>
