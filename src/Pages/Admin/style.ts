@@ -413,6 +413,32 @@ export const ParagraphHeader = styled.div`
   font-weight: 700;
 `;
 
+export const AudioPreviewBox = styled.div<{ $empty?: boolean }>`
+  width: 100%;
+  padding: 12px;
+  border: 1px solid
+    ${(props) =>
+      props.$empty ? "rgba(76, 85, 125, 0.34)" : "rgba(143, 229, 208, 0.34)"};
+  border-radius: 16px;
+  background: ${(props) =>
+    props.$empty ? "rgba(33, 36, 51, 0.56)" : "rgba(41, 170, 139, 0.08)"};
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+
+  span {
+    color: ${(props) => (props.$empty ? "#8f9bc1" : "#cfd7f6")};
+    font-size: 0.84rem;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  audio {
+    width: 100%;
+    height: 38px;
+  }
+`;
+
 export const RemoveButton = styled.div`
   width: 38px;
   height: 38px;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { postText } from "../../Apis/englishplusApi";
@@ -24,6 +24,58 @@ type Quiz = {
   };
   correctAnswer?: "A" | "B" | "C" | "D";
 };
+
+function getAudioSource(audio: string | null) {
+  const trimmedAudio = audio?.trim();
+
+  if (!trimmedAudio) return "";
+
+  if (
+    trimmedAudio.startsWith("data:") ||
+    trimmedAudio.startsWith("http") ||
+    trimmedAudio.startsWith("blob:")
+  ) {
+    return trimmedAudio;
+  }
+
+  return `data:audio/mpeg;base64,${trimmedAudio}`;
+}
+
+function AudioPreview({ audio }: { audio: File | string | null }) {
+  const [filePreviewUrl, setFilePreviewUrl] = useState("");
+
+  useEffect(() => {
+    if (!(audio instanceof File)) {
+      setFilePreviewUrl("");
+      return;
+    }
+
+    const previewUrl = URL.createObjectURL(audio);
+    setFilePreviewUrl(previewUrl);
+
+    return () => URL.revokeObjectURL(previewUrl);
+  }, [audio]);
+
+  const audioSrc =
+    audio instanceof File ? filePreviewUrl : getAudioSource(audio);
+
+  if (!audioSrc) {
+    return (
+      <AudioPreviewBox $empty>
+        <span>Nenhum audio selecionado para este paragrafo.</span>
+      </AudioPreviewBox>
+    );
+  }
+
+  return (
+    <AudioPreviewBox>
+      <span>
+        {audio instanceof File ? audio.name : "Audio pronto para escuta"}
+      </span>
+      <audio controls src={audioSrc} />
+    </AudioPreviewBox>
+  );
+}
 
 function AddText({ token }: AddTextProps) {
   const [title, setTitle] = useState("");
@@ -230,6 +282,7 @@ function AddText({ token }: AddTextProps) {
                   updateParagraphAudio(index, e.target.files?.[0] || null)
                 }
               />
+              <AudioPreview audio={paragraph.audiotexturl} />
             </Field>
           </ParagraphCard>
         ))}
@@ -454,6 +507,33 @@ const ParagraphHeader = styled.div`
   gap: 12px;
   color: #eef1ff;
   font-weight: 700;
+`;
+
+const AudioPreviewBox = styled.div<{ $empty?: boolean }>`
+  width: 100%;
+  padding: 12px;
+  border: 1px solid
+    ${(props) =>
+      props.$empty ? "rgba(76, 85, 125, 0.34)" : "rgba(143, 229, 208, 0.34)"};
+  border-radius: 16px;
+  background: ${(props) =>
+    props.$empty ? "rgba(33, 36, 51, 0.56)" : "rgba(41, 170, 139, 0.08)"};
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+
+  span {
+    color: ${(props) => (props.$empty ? "#8f9bc1" : "#cfd7f6")};
+    font-size: 0.84rem;
+    font-weight: 700;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  audio {
+    width: 100%;
+    height: 38px;
+  }
 `;
 
 const RemoveButton = styled.button`

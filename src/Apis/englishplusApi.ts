@@ -111,8 +111,7 @@ export async function PutText(textId: string, data: unknown, token: string) {
     .then((response) => {
       invalidateCache(["texts:", `text:${textId}`]);
       return response.data;
-    })
-    .catch(logAndReturn(null));
+    });
 
   return await put;
 }

@@ -21,6 +21,7 @@ interface Text {
 type Paragraph = {
   paragraph: string;
   audiotexturl: string | null; // base64
+  audioPreviewUrl?: string | null;
 };
 
 type Level = "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
@@ -34,6 +35,23 @@ type Quiz = {
   };
   correctAnswer?: "A" | "B" | "C" | "D";
 };
+
+function getAudioSource(audio: string | null) {
+  const trimmedAudio = audio?.trim();
+
+  if (!trimmedAudio) return "";
+
+  if (
+    trimmedAudio.startsWith("data:") ||
+    trimmedAudio.startsWith("http") ||
+    trimmedAudio.startsWith("blob:")
+  ) {
+    return trimmedAudio;
+  }
+
+  return `data:audio/mpeg;base64,${trimmedAudio}`;
+}
+
 export default function EditText({ token }: { token: string }) {
   // Tipando o estado de levels como um array de Text
   const [isLoading, setIsLoading] = useState(true);
@@ -157,11 +175,12 @@ export default function EditText({ token }: { token: string }) {
       setTitle(res[0].title);
       setresume(res[0].resume);
       setLevel(res[0].level);
-      setQuizzes(res[0].quizzes);
+      setQuizzes(res[0].quizzes || []);
       setParagraphs(
         res[0].content.map((para: Paragraph) => ({
           paragraph: para.paragraph,
           audiotexturl: para.audiotexturl || null,
+          audioPreviewUrl: null,
         })),
       );
 
@@ -180,6 +199,8 @@ export default function EditText({ token }: { token: string }) {
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
       const content = paragraphs.map((p) => ({
         paragraph: p.paragraph,
@@ -195,9 +216,11 @@ export default function EditText({ token }: { token: string }) {
         quizzes,
       };
 
-      console.log("Payload enviado:", payload);
+      const response = await PutText(editingTextId, payload, token);
 
-      await PutText(editingTextId, payload, token);
+      if (!response || response.error) {
+        throw new Error(response?.message || "Erro ao atualizar texto");
+      }
 
       toast.success("Texto atualizado com sucesso!");
 
@@ -391,9 +414,11 @@ function EditPopUp({
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      const base64 = (reader.result as string).split(",")[1];
+      const previewUrl = reader.result as string;
+      const base64 = previewUrl.split(",")[1];
       const updated = [...paragraphs];
       updated[index].audiotexturl = base64;
+      updated[index].audioPreviewUrl = previewUrl;
       setParagraphs(updated);
     };
     reader.readAsDataURL(file);
@@ -494,6 +519,19 @@ function EditPopUp({
                       updateParagraphAudio(i, e.target.files?.[0] || null)
                     }
                   />
+                  {p.audiotexturl ? (
+                    <C.AudioPreviewBox>
+                      <span>Audio deste paragrafo</span>
+                      <audio
+                        controls
+                        src={p.audioPreviewUrl || getAudioSource(p.audiotexturl)}
+                      />
+                    </C.AudioPreviewBox>
+                  ) : (
+                    <C.AudioPreviewBox $empty>
+                      <span>Nenhum audio cadastrado para este paragrafo.</span>
+                    </C.AudioPreviewBox>
+                  )}
                 </C.Field>
               </C.ParagraphCard>
             ))}
