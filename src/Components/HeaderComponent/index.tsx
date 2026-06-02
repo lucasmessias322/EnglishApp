@@ -2,7 +2,8 @@ import styled from "styled-components";
 import { ReactNode, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
-
+import { IoIosArrowBack } from "react-icons/io";
+import { useNavigate, useParams } from "react-router-dom";
 interface HeaderProps {
   fixed?: boolean;
   textPage?: boolean;
@@ -11,6 +12,7 @@ interface HeaderProps {
   admin?: boolean;
   bgcolor?: string;
   showlogo?: boolean;
+  showBackButton?: boolean;
 }
 
 export default function HeaderComponent({
@@ -21,24 +23,35 @@ export default function HeaderComponent({
   admin,
   bgcolor,
   showlogo,
+  showBackButton,
+  
 }: HeaderProps) {
   const { token, logout, userData } = useContext(AuthContext);
   const firstName = userData?.name?.split(" ")[0];
-
+  const navigate = useNavigate();
   return (
     <Header $fixed={fixed} $bgcolor={bgcolor}>
       <HeaderInner>
+        {showBackButton && (
+          <BackBtn
+            type="button"
+            className="backbtn"
+            onClick={() => navigate("/")}
+            title="Voltar para textos"
+          >
+            <IoIosArrowBack size={25} />
+          </BackBtn>
+        )}
         <LeftSide>
           {showlogo && (
             <LogoLink to="/">
-             
               <h2>
                 EngleshPlus <b>+</b>{" "}
               </h2>
             </LogoLink>
           )}
 
-          {token && firstName && !loginSignin && (
+          {token && firstName && !loginSignin && !showBackButton && (
             <UserPill>Ola, {firstName}</UserPill>
           )}
         </LeftSide>
@@ -242,4 +255,16 @@ const LoginSignin = styled.div`
       font-size: 12px;
     }
   }
+`;
+const BackBtn = styled.button`
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(76, 85, 125, 0.45);
+  border-radius: 16px;
+  background: rgba(24, 27, 40, 0.86);
+  color: #f5f7ff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 `;

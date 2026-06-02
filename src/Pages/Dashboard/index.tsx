@@ -131,7 +131,7 @@ export default function Dashboard() {
     <DashboardContainer>
       <HeaderComponent
         admin={isAdmin}
-        fixed
+        fixed={false}
         bgcolor="#212433"
         loginSignin
         showlogo
@@ -337,7 +337,7 @@ const DashboardContainer = styled.div`
 
 const HeroSection = styled.section`
   width: 100%;
-  padding: 120px 16px 56px;
+  padding: 50px 16px 56px;
 `;
 
 const InstallPromptCard = styled.aside`

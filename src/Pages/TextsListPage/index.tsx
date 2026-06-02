@@ -3,7 +3,12 @@ import HeaderComponent from "../../Components/HeaderComponent";
 import { useEffect, useRef, useState } from "react";
 import { getTexts } from "../../Apis/englishplusApi";
 import { Link } from "react-router-dom";
-import { FaCheck, FaQuestionCircle, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
+import {
+  FaCheck,
+  FaQuestionCircle,
+  FaVolumeMute,
+  FaVolumeUp,
+} from "react-icons/fa";
 import { MutatingDots } from "react-loader-spinner";
 
 interface Text {
@@ -110,9 +115,11 @@ export default function TextsListPage() {
       }
     }
 
-    return text.content?.some((paragraph) =>
-      Boolean(paragraph.audiotexturl?.trim()),
-    ) ?? false;
+    return (
+      text.content?.some((paragraph) =>
+        Boolean(paragraph.audiotexturl?.trim()),
+      ) ?? false
+    );
   };
 
   const textHasQuiz = (text: Text) => {
@@ -133,10 +140,9 @@ export default function TextsListPage() {
 
   return (
     <Container>
-      <HeaderComponent showlogo fixed bgcolor="#161616" />
+      <HeaderComponent showBackButton fixed />
 
       <Content>
-        
         <SectionHeader>
           <div>
             <span>Selecione um texto</span>
@@ -224,7 +230,7 @@ const Content = styled.main`
   width: 100%;
   max-width: 1180px;
   margin: 0 auto;
-  padding: 108px 16px 48px;
+  padding: 70px 16px 48px;
 `;
 
 const SectionHeader = styled.div`
@@ -267,7 +273,9 @@ const TextItem = styled.li<{ $completed?: boolean }>`
     gap: 16px;
     border: 1px solid
       ${(props) =>
-        props.$completed ? "rgba(41, 170, 139, 0.55)" : "rgba(76, 85, 125, 0.45)"};
+        props.$completed
+          ? "rgba(41, 170, 139, 0.55)"
+          : "rgba(76, 85, 125, 0.45)"};
     background:
       linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 45%),
       rgba(24, 27, 40, 0.86);
