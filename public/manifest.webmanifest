@@ -2,7 +2,7 @@
   "name": "EnglishPlus",
   "short_name": "EnglishPlus",
   "description": "Study English texts, flashcards and memorization lists.",
-  "start_url": "/",
+  "start_url": "/#/dashboard",
   "scope": "/",
   "display": "standalone",
   "background_color": "#212433",

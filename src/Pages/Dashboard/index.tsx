@@ -7,7 +7,7 @@ import {
   FaTextHeight,
   FaTimes,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { GiBrain } from "react-icons/gi";
 import HeaderComponent from "../../Components/HeaderComponent";
 import { AuthContext } from "../../Context/AuthContext";
@@ -51,7 +51,7 @@ function listenToMediaQuery(query: MediaQueryList, listener: () => void) {
 }
 
 export default function Dashboard() {
-  const { userData } = useContext(AuthContext);
+  const { token, userData } = useContext(AuthContext);
   const [userName, setUserName] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [installPrompt, setInstallPrompt] =
@@ -127,6 +127,10 @@ export default function Dashboard() {
   const shouldShowInstallBanner =
     isMobile && !isInstalled && !installBannerDismissed;
 
+  if (token) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return (
     <DashboardContainer>
       <HeaderComponent
@@ -193,7 +197,9 @@ export default function Dashboard() {
 
             <img src="./logo3.png" alt="EngleshPlus" />
             <ActionRow>
-              <PrimaryAction to="/textslist">Explorar textos</PrimaryAction>
+              <PrimaryAction to={userName ? "/dashboard" : "/textslist"}>
+                {userName ? "Abrir dashboard" : "Explorar textos"}
+              </PrimaryAction>
               <SecondaryAction
                 to={userName ? "/memorizelists" : "/account/login"}
               >

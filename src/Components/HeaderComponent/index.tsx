@@ -72,6 +72,9 @@ export default function HeaderComponent({
 
           {loginSignin && token && (
             <LoginSignin>
+              <Link to="/dashboard">
+                <span className="register">Dashboard</span>
+              </Link>
               {admin && (
                 <Link to="/admin">
                   <span className="register">Admin</span>

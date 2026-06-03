@@ -1,5 +1,6 @@
 import { Routes, HashRouter, Route, Navigate } from "react-router-dom";
 import Dashboard from "./Pages/Dashboard";
+import AppDashboard from "./Pages/AppDashboard";
 import TextsListPage from "./Pages/TextsListPage";
 import TextPage from "./Pages/TextPage";
 import MemorizeLists from "./Pages/MemorizeLists";
@@ -14,6 +15,7 @@ export default function RouterComponent() {
     <HashRouter>
       <Routes>
         <Route element={<PrivateRoutes requiredRoles={["user", "admin"]} />}>
+          <Route path="/dashboard" element={<AppDashboard />} />
           <Route path="/memorizelists" element={<MemorizeLists />} />
           <Route path="/memolist/:memoid" element={<MemoList />} />
           <Route path="/learn/:memoid" element={<LearnPage />} />
