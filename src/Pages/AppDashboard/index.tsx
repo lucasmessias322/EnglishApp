@@ -8,6 +8,7 @@ import {
   FaCog,
   FaHome,
   FaLayerGroup,
+  FaTools,
   FaPlay,
   FaRegNewspaper,
   FaSignOutAlt,
@@ -118,6 +119,9 @@ export default function AppDashboard() {
   const firstName = userData?.name?.split(" ")[0] || "estudante";
   const fullName = userData?.name || "Estudante EnglishPlus";
   const userEmail = userData?.email || userData?.username || "Conta conectada";
+  const isAdmin = Array.isArray(userData?.role)
+    ? userData.role.includes("admin")
+    : userData?.role === "admin";
   const decksWithCards = decks.filter((deck) => deck.flashcards.length > 0);
   const totalCards = decksWithCards.reduce(
     (total, deck) => total + deck.flashcards.length,
@@ -169,6 +173,16 @@ export default function AppDashboard() {
                   <span>{userEmail}</span>
                 </div>
               </UserSummary>
+
+              {isAdmin && (
+                <MenuLink to="/admin" onClick={() => setProfileMenuOpen(false)}>
+                  <FaTools />
+                  <div>
+                    <strong>Painel admin</strong>
+                    <span>Gerenciar conteudo</span>
+                  </div>
+                </MenuLink>
+              )}
 
               <MenuLink to="/settings" onClick={() => setProfileMenuOpen(false)}>
                 <FaCog />
