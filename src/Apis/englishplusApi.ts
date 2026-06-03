@@ -157,12 +157,32 @@ export async function postRegister(data: unknown) {
     .catch(logAndReturn(null));
 }
 
-export async function getTexts({ page = 1, limit = 5 }) {
+export async function getTexts({
+  page = 1,
+  limit = 5,
+  level,
+  levels,
+}: {
+  page?: number;
+  limit?: number;
+  level?: string;
+  levels?: string[];
+} = {}) {
+  const selectedLevels = levels?.length ? levels : level ? [level] : [];
+  const params = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  });
+
+  if (selectedLevels.length) {
+    params.set("levels", selectedLevels.join(","));
+  }
+
   const get = getCachedRequest(
-    `texts:${page}:${limit}`,
+    `texts:${page}:${limit}:${selectedLevels.join(",") || "all"}`,
     () =>
       engleshPlusApi
-        .get(`/api/texts/?page=${page}&limit=${limit}`)
+        .get(`/api/texts/?${params.toString()}`)
         .then((response) => response.data),
     CACHE_TTL.medium,
   )

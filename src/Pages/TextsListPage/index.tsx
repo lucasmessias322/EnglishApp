@@ -4,7 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { getTexts } from "../../Apis/englishplusApi";
 import { Link } from "react-router-dom";
 import {
+  FaChevronDown,
   FaCheck,
+  FaFilter,
   FaQuestionCircle,
   FaVolumeMute,
   FaVolumeUp,
@@ -22,23 +24,36 @@ interface Text {
   quizzes?: unknown[];
 }
 
+const textLevels = ["A1", "A2", "B1", "B2", "C1", "C2"];
+
 export default function TextsListPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [levels, setLevels] = useState<Text[]>([]);
   const [completedTexts, setCompletedTexts] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const loaderRef = useRef<HTMLDivElement | null>(null);
+  const filterRef = useRef<HTMLDivElement | null>(null);
   const isFetchingRef = useRef(false);
+  const selectedLevelKey = selectedLevels.join(",");
 
   useEffect(() => {
-    //if (!hasMore || isFetchingRef.current) return;
+    if (!hasMore || isFetchingRef.current) return;
 
     let isCancelled = false;
     isFetchingRef.current = true;
     setIsLoading(true);
+    const requestedLevels = selectedLevelKey
+      ? selectedLevelKey.split(",")
+      : undefined;
 
-    getTexts({ page: currentPage, limit: 6 })
+    getTexts({
+      page: currentPage,
+      limit: 6,
+      levels: requestedLevels,
+    })
       .then((res) => {
         if (isCancelled) return;
 
@@ -70,7 +85,7 @@ export default function TextsListPage() {
       isCancelled = true;
       isFetchingRef.current = false;
     };
-  }, [currentPage, hasMore]);
+  }, [currentPage, hasMore, selectedLevelKey]);
 
   useEffect(() => {
     if (!loaderRef.current || !hasMore) return;
@@ -100,7 +115,56 @@ export default function TextsListPage() {
     setCompletedTexts(completed);
   }, []);
 
+  useEffect(() => {
+    const closeFilterOnOutsideClick = (event: MouseEvent) => {
+      if (!filterRef.current?.contains(event.target as Node)) {
+        setIsFilterOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", closeFilterOnOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", closeFilterOnOutsideClick);
+    };
+  }, []);
+
   const isTextCompleted = (id: string) => completedTexts.includes(id);
+
+  const resetTextsPagination = () => {
+    setLevels([]);
+    setCurrentPage(1);
+    setHasMore(true);
+  };
+
+  const handleLevelFilter = (level: string) => {
+    setSelectedLevels((prev) => {
+      const nextLevels = prev.includes(level)
+        ? prev.filter((selectedLevel) => selectedLevel !== level)
+        : [...prev, level];
+
+      return textLevels.filter((textLevel) => nextLevels.includes(textLevel));
+    });
+    resetTextsPagination();
+  };
+
+  const handleClearLevels = () => {
+    if (!selectedLevels.length) return;
+
+    setSelectedLevels([]);
+    resetTextsPagination();
+  };
+
+  const visibleTexts =
+    selectedLevels.length === 0
+      ? levels
+      : levels.filter(
+          (text) => selectedLevels.includes(text.level.trim().toUpperCase()),
+        );
+
+  const selectedLevelLabel = selectedLevels.length
+    ? selectedLevels.join(", ")
+    : "Todos os niveis";
 
   const textHasAudio = (text: Text) => {
     if (typeof text.hasAudios === "boolean") {
@@ -148,55 +212,101 @@ export default function TextsListPage() {
             <span>Selecione um texto</span>
             <h2>Escolha sua proxima leitura</h2>
           </div>
+
+          <FilterPanel ref={filterRef}>
+            <FilterLabel>
+              <FaFilter size={13} />
+              Nivel
+            </FilterLabel>
+
+            <DropdownButton
+              type="button"
+              aria-expanded={isFilterOpen}
+              aria-haspopup="menu"
+              onClick={() => setIsFilterOpen((isOpen) => !isOpen)}
+            >
+              <span>{selectedLevelLabel}</span>
+              <FaChevronDown size={12} />
+            </DropdownButton>
+
+            {isFilterOpen && (
+              <FilterMenu role="menu" aria-label="Filtrar textos por dificuldade">
+                <AllLevelsButton
+                  type="button"
+                  $active={selectedLevels.length === 0}
+                  onClick={handleClearLevels}
+                >
+                  Todos os niveis
+                </AllLevelsButton>
+
+                {textLevels.map((level) => (
+                  <LevelOption key={level}>
+                    <input
+                      type="checkbox"
+                      checked={selectedLevels.includes(level)}
+                      onChange={() => handleLevelFilter(level)}
+                    />
+                    <span>{level}</span>
+                  </LevelOption>
+                ))}
+              </FilterMenu>
+            )}
+          </FilterPanel>
         </SectionHeader>
 
-        <TextListWrapper>
-          {levels.map((text) => {
-            const completed = isTextCompleted(text._id);
-            const hasAudio = textHasAudio(text);
-            const hasQuiz = textHasQuiz(text);
+        {visibleTexts.length === 0 && !isLoading && !hasMore ? (
+          <EmptyState>
+            Nenhum texto encontrado para esse nivel no momento.
+          </EmptyState>
+        ) : (
+          <TextListWrapper>
+            {visibleTexts.map((text) => {
+              const completed = isTextCompleted(text._id);
+              const hasAudio = textHasAudio(text);
+              const hasQuiz = textHasQuiz(text);
 
-            return (
-              <TextItem key={text._id} $completed={completed}>
-                <Link to={`/text/${text._id}`}>
-                  <CardTop>
-                    <LevelBadge>{text.level}</LevelBadge>
-                    <BadgeGroup>
-                      <AudioBadge $hasAudio={hasAudio}>
-                        {hasAudio ? (
-                          <FaVolumeUp size={12} />
-                        ) : (
-                          <FaVolumeMute size={12} />
+              return (
+                <TextItem key={text._id} $completed={completed}>
+                  <Link to={`/text/${text._id}`}>
+                    <CardTop>
+                      <LevelBadge>{text.level}</LevelBadge>
+                      <BadgeGroup>
+                        <AudioBadge $hasAudio={hasAudio}>
+                          {hasAudio ? (
+                            <FaVolumeUp size={12} />
+                          ) : (
+                            <FaVolumeMute size={12} />
+                          )}
+                          {hasAudio ? "Com audio" : "Sem audio"}
+                        </AudioBadge>
+                        <QuizBadge $hasQuiz={hasQuiz}>
+                          <FaQuestionCircle size={12} />
+                          {hasQuiz ? "Com quiz" : "Sem quiz"}
+                        </QuizBadge>
+                        {completed && (
+                          <CompletedBadge>
+                            <FaCheck size={12} />
+                            Concluido
+                          </CompletedBadge>
                         )}
-                        {hasAudio ? "Com audio" : "Sem audio"}
-                      </AudioBadge>
-                      <QuizBadge $hasQuiz={hasQuiz}>
-                        <FaQuestionCircle size={12} />
-                        {hasQuiz ? "Com quiz" : "Sem quiz"}
-                      </QuizBadge>
-                      {completed && (
-                        <CompletedBadge>
-                          <FaCheck size={12} />
-                          Concluido
-                        </CompletedBadge>
-                      )}
-                    </BadgeGroup>
-                  </CardTop>
+                      </BadgeGroup>
+                    </CardTop>
 
-                  <h3>{text.title}</h3>
-                  <p>{text.resume}</p>
+                    <h3>{text.title}</h3>
+                    <p>{text.resume}</p>
 
-                  <CardFooter>
-                    <span>Ler agora</span>
-                    <small>
-                      {completed ? "Pronto para revisar" : "Novo para estudar"}
-                    </small>
-                  </CardFooter>
-                </Link>
-              </TextItem>
-            );
-          })}
-        </TextListWrapper>
+                    <CardFooter>
+                      <span>Ler agora</span>
+                      <small>
+                        {completed ? "Pronto para revisar" : "Novo para estudar"}
+                      </small>
+                    </CardFooter>
+                  </Link>
+                </TextItem>
+              );
+            })}
+          </TextListWrapper>
+        )}
 
         {hasMore && (
           <LoadingWrapper ref={loaderRef}>
@@ -238,8 +348,10 @@ const SectionHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
 
-  span {
+  > div > span {
     display: inline-flex;
     margin-bottom: 8px;
     color: var(--accent-soft);
@@ -253,11 +365,138 @@ const SectionHeader = styled.div`
   }
 `;
 
+const FilterPanel = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+`;
+
+const FilterLabel = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+`;
+
+const DropdownButton = styled.button`
+  min-width: 178px;
+  min-height: 40px;
+  padding: 8px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.32);
+  background: var(--control-bg);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &:hover {
+    border-color: rgba(var(--primary-strong-rgb), 0.7);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: rgba(var(--primary-strong-rgb), 0.82);
+    box-shadow: 0 0 0 3px rgba(var(--primary-strong-rgb), 0.16);
+  }
+`;
+
+const FilterMenu = styled.div`
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 5;
+  min-width: 178px;
+  padding: 8px;
+  border-radius: 16px;
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.28);
+  background: var(--glass-bg);
+  box-shadow: 0 18px 42px rgba(7, 10, 20, 0.28);
+`;
+
+const AllLevelsButton = styled.button<{ $active: boolean }>`
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: ${(props) =>
+    props.$active
+      ? "rgba(var(--primary-strong-rgb), 0.18)"
+      : "transparent"};
+  color: ${(props) => (props.$active ? "var(--primary-soft)" : "var(--text)")};
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(var(--primary-strong-rgb), 0.14);
+    color: var(--primary-soft);
+  }
+`;
+
+const LevelOption = styled.label`
+  min-height: 38px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(var(--primary-strong-rgb), 0.12);
+  }
+
+  input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-soft);
+  }
+`;
+
 const TextListWrapper = styled.ul`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
   padding: 0;
+`;
+
+const EmptyState = styled.div`
+  width: 100%;
+  padding: 28px;
+  border-radius: 24px;
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.24);
+  background: var(--glass-bg);
+  color: var(--muted);
+  text-align: center;
 `;
 
 const TextItem = styled.li<{ $completed?: boolean }>`
