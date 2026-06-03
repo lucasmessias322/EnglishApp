@@ -316,7 +316,7 @@ const AuthCard = styled.section`
   border-radius: 28px;
   background:
     linear-gradient(145deg, rgba(41, 170, 139, 0.12), transparent 42%),
-    rgba(24, 27, 40, 0.92);
+    var(--glass-bg-strong);
   box-shadow: 0 22px 44px rgba(7, 10, 20, 0.28);
 
   > p {
@@ -333,7 +333,7 @@ const ModeSwitch = styled.div`
   gap: 6px;
   padding: 5px;
   border-radius: 18px;
-  background: rgba(15, 18, 28, 0.54);
+  background: var(--subtle-bg);
 `;
 
 const ModeLink = styled(Link)<{ $active: boolean }>`
@@ -433,7 +433,7 @@ const InputGroup = styled.div`
     min-height: 54px;
     border: 1px solid rgba(76, 85, 125, 0.45);
     border-radius: 18px;
-    background: rgba(15, 18, 28, 0.5);
+    background: var(--subtle-bg);
     display: grid;
     grid-template-columns: 46px minmax(0, 1fr) auto;
     align-items: center;
@@ -445,7 +445,7 @@ const InputGroup = styled.div`
 
   .field:focus-within {
     border-color: rgba(143, 229, 208, 0.62);
-    background: rgba(24, 27, 40, 0.76);
+    background: var(--glass-bg);
   }
 
   div.iconContainer {
@@ -512,7 +512,7 @@ const FooterSwitch = styled.div`
   margin-top: 16px;
   padding: 13px 14px;
   border-radius: 18px;
-  background: rgba(33, 36, 51, 0.58);
+  background: var(--control-bg);
   color: #aeb8d8;
   display: flex;
   align-items: center;

@@ -154,16 +154,16 @@ const Content = styled.main`
 const HeroSection = styled.section`
   padding: 28px;
   border-radius: 32px;
-  border: 1px solid rgba(76, 85, 125, 0.45);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   background:
-    linear-gradient(145deg, rgba(41, 170, 139, 0.12), transparent 40%),
-    rgba(24, 27, 40, 0.9);
+    linear-gradient(145deg, rgba(var(--accent-rgb), 0.12), transparent 40%),
+    var(--glass-bg);
   box-shadow: 0 26px 52px rgba(7, 10, 20, 0.28);
 
   .eyebrow {
     display: inline-flex;
     margin-bottom: 10px;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.88rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -179,7 +179,7 @@ const HeroSection = styled.section`
   p {
     max-width: 640px;
     margin-top: 12px;
-    color: #a9b4d8;
+    color: var(--muted);
     line-height: 1.8;
   }
 `;
@@ -193,8 +193,8 @@ const HeroStats = styled.div`
   div {
     padding: 18px;
     border-radius: 22px;
-    background: rgba(33, 36, 51, 0.76);
-    border: 1px solid rgba(76, 85, 125, 0.38);
+    background: var(--control-bg);
+    border: 1px solid rgba(var(--primary-strong-rgb), 0.24);
   }
 
   strong {
@@ -203,7 +203,7 @@ const HeroStats = styled.div`
   }
 
   span {
-    color: #99a4c8;
+    color: var(--muted);
     font-size: 0.95rem;
   }
 
@@ -226,7 +226,7 @@ const SectionLabel = styled.div`
   span {
     display: inline-flex;
     margin-bottom: 8px;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.82rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -257,10 +257,12 @@ const DeckItem = styled.li<{ personal?: boolean }>`
     gap: 16px;
     border: 1px solid
       ${(props) =>
-        props.personal ? "rgba(41, 170, 139, 0.52)" : "rgba(76, 85, 125, 0.45)"};
+        props.personal
+          ? "rgba(var(--accent-rgb), 0.52)"
+          : "rgba(var(--primary-strong-rgb), 0.26)"};
     background:
       linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 45%),
-      rgba(24, 27, 40, 0.86);
+      var(--glass-bg);
     box-shadow: 0 22px 45px rgba(7, 10, 20, 0.2);
     transition:
       transform 0.2s ease,
@@ -270,7 +272,7 @@ const DeckItem = styled.li<{ personal?: boolean }>`
 
   a:hover {
     transform: translateY(-4px);
-    border-color: rgba(110, 136, 204, 0.7);
+    border-color: rgba(var(--primary-strong-rgb), 0.7);
     box-shadow: 0 28px 50px rgba(7, 10, 20, 0.28);
   }
 
@@ -280,7 +282,7 @@ const DeckItem = styled.li<{ personal?: boolean }>`
   }
 
   p {
-    color: #9ea9cc;
+    color: var(--muted);
     line-height: 1.7;
     flex: 1;
   }
@@ -294,7 +296,7 @@ const TopRow = styled.div`
   flex-wrap: wrap;
 
   .count {
-    color: #ced6f6;
+    color: var(--text);
     font-size: 0.9rem;
   }
 `;
@@ -304,8 +306,11 @@ const SourceTag = styled.span<{ personal?: boolean }>`
   padding: 8px 12px;
   border-radius: 999px;
   background: ${(props) =>
-    props.personal ? "rgba(41, 170, 139, 0.12)" : "rgba(73, 104, 236, 0.12)"};
-  color: ${(props) => (props.personal ? "#8fe5d0" : "#bdd0ff")};
+    props.personal
+      ? "rgba(var(--accent-rgb), 0.12)"
+      : "rgba(var(--primary-strong-rgb), 0.12)"};
+  color: ${(props) =>
+    props.personal ? "var(--accent-soft)" : "var(--primary-soft)"};
   font-size: 0.84rem;
 `;
 
@@ -316,10 +321,10 @@ const BottomRow = styled.div`
   gap: 10px;
 
   strong {
-    color: #eef1ff;
+    color: var(--text);
   }
 
   small {
-    color: #8390b7;
+    color: var(--muted);
   }
 `;

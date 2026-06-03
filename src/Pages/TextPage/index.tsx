@@ -447,7 +447,17 @@ export default function TextPage() {
                           value={key}
                           disabled={quizPassed}
                         />
-                        <OptionMarker>{key}</OptionMarker>
+                        <OptionMarker
+                          $selected={answers[q._id] === key}
+                          $correct={submitted && key === q.correctAnswer}
+                          $wrong={
+                            submitted &&
+                            answers[q._id] === key &&
+                            key !== q.correctAnswer
+                          }
+                        >
+                          {key}
+                        </OptionMarker>
                         <span className="option-text">
                           {q.alternatives[key]}
                         </span>
@@ -523,7 +533,7 @@ const Result = styled.div<{ $status: "info" | "success" | "error" }>`
   border: 1px solid
     ${(props) =>
       props.$status === "success"
-        ? "rgba(41, 170, 139, 0.36)"
+        ? "rgba(var(--accent-rgb), 0.36)"
         : props.$status === "error"
           ? "rgba(243, 91, 91, 0.36)"
           : "rgba(243, 129, 47, 0.36)"};
@@ -531,13 +541,13 @@ const Result = styled.div<{ $status: "info" | "success" | "error" }>`
   padding: 13px 14px;
   color: ${(props) =>
     props.$status === "success"
-      ? "#8fe5d0"
+      ? "var(--accent-soft)"
       : props.$status === "error"
         ? "#ffb4b4"
         : "#ffc878"};
   background: ${(props) =>
     props.$status === "success"
-      ? "rgba(41, 170, 139, 0.1)"
+      ? "rgba(var(--accent-rgb), 0.1)"
       : props.$status === "error"
         ? "rgba(243, 91, 91, 0.1)"
         : "rgba(243, 129, 47, 0.1)"};
@@ -562,11 +572,12 @@ const QuestionForm = styled.form`
 
 const QuizHeader = styled.div`
   padding: 18px;
-  border: 1px solid rgba(76, 85, 125, 0.42);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   border-radius: 24px;
   background:
-    linear-gradient(145deg, rgba(73, 104, 236, 0.14), transparent 42%),
-    rgba(24, 27, 40, 0.9);
+    linear-gradient(145deg, rgba(var(--primary-strong-rgb), 0.16), transparent 42%),
+    var(--surface-strong);
+  box-shadow: 0 18px 36px rgba(7, 10, 20, 0.18);
 
   h2 {
     margin-top: 4px;
@@ -577,7 +588,7 @@ const QuizHeader = styled.div`
 `;
 
 const QuizEyebrow = styled.span`
-  color: #8fe5d0;
+  color: var(--accent-soft);
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0;
@@ -590,7 +601,7 @@ const QuizProgressRow = styled.div`
   align-items: center;
   gap: 12px;
   margin-top: 14px;
-  color: #aeb8d8;
+  color: var(--muted);
   font-size: 0.82rem;
   font-weight: 700;
 
@@ -604,28 +615,31 @@ const QuizProgressTrack = styled.div`
   height: 7px;
   overflow: hidden;
   border-radius: 999px;
-  background: rgba(76, 85, 125, 0.34);
+  background: rgba(var(--primary-strong-rgb), 0.18);
 `;
 
 const QuizProgressFill = styled.div<{ $progress: number }>`
   width: ${(props) => Math.min(100, Math.max(0, props.$progress))}%;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #4968ec, #8fe5d0);
+  background: linear-gradient(90deg, var(--primary-strong), var(--accent-soft));
   transition: width 0.2s ease;
 `;
 
 const QuestionCard = styled.fieldset`
   min-width: 0;
-  border: 1px solid rgba(76, 85, 125, 0.42);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   border-radius: 24px;
   padding: 16px;
-  background: rgba(24, 27, 40, 0.88);
+  background:
+    linear-gradient(180deg, rgba(var(--primary-strong-rgb), 0.08), transparent 36%),
+    var(--glass-bg);
+  box-shadow: 0 16px 32px rgba(7, 10, 20, 0.16);
 
   legend {
     width: 100%;
     padding: 0;
-    color: #f5f7ff;
+    color: var(--text);
     font-size: 1rem;
     font-weight: 700;
     line-height: 1.45;
@@ -640,7 +654,7 @@ const QuestionCard = styled.fieldset`
 const QuestionNumber = styled.span`
   display: inline-flex;
   margin-bottom: 8px;
-  color: #8fe5d0;
+  color: var(--accent-soft);
   font-size: 0.72rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -667,23 +681,27 @@ const OptionLabel = styled.label<{
   border: 1px solid
     ${(props) =>
       props.$correct
-        ? "rgba(41, 170, 139, 0.58)"
+        ? "rgba(var(--accent-rgb), 0.58)"
         : props.$wrong
           ? "rgba(243, 91, 91, 0.58)"
           : props.$selected
-            ? "rgba(110, 136, 204, 0.72)"
-            : "rgba(76, 85, 125, 0.34)"};
+            ? "rgba(var(--primary-strong-rgb), 0.72)"
+            : "rgba(var(--primary-strong-rgb), 0.24)"};
   border-radius: 18px;
   padding: 10px;
-  color: #dce2fb;
+  color: var(--text);
   background: ${(props) =>
     props.$correct
-      ? "rgba(41, 170, 139, 0.12)"
+      ? "rgba(var(--accent-rgb), 0.16)"
       : props.$wrong
         ? "rgba(243, 91, 91, 0.12)"
         : props.$selected
-          ? "rgba(73, 104, 236, 0.16)"
-          : "rgba(33, 36, 51, 0.68)"};
+          ? "rgba(var(--primary-strong-rgb), 0.22)"
+          : "var(--control-bg)"};
+  box-shadow: ${(props) =>
+    props.$selected && !props.$correct && !props.$wrong
+      ? "inset 0 0 0 1px rgba(var(--primary-strong-rgb), 0.18)"
+      : "none"};
   cursor: ${(props) => (props.$disabled ? "not-allowed" : "pointer")};
   opacity: ${(props) => (props.$disabled && !props.$selected ? 0.72 : 1)};
   transition:
@@ -712,19 +730,31 @@ const OptionLabel = styled.label<{
     border-color: ${(props) =>
       props.$correct || props.$wrong
         ? undefined
-        : "rgba(143, 229, 208, 0.5)"};
+        : "rgba(var(--accent-rgb), 0.5)"};
   }
 `;
 
-const OptionMarker = styled.span`
+const OptionMarker = styled.span<{
+  $selected: boolean;
+  $correct: boolean;
+  $wrong: boolean;
+}>`
   width: 34px;
   height: 34px;
   border-radius: 13px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #eef1ff;
-  background: rgba(15, 18, 28, 0.56);
+  color: ${(props) =>
+    props.$correct || props.$selected ? "var(--bg)" : "var(--text)"};
+  background: ${(props) =>
+    props.$correct
+      ? "linear-gradient(135deg, var(--accent), var(--accent-soft))"
+      : props.$wrong
+        ? "rgba(243, 91, 91, 0.22)"
+        : props.$selected
+          ? "linear-gradient(135deg, var(--primary-strong), var(--primary-soft))"
+          : "rgba(var(--primary-strong-rgb), 0.16)"};
   font-size: 0.82rem;
   font-weight: 800;
 `;
@@ -743,16 +773,16 @@ const QuizButton = styled.button`
   border: none;
   border-radius: 18px;
   padding: 13px 16px;
-  color: #07121b;
-  background: linear-gradient(135deg, #29aa8b, #8fe5d0);
-  box-shadow: 0 16px 30px rgba(41, 170, 139, 0.18);
+  color: var(--bg);
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  box-shadow: 0 16px 30px rgba(var(--accent-rgb), 0.18);
   font-size: 0.98rem;
   font-weight: 800;
   cursor: pointer;
 
   &:disabled {
-    color: #aab2c9;
-    background: rgba(76, 85, 125, 0.28);
+    color: var(--muted);
+    background: var(--subtle-bg);
     box-shadow: none;
     cursor: not-allowed;
   }
@@ -761,10 +791,10 @@ const QuizButton = styled.button`
 const BackBtn = styled.button`
   width: 44px;
   height: 44px;
-  border: 1px solid rgba(76, 85, 125, 0.45);
+  border: 1px solid var(--border-strong);
   border-radius: 16px;
-  background: rgba(24, 27, 40, 0.86);
-  color: #f5f7ff;
+  background: var(--glass-bg);
+  color: var(--text);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -786,7 +816,7 @@ const Header = styled.div`
   position: fixed;
   top: 0;
   padding: calc(env(safe-area-inset-top) + 10px) 14px 10px;
-  border-bottom: 1px solid rgba(76, 85, 125, 0.24);
+  border-bottom: 1px solid rgba(var(--primary-strong-rgb), 0.2);
 
   backdrop-filter: blur(14px);
   z-index: 999999;
@@ -797,7 +827,7 @@ const HeaderTitle = styled.div`
 
   span {
     display: block;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.68rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -806,7 +836,7 @@ const HeaderTitle = styled.div`
   strong {
     display: block;
     margin-top: 2px;
-    color: #f5f7ff;
+    color: var(--text);
     font-size: 0.96rem;
     line-height: 1.15;
     white-space: nowrap;
@@ -820,13 +850,13 @@ const AudioButton = styled.button`
   height: 44px;
   border: none;
   border-radius: 16px;
-  color: #07121b;
-  background: linear-gradient(135deg, #29aa8b, #8fe5d0);
+  color: var(--bg);
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 14px 28px rgba(41, 170, 139, 0.18);
+  box-shadow: 0 14px 28px rgba(var(--accent-rgb), 0.18);
 `;
 
 const CompletionDock = styled.div`
@@ -849,14 +879,14 @@ const CompletionButton = styled.button<{ $completed: boolean }>`
   border: 1px solid
     ${(props) =>
       props.$completed
-        ? "rgba(41, 170, 139, 0.42)"
-        : "rgba(76, 85, 125, 0.45)"};
+        ? "rgba(var(--accent-rgb), 0.42)"
+        : "rgba(var(--primary-strong-rgb), 0.26)"};
   border-radius: 19px;
-  color: ${(props) => (props.$completed ? "#8fe5d0" : "#f5f7ff")};
+  color: ${(props) => (props.$completed ? "var(--accent-soft)" : "var(--text)")};
   background: ${(props) =>
     props.$completed
       ? "rgba(14, 59, 68, 0.92)"
-      : "rgba(33, 36, 51, 0.94)"};
+      : "var(--control-bg-strong)"};
   backdrop-filter: blur(12px);
   display: inline-flex;
   align-items: center;

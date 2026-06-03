@@ -135,10 +135,10 @@ const WordPopUp = styled.div<{ token?: string }>`
   max-width: 380px;
   border-radius: 28px;
   padding: 22px;
-  border: 1px solid rgba(76, 85, 125, 0.42);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   background:
-    linear-gradient(145deg, rgba(73, 104, 236, 0.12), transparent 38%),
-    rgba(24, 27, 40, 0.94);
+    linear-gradient(145deg, rgba(var(--primary-strong-rgb), 0.14), transparent 38%),
+    var(--glass-bg-strong);
   box-shadow: 0 28px 60px rgba(7, 10, 20, 0.34);
 `;
 
@@ -153,9 +153,9 @@ const ActionIcon = styled.button`
   width: 46px;
   height: 46px;
   border-radius: 16px;
-  border: 1px solid rgba(76, 85, 125, 0.45);
-  background: rgba(33, 36, 51, 0.76);
-  color: #eef1ff;
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.28);
+  background: var(--control-bg);
+  color: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -170,7 +170,7 @@ const ActionIcon = styled.button`
 const WordInfo = styled.div`
   span {
     display: block;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -187,9 +187,9 @@ const BookmarkState = styled.div`
   width: 46px;
   height: 46px;
   border-radius: 16px;
-  border: 1px solid rgba(41, 170, 139, 0.32);
-  background: rgba(41, 170, 139, 0.12);
-  color: #8fe5d0;
+  border: 1px solid rgba(var(--accent-rgb), 0.32);
+  background: rgba(var(--accent-rgb), 0.12);
+  color: var(--accent-soft);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -199,13 +199,13 @@ const TranslationCard = styled.div`
   margin-top: 18px;
   padding: 18px;
   border-radius: 22px;
-  border: 1px solid rgba(76, 85, 125, 0.38);
-  background: rgba(33, 36, 51, 0.76);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
+  background: var(--control-bg);
 
   span {
     display: block;
     margin-bottom: 8px;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -213,6 +213,6 @@ const TranslationCard = styled.div`
 
   strong {
     font-size: 1.2rem;
-    color: #f5f7ff;
+    color: var(--text);
   }
 `;

@@ -116,7 +116,7 @@ const CardFace = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   gap: 16px;
-  border: 1px solid rgba(76, 85, 125, 0.42);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   box-shadow: 0 30px 60px rgba(7, 10, 20, 0.3);
   overflow: hidden;
 
@@ -134,13 +134,13 @@ const CardFace = styled.div`
 const Front = styled(CardFace)`
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 40%),
-    rgba(33, 36, 51, 0.96);
+    var(--glass-bg-strong);
 `;
 
 const Back = styled(CardFace)`
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 40%),
-    rgba(33, 36, 51, 0.96);
+    var(--glass-bg-strong);
   transform: rotateY(180deg);
 `;
 
@@ -156,8 +156,8 @@ const CardLabel = styled.span`
   display: inline-flex;
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #cdd7fb;
+  background: rgba(var(--primary-strong-rgb), 0.12);
+  color: var(--primary-soft);
   font-size: 0.82rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -176,8 +176,8 @@ const SidePill = styled.span`
   min-height: 30px;
   border-radius: 999px;
   padding: 6px 10px;
-  color: #8fe5d0;
-  background: rgba(41, 170, 139, 0.12);
+  color: var(--accent-soft);
+  background: rgba(var(--accent-rgb), 0.12);
   font-size: 0.76rem;
   font-weight: 800;
 `;
@@ -192,7 +192,7 @@ const CardContent = styled.div`
   font-size: clamp(1.8rem, 7vw, 2.75rem);
   font-weight: 800;
   line-height: 1.2;
-  color: #f5f7ff;
+  color: var(--text);
   padding: 0 8px;
   overflow-wrap: anywhere;
 
@@ -215,8 +215,8 @@ const CardHint = styled.span`
   justify-content: center;
   border-radius: 999px;
   padding: 7px 12px;
-  color: #99a4c8;
-  background: rgba(15, 18, 28, 0.38);
+  color: var(--muted);
+  background: var(--subtle-bg);
   font-size: 0.82rem;
   font-weight: 700;
 
@@ -248,13 +248,13 @@ const ActionButton = styled.button<{ $variant: "known" | "review" }>`
   border: 1px solid
     ${(props) =>
       props.$variant === "known"
-        ? "rgba(41, 170, 139, 0.42)"
+        ? "rgba(var(--accent-rgb), 0.42)"
         : "rgba(243, 129, 47, 0.38)"};
   background: ${(props) =>
     props.$variant === "known"
-      ? "linear-gradient(135deg, #29aa8b, #8fe5d0)"
+      ? "linear-gradient(135deg, var(--accent), var(--accent-soft))"
       : "rgba(70, 32, 31, 0.86)"};
-  color: ${(props) => (props.$variant === "known" ? "#07121b" : "#f4a061")};
+  color: ${(props) => (props.$variant === "known" ? "var(--bg)" : "#f4a061")};
   font-weight: 800;
   cursor: pointer;
 
@@ -278,9 +278,9 @@ const ProgressPill = styled.span`
   min-height: 52px;
   padding: 10px 14px;
   border-radius: 18px;
-  border: 1px solid rgba(110, 136, 204, 0.3);
-  background: rgba(73, 104, 236, 0.12);
-  color: #d7def9;
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.3);
+  background: rgba(var(--primary-strong-rgb), 0.12);
+  color: var(--text);
   font-weight: 800;
 
   @media (max-width: 560px) {

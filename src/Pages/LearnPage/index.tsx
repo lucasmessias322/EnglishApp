@@ -360,7 +360,8 @@ const PageHeader = styled.header`
   align-items: center;
   gap: 10px;
   padding: calc(env(safe-area-inset-top) + 10px) 12px 10px;
-  border-bottom: 1px solid rgba(76, 85, 125, 0.24);
+  border-bottom: 1px solid rgba(var(--primary-strong-rgb), 0.2);
+  background: var(--appbar-bg);
 
   backdrop-filter: blur(16px);
 `;
@@ -372,9 +373,9 @@ const CloseLink = styled(Link)`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(24, 27, 40, 0.86);
-  border: 1px solid rgba(76, 85, 125, 0.45);
-  color: #f5f7ff;
+  background: var(--glass-bg);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
 `;
 
 const HeaderTitle = styled.div`
@@ -384,7 +385,7 @@ const HeaderTitle = styled.div`
 
   span {
     display: block;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.68rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -393,7 +394,7 @@ const HeaderTitle = styled.div`
   strong {
     display: block;
     margin-top: 2px;
-    color: #f5f7ff;
+    color: var(--text);
     font-size: 0.96rem;
     line-height: 1.15;
     white-space: nowrap;
@@ -411,9 +412,9 @@ const RoundBadge = styled.span`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(73, 104, 236, 0.14);
-  border: 1px solid rgba(110, 136, 204, 0.32);
-  color: #bdd0ff;
+  background: rgba(var(--primary-strong-rgb), 0.14);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.32);
+  color: var(--primary-soft);
   font-size: 0.86rem;
   font-weight: 800;
 `;
@@ -429,15 +430,15 @@ const SectionWrapper = styled.main`
 const StudyStatus = styled.section`
   padding: 16px;
   border-radius: 24px;
-  border: 1px solid rgba(76, 85, 125, 0.45);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   background:
-    linear-gradient(145deg, rgba(41, 170, 139, 0.12), transparent 40%),
-    rgba(24, 27, 40, 0.9);
+    linear-gradient(145deg, rgba(var(--accent-rgb), 0.12), transparent 40%),
+    var(--glass-bg);
   box-shadow: 0 18px 36px rgba(7, 10, 20, 0.22);
 
   .eyebrow {
     display: block;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.72rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -453,7 +454,7 @@ const StatusTop = styled.div`
   strong {
     display: block;
     margin-top: 4px;
-    color: #f5f7ff;
+    color: var(--text);
     font-size: 1.05rem;
     line-height: 1.2;
   }
@@ -466,8 +467,8 @@ const ProgressValue = styled.span`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 18, 28, 0.56);
-  color: #bdd0ff;
+  background: var(--subtle-bg);
+  color: var(--primary-soft);
   font-size: 0.9rem;
   font-weight: 800;
 `;
@@ -477,14 +478,14 @@ const ProgressTrack = styled.div`
   margin-top: 14px;
   overflow: hidden;
   border-radius: 999px;
-  background: rgba(76, 85, 125, 0.34);
+  background: rgba(var(--primary-strong-rgb), 0.18);
 `;
 
 const ProgressFill = styled.div<{ $progress: number }>`
   width: ${(props) => Math.min(100, Math.max(0, props.$progress))}%;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #29aa8b, #8fe5d0);
+  background: linear-gradient(90deg, var(--accent), var(--accent-soft));
   transition: width 0.2s ease;
 `;
 
@@ -497,22 +498,22 @@ const QuickStats = styled.div`
   span {
     min-width: 0;
     min-height: 58px;
-    border: 1px solid rgba(76, 85, 125, 0.32);
+    border: 1px solid rgba(var(--primary-strong-rgb), 0.24);
     border-radius: 18px;
     padding: 9px 8px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 2px;
-    color: #99a4c8;
-    background: rgba(33, 36, 51, 0.64);
+    color: var(--muted);
+    background: var(--control-bg);
     font-size: 0.76rem;
     font-weight: 700;
     text-align: center;
   }
 
   strong {
-    color: #f5f7ff;
+    color: var(--text);
     font-size: 1.05rem;
   }
 `;
@@ -520,24 +521,24 @@ const QuickStats = styled.div`
 const TrainingCard = styled.section`
   padding: 0;
   border-radius: 26px;
-  border: 1px solid rgba(76, 85, 125, 0.42);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 25%),
-    rgba(24, 27, 40, 0.88);
+    var(--glass-bg);
   box-shadow: 0 18px 36px rgba(7, 10, 20, 0.2);
   overflow: hidden;
 `;
 
 const PromptCard = styled.div`
   padding: 18px;
-  border-bottom: 1px solid rgba(76, 85, 125, 0.36);
+  border-bottom: 1px solid rgba(var(--primary-strong-rgb), 0.22);
   background:
     radial-gradient(
       circle at top right,
-      rgba(41, 170, 139, 0.14),
+      rgba(var(--accent-rgb), 0.14),
       transparent 34%
     ),
-    rgba(33, 36, 51, 0.88);
+    var(--control-bg-strong);
 `;
 
 const PromptTop = styled.div`
@@ -551,7 +552,7 @@ const PromptTop = styled.div`
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     text-transform: uppercase;
     font-size: 0.72rem;
     font-weight: 800;
@@ -564,7 +565,7 @@ const PromptTop = styled.div`
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: rgba(15, 18, 28, 0.48);
+    background: var(--subtle-bg);
     color: #9ea9cc;
     font-weight: 800;
   }
@@ -582,15 +583,15 @@ const FrontContent = styled.div`
     height: 54px;
     padding: 14px;
     border-radius: 19px;
-    color: #07121b;
-    background: linear-gradient(135deg, #29aa8b, #8fe5d0);
+    color: var(--bg);
+    background: linear-gradient(135deg, var(--accent), var(--accent-soft));
     cursor: pointer;
-    box-shadow: 0 14px 28px rgba(41, 170, 139, 0.18);
+    box-shadow: 0 14px 28px rgba(var(--accent-rgb), 0.18);
   }
 
   h2 {
     min-width: 0;
-    color: #f5f7ff;
+    color: var(--text);
     font-size: 2rem;
     line-height: 1.15;
     overflow-wrap: anywhere;
@@ -601,7 +602,7 @@ const AnswerOptionsContainer = styled.div`
   padding: 18px;
 
   span {
-    color: #d7def9;
+    color: var(--text);
     font-size: 0.88rem;
     font-weight: 800;
   }
@@ -627,7 +628,7 @@ const AnswerOption = styled.li<AnswerOptionProps>`
           ? "#4CAF50"
           : props.incorrect
             ? "#F44336"
-            : "rgba(76, 85, 125, 0.45)"};
+            : "rgba(var(--primary-strong-rgb), 0.26)"};
   background: ${(props) =>
     props.correct
       ? "rgba(76, 175, 80, 0.14)"
@@ -635,8 +636,8 @@ const AnswerOption = styled.li<AnswerOptionProps>`
         ? "rgba(244, 67, 54, 0.12)"
         : props.selected
           ? "rgba(117, 131, 255, 0.12)"
-          : "rgba(33, 36, 51, 0.76)"};
-  color: #eef1ff;
+          : "var(--control-bg)"};
+  color: var(--text);
   display: flex;
   align-items: center;
   overflow-wrap: anywhere;
@@ -652,7 +653,7 @@ const AnswerOption = styled.li<AnswerOptionProps>`
   &:hover {
     transform: ${(props) => (props.disabled ? "none" : "translateY(-2px)")};
     border-color: ${(props) =>
-      props.disabled ? "inherit" : "rgba(110, 136, 204, 0.7)"};
+      props.disabled ? "inherit" : "rgba(var(--primary-strong-rgb), 0.7)"};
   }
 `;
 
@@ -669,14 +670,14 @@ const NextButton = styled.button`
   width: 100%;
   min-height: 56px;
   border: none;
-  background: linear-gradient(135deg, #29aa8b, #8fe5d0);
-  color: #07121b;
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  color: var(--bg);
   font-weight: 800;
   font-size: 0.98rem;
   border-radius: 19px;
   padding: 14px 22px;
   cursor: pointer;
-  box-shadow: 0 18px 32px rgba(41, 170, 139, 0.24);
+  box-shadow: 0 18px 32px rgba(var(--accent-rgb), 0.24);
 `;
 
 const RoundSummary = styled.section`
@@ -687,17 +688,17 @@ const RoundSummary = styled.section`
 const ResultsContainer = styled.div`
   padding: 22px 18px;
   border-radius: 26px;
-  border: 1px solid rgba(76, 85, 125, 0.42);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   background:
-    linear-gradient(145deg, rgba(41, 170, 139, 0.08), transparent 38%),
-    rgba(24, 27, 40, 0.88);
+    linear-gradient(145deg, rgba(var(--accent-rgb), 0.08), transparent 38%),
+    var(--glass-bg);
   box-shadow: 0 18px 36px rgba(7, 10, 20, 0.2);
   text-align: center;
 
   .eyebrow {
     display: inline-flex;
     margin-bottom: 10px;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.76rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -709,7 +710,7 @@ const ResultsContainer = styled.div`
 
   p {
     margin-top: 14px;
-    color: #a9b4d8;
+    color: var(--muted);
   }
 `;
 
@@ -722,7 +723,7 @@ const ResultPill = styled.span`
 
   &.hits {
     background: rgba(14, 59, 68, 0.85);
-    color: #8fe5d0;
+    color: var(--accent-soft);
   }
 
   &.misses {
@@ -737,8 +738,8 @@ const NextRoundButton = styled.button`
   border: none;
   padding: 14px 20px;
   border-radius: 19px;
-  background: linear-gradient(135deg, #29aa8b, #8fe5d0);
-  color: #07121b;
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  color: var(--bg);
   font-weight: 800;
   cursor: pointer;
 `;
@@ -746,10 +747,10 @@ const NextRoundButton = styled.button`
 const ReviewedList = styled.div`
   padding: 18px;
   border-radius: 26px;
-  border: 1px solid rgba(76, 85, 125, 0.42);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 25%),
-    rgba(24, 27, 40, 0.88);
+    var(--glass-bg);
   box-shadow: 0 18px 36px rgba(7, 10, 20, 0.2);
 
   h3 {
@@ -768,8 +769,8 @@ const ReviewedList = styled.div`
     min-height: 58px;
     padding: 13px 14px;
     border-radius: 18px;
-    border: 1px solid rgba(76, 85, 125, 0.4);
-    background: rgba(33, 36, 51, 0.76);
+    border: 1px solid rgba(var(--primary-strong-rgb), 0.24);
+    background: var(--control-bg);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -785,28 +786,28 @@ const ReviewedList = styled.div`
 
   .speaker {
     cursor: pointer;
-    color: #eef1ff;
+    color: var(--text);
   }
 
   .translation {
-    color: #99a4c8;
+    color: var(--muted);
   }
 `;
 
 const FinishedCard = styled.div`
   padding: 24px 18px;
   border-radius: 26px;
-  border: 1px solid rgba(76, 85, 125, 0.42);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   background:
-    linear-gradient(145deg, rgba(73, 104, 236, 0.1), transparent 38%),
-    rgba(24, 27, 40, 0.88);
+    linear-gradient(145deg, rgba(var(--primary-strong-rgb), 0.1), transparent 38%),
+    var(--glass-bg);
   box-shadow: 0 18px 36px rgba(7, 10, 20, 0.2);
   text-align: center;
 
   .eyebrow {
     display: inline-flex;
     margin-bottom: 10px;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.76rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -818,7 +819,7 @@ const FinishedCard = styled.div`
 
   p {
     margin: 14px auto 0;
-    color: #a9b4d8;
+    color: var(--muted);
     line-height: 1.8;
   }
 `;
@@ -841,15 +842,15 @@ const ActionsRow = styled.div`
   }
 
   a {
-    border: 1px solid rgba(76, 85, 125, 0.45);
-    background: rgba(33, 36, 51, 0.76);
-    color: #eef1ff;
+    border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
+    background: var(--control-bg);
+    color: var(--text);
   }
 
   button {
     border: none;
-    background: linear-gradient(135deg, #29aa8b, #8fe5d0);
-    color: #07121b;
+    background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+    color: var(--bg);
     cursor: pointer;
   }
 `;
@@ -857,12 +858,12 @@ const ActionsRow = styled.div`
 const EmptyState = styled.div`
   padding: 24px 18px;
   border-radius: 26px;
-  border: 1px solid rgba(76, 85, 125, 0.42);
-  background: rgba(24, 27, 40, 0.88);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
+  background: var(--glass-bg);
   text-align: center;
 
   .eyebrow {
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.76rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -881,8 +882,8 @@ const EmptyState = styled.div`
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #29aa8b, #8fe5d0);
-    color: #07121b;
+    background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+    color: var(--bg);
     font-weight: 800;
   }
 `;

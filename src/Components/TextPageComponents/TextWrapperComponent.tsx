@@ -142,14 +142,14 @@ const TitleBlock = styled.div`
   span {
     display: inline-flex;
     margin-bottom: 8px;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.82rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
 
   h2 {
-    color: #f7f9ff;
+    color: var(--text);
     font-size: clamp(1.7rem, 3vw, 2.35rem);
     line-height: 1.15;
     letter-spacing: 0;
@@ -181,10 +181,10 @@ const MetaPill = styled.small`
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  border: 1px solid rgba(76, 85, 125, 0.44);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.28);
   padding: 6px 11px;
-  color: #c8d0ec;
-  background: rgba(33, 36, 51, 0.72);
+  color: var(--muted);
+  background: var(--control-bg);
   font-size: 0.76rem;
   font-weight: 600;
 `;
@@ -193,10 +193,10 @@ const ReadingCard = styled.article`
   overflow: hidden;
   padding: 12px;
   border-radius: 28px;
-  border: 1px solid rgba(76, 85, 125, 0.42);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 25%),
-    rgba(24, 27, 40, 0.88);
+    var(--glass-bg);
   box-shadow: 0 24px 50px rgba(7, 10, 20, 0.24);
 
   @media (max-width: 560px) {
@@ -214,14 +214,14 @@ const AudioTimeline = styled.div`
   overflow: hidden;
   margin: 2px 4px 10px;
   border-radius: 999px;
-  background: rgba(76, 85, 125, 0.34);
+  background: rgba(var(--primary-strong-rgb), 0.18);
 `;
 
 const AudioTimelineFill = styled.div<{ $progress: number }>`
   width: ${(props) => Math.min(100, Math.max(0, props.$progress))}%;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #29aa8b, #8fe5d0);
+  background: linear-gradient(90deg, var(--accent), var(--accent-soft));
   transition: width 0.24s ease;
 `;
 
@@ -230,7 +230,7 @@ const Paragraph = styled.p`
   margin-top: 8px;
   border: 1px solid transparent;
   border-radius: 18px;
-  color: #dce2fb;
+  color: var(--text);
   line-height: 1.95;
   font-size: 1.05rem;
   transition:
@@ -243,12 +243,12 @@ const Paragraph = styled.p`
   }
 
   &.SelectedP {
-    background: rgba(110, 136, 204, 0.12);
-    border: 1px solid rgba(110, 136, 204, 0.22);
+    background: rgba(var(--primary-strong-rgb), 0.14);
+    border: 1px solid rgba(var(--primary-strong-rgb), 0.28);
   }
 
   &.SelectedP span {
-    color: #fff3c3;
+    color: var(--accent-soft);
   }
 
   @media (max-width: 560px) {
@@ -277,7 +277,7 @@ const WordContainer = styled.span`
 
   &:hover {
     cursor: pointer;
-    color: #ffffff;
-    background-color: #37406e;
+    color: var(--text);
+    background-color: rgba(var(--primary-strong-rgb), 0.28);
   }
 `;

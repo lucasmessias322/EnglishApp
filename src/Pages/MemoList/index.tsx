@@ -219,7 +219,8 @@ const AppBar = styled.header`
   align-items: center;
   gap: 12px;
   padding: calc(env(safe-area-inset-top) + 10px) 14px 10px;
-  border-bottom: 1px solid rgba(76, 85, 125, 0.24);
+  border-bottom: 1px solid rgba(var(--primary-strong-rgb), 0.2);
+  background: var(--appbar-bg);
 
   backdrop-filter: blur(14px);
 `;
@@ -227,10 +228,10 @@ const AppBar = styled.header`
 const IconLink = styled(Link)`
   width: 44px;
   height: 44px;
-  border: 1px solid rgba(76, 85, 125, 0.45);
+  border: 1px solid var(--border-strong);
   border-radius: 16px;
-  background: rgba(24, 27, 40, 0.86);
-  color: #f5f7ff;
+  background: var(--glass-bg);
+  color: var(--text);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -245,7 +246,7 @@ const AppTitle = styled.div`
 
   span {
     display: block;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.68rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -254,7 +255,7 @@ const AppTitle = styled.div`
   strong {
     display: block;
     margin-top: 2px;
-    color: #f5f7ff;
+    color: var(--text);
     font-size: 0.96rem;
     line-height: 1.15;
     white-space: nowrap;
@@ -278,7 +279,7 @@ const SessionHeader = styled.section`
   padding: 6px 2px 0;
 
   h1 {
-    color: #f7f9ff;
+    color: var(--text);
     font-size: clamp(1.7rem, 5vw, 2.2rem);
     line-height: 1.12;
     letter-spacing: 0;
@@ -296,7 +297,7 @@ const SessionHeader = styled.section`
 const TopLabel = styled.span`
   display: inline-flex;
   margin-bottom: 8px;
-  color: #8fe5d0;
+  color: var(--accent-soft);
   font-size: 0.78rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -311,8 +312,8 @@ const ProgressBlock = styled.div`
   margin-top: 16px;
   padding: 14px;
   border-radius: 20px;
-  border: 1px solid rgba(76, 85, 125, 0.42);
-  background: rgba(24, 27, 40, 0.86);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
+  background: var(--glass-bg);
 `;
 
 const ProgressTop = styled.div`
@@ -325,7 +326,7 @@ const ProgressTop = styled.div`
   font-weight: 700;
 
   strong {
-    color: #8fe5d0;
+    color: var(--accent-soft);
   }
 `;
 
@@ -334,14 +335,14 @@ const ProgressTrack = styled.div`
   overflow: hidden;
   margin-top: 10px;
   border-radius: 999px;
-  background: rgba(76, 85, 125, 0.34);
+  background: rgba(var(--primary-strong-rgb), 0.18);
 `;
 
 const ProgressFill = styled.div<{ $progress: number }>`
   width: ${(props) => Math.min(100, Math.max(0, props.$progress))}%;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #4968ec, #8fe5d0);
+  background: linear-gradient(90deg, var(--primary-strong), var(--accent-soft));
   transition: width 0.2s ease;
 `;
 
@@ -355,10 +356,10 @@ const StatsRail = styled.div`
 const StatPill = styled.div`
   min-height: 58px;
   min-width: 0;
-  border: 1px solid rgba(76, 85, 125, 0.36);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   border-radius: 18px;
   padding: 10px;
-  background: rgba(33, 36, 51, 0.72);
+  background: var(--control-bg);
   display: flex;
   align-items: center;
   gap: 9px;
@@ -366,18 +367,18 @@ const StatPill = styled.div`
   .icon {
     flex-shrink: 0;
     font-size: 1.2rem;
-    color: #29aa8b;
+    color: var(--accent);
   }
 
   strong {
     display: block;
-    color: #f5f7ff;
+    color: var(--text);
     font-size: 1.05rem;
     line-height: 1;
   }
 
   span {
-    color: #99a4c8;
+    color: var(--muted);
     font-size: 0.72rem;
     line-height: 1.2;
   }
@@ -400,17 +401,17 @@ const DeckStage = styled.section`
 const ResultsContainer = styled.div`
   padding: 22px 16px;
   border-radius: 24px;
-  border: 1px solid rgba(76, 85, 125, 0.42);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   background:
-    linear-gradient(145deg, rgba(41, 170, 139, 0.08), transparent 38%),
-    rgba(24, 27, 40, 0.88);
+    linear-gradient(145deg, rgba(var(--accent-rgb), 0.08), transparent 38%),
+    var(--glass-bg);
   box-shadow: 0 26px 52px rgba(7, 10, 20, 0.24);
   text-align: center;
 
   .eyebrow {
     display: inline-flex;
     margin-bottom: 10px;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.78rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -424,7 +425,7 @@ const ResultsContainer = styled.div`
 
   p {
     margin-top: 14px;
-    color: #a9b4d8;
+    color: var(--muted);
     line-height: 1.75;
   }
 
@@ -457,7 +458,7 @@ const ResultPill = styled.span`
 
   &.hits {
     background: rgba(14, 59, 68, 0.85);
-    color: #8fe5d0;
+    color: var(--accent-soft);
   }
 
   &.misses {
@@ -482,8 +483,8 @@ const RestartButton = styled.button`
   border: none;
   padding: 12px 14px;
   border-radius: 16px;
-  background: linear-gradient(135deg, #29aa8b, #8fe5d0);
-  color: #07121b;
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  color: var(--bg);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -496,9 +497,9 @@ const BackLink = styled(Link)`
   min-height: 50px;
   padding: 12px 14px;
   border-radius: 16px;
-  border: 1px solid rgba(76, 85, 125, 0.45);
-  background: rgba(33, 36, 51, 0.76);
-  color: #eef1ff;
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
+  background: var(--control-bg);
+  color: var(--text);
   display: inline-flex;
   align-items: center;
   justify-content: center;

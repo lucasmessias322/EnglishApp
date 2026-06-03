@@ -170,16 +170,13 @@ export default function AppDashboard() {
                 </div>
               </UserSummary>
 
-              <MenuAction
-                type="button"
-                onClick={() => setProfileMenuOpen(false)}
-              >
+              <MenuLink to="/settings" onClick={() => setProfileMenuOpen(false)}>
                 <FaCog />
                 <div>
                   <strong>Settings</strong>
-                  <span>Em breve</span>
+                  <span>Tema e conta</span>
                 </div>
-              </MenuAction>
+              </MenuLink>
 
               <MenuAction type="button" className="danger" onClick={logout}>
                 <FaSignOutAlt />
@@ -331,18 +328,18 @@ const AppBar = styled.header`
   align-items: center;
   gap: 10px;
   padding: calc(env(safe-area-inset-top) + 10px) 12px 10px;
-  border-bottom: 1px solid rgba(76, 85, 125, 0.24);
-  background: rgba(12, 15, 24, 0.76);
+  border-bottom: 1px solid rgba(var(--primary-strong-rgb), 0.2);
+  background: var(--appbar-bg);
   backdrop-filter: blur(16px);
 `;
 
 const IconLink = styled(Link)`
   width: 44px;
   height: 44px;
-  border: 1px solid rgba(76, 85, 125, 0.45);
+  border: 1px solid var(--border-strong);
   border-radius: 16px;
-  background: rgba(24, 27, 40, 0.86);
-  color: #f5f7ff;
+  background: var(--glass-bg);
+  color: var(--text);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -353,7 +350,7 @@ const HeaderTitle = styled.div`
 
   span {
     display: block;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.68rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -362,7 +359,7 @@ const HeaderTitle = styled.div`
   strong {
     display: block;
     margin-top: 2px;
-    color: #f5f7ff;
+    color: var(--text);
     font-size: 0.96rem;
     line-height: 1.15;
     white-space: nowrap;
@@ -384,13 +381,13 @@ const ProfileBubble = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #29aa8b, #8fe5d0);
-  color: #07121b;
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  color: var(--bg);
   font-weight: 900;
   cursor: pointer;
 
   &:focus-visible {
-    outline: 2px solid #bdd0ff;
+    outline: 2px solid var(--primary-soft);
     outline-offset: 3px;
   }
 `;
@@ -401,11 +398,11 @@ const ProfileDropdown = styled.div`
   right: 0;
   width: min(300px, calc(100vw - 24px));
   padding: 10px;
-  border: 1px solid rgba(76, 85, 125, 0.45);
+  border: 1px solid var(--border-strong);
   border-radius: 22px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 40%),
-    rgba(18, 21, 32, 0.98);
+    var(--glass-bg-strong);
   box-shadow: 0 22px 44px rgba(7, 10, 20, 0.34);
   backdrop-filter: blur(18px);
 `;
@@ -418,11 +415,11 @@ const UserSummary = styled.div`
   grid-template-columns: 42px minmax(0, 1fr);
   align-items: center;
   gap: 10px;
-  background: rgba(33, 36, 51, 0.68);
+  background: var(--control-bg);
 
   strong {
     display: block;
-    color: #f5f7ff;
+    color: var(--text);
     font-size: 0.92rem;
     line-height: 1.25;
     white-space: nowrap;
@@ -433,7 +430,7 @@ const UserSummary = styled.div`
   span {
     display: block;
     margin-top: 3px;
-    color: #99a4c8;
+    color: var(--muted);
     font-size: 0.74rem;
     line-height: 1.25;
     white-space: nowrap;
@@ -449,8 +446,8 @@ const UserAvatar = styled.div`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #8fe5d0;
-  background: rgba(41, 170, 139, 0.12);
+  color: var(--accent-soft);
+  background: rgba(var(--accent-rgb), 0.12);
 
   svg {
     font-size: 1.35rem;
@@ -462,10 +459,10 @@ const MenuAction = styled.button`
   min-height: 58px;
   margin-top: 8px;
   padding: 10px;
-  border: 1px solid rgba(76, 85, 125, 0.32);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.22);
   border-radius: 18px;
-  background: rgba(24, 27, 40, 0.76);
-  color: #f5f7ff;
+  background: var(--glass-bg);
+  color: var(--text);
   display: grid;
   grid-template-columns: 38px minmax(0, 1fr);
   align-items: center;
@@ -474,7 +471,7 @@ const MenuAction = styled.button`
   cursor: pointer;
 
   svg {
-    color: #bdd0ff;
+    color: var(--primary-soft);
     font-size: 1rem;
     justify-self: center;
   }
@@ -488,13 +485,13 @@ const MenuAction = styled.button`
   span {
     display: block;
     margin-top: 2px;
-    color: #99a4c8;
+    color: var(--muted);
     font-size: 0.72rem;
   }
 
   &:hover {
     border-color: rgba(143, 229, 208, 0.38);
-    background: rgba(33, 36, 51, 0.88);
+    background: var(--control-bg-strong);
   }
 
   &.danger {
@@ -503,6 +500,46 @@ const MenuAction = styled.button`
     svg {
       color: #ffb4b4;
     }
+  }
+`;
+
+const MenuLink = styled(Link)`
+  width: 100%;
+  min-height: 58px;
+  margin-top: 8px;
+  padding: 10px;
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.22);
+  border-radius: 18px;
+  background: var(--glass-bg);
+  color: var(--text);
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  text-align: left;
+
+  svg {
+    color: var(--primary-soft);
+    font-size: 1rem;
+    justify-self: center;
+  }
+
+  strong {
+    display: block;
+    font-size: 0.88rem;
+    line-height: 1.2;
+  }
+
+  span {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 0.72rem;
+  }
+
+  &:hover {
+    border-color: rgba(143, 229, 208, 0.38);
+    background: var(--control-bg-strong);
   }
 `;
 
@@ -518,14 +555,14 @@ const Content = styled.main`
 const HeroPanel = styled.section`
   padding: 18px;
   border-radius: 26px;
-  border: 1px solid rgba(76, 85, 125, 0.45);
+  border: 1px solid var(--border-strong);
   background:
-    linear-gradient(145deg, rgba(41, 170, 139, 0.12), transparent 42%),
-    rgba(24, 27, 40, 0.9);
+    linear-gradient(145deg, rgba(var(--accent-rgb), 0.12), transparent 42%),
+    var(--glass-bg);
   box-shadow: 0 18px 36px rgba(7, 10, 20, 0.22);
 
   .eyebrow {
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.72rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -533,14 +570,14 @@ const HeroPanel = styled.section`
 
   h1 {
     margin-top: 8px;
-    color: #f7f9ff;
+    color: var(--text);
     font-size: 1.65rem;
     line-height: 1.12;
   }
 
   p {
     margin-top: 8px;
-    color: #a9b4d8;
+    color: var(--muted);
     font-size: 0.92rem;
     line-height: 1.65;
   }
@@ -550,8 +587,8 @@ const ProgressBlock = styled.div`
   margin-top: 16px;
   padding: 14px;
   border-radius: 20px;
-  border: 1px solid rgba(76, 85, 125, 0.34);
-  background: rgba(33, 36, 51, 0.68);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.24);
+  background: var(--control-bg);
 `;
 
 const ProgressTop = styled.div`
@@ -564,7 +601,7 @@ const ProgressTop = styled.div`
   font-weight: 700;
 
   strong {
-    color: #8fe5d0;
+    color: var(--accent-soft);
   }
 `;
 
@@ -573,14 +610,14 @@ const ProgressTrack = styled.div`
   overflow: hidden;
   margin-top: 10px;
   border-radius: 999px;
-  background: rgba(76, 85, 125, 0.34);
+  background: rgba(var(--primary-strong-rgb), 0.18);
 `;
 
 const ProgressFill = styled.div<{ $progress: number }>`
   width: ${(props) => Math.min(100, Math.max(0, props.$progress))}%;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #4968ec, #8fe5d0);
+  background: linear-gradient(90deg, var(--primary-strong), var(--accent-soft));
   transition: width 0.2s ease;
 `;
 
@@ -601,7 +638,7 @@ const StatCard = styled.div<{ $tone: "blue" | "green" | "orange" }>`
   min-height: 104px;
   min-width: 0;
   padding: 12px 8px;
-  border: 1px solid rgba(76, 85, 125, 0.36);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.24);
   border-radius: 20px;
   background: ${(props) =>
     props.$tone === "green"
@@ -619,15 +656,15 @@ const StatCard = styled.div<{ $tone: "blue" | "green" | "orange" }>`
   svg {
     color: ${(props) =>
       props.$tone === "green"
-        ? "#8fe5d0"
+        ? "var(--accent-soft)"
         : props.$tone === "orange"
           ? "#ffc878"
-          : "#bdd0ff"};
+          : "var(--primary-soft)"};
     font-size: 1.15rem;
   }
 
   strong {
-    color: #f5f7ff;
+    color: var(--text);
     font-size: 1.22rem;
     line-height: 1;
   }
@@ -646,7 +683,7 @@ const QuickActions = styled.section`
 
 const SectionTitle = styled.h2`
   padding: 0 2px;
-  color: #f5f7ff;
+  color: var(--text);
   font-size: 1.05rem;
   line-height: 1.2;
 `;
@@ -659,9 +696,9 @@ const ActionList = styled.div`
 const ActionItem = styled(Link)`
   min-height: 72px;
   padding: 12px;
-  border: 1px solid rgba(76, 85, 125, 0.4);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.24);
   border-radius: 22px;
-  background: rgba(24, 27, 40, 0.88);
+  background: var(--glass-bg);
   display: grid;
   grid-template-columns: 48px minmax(0, 1fr) 18px;
   align-items: center;
@@ -669,7 +706,7 @@ const ActionItem = styled(Link)`
 
   strong {
     display: block;
-    color: #f5f7ff;
+    color: var(--text);
     font-size: 0.96rem;
     line-height: 1.25;
   }
@@ -677,7 +714,7 @@ const ActionItem = styled(Link)`
   span {
     display: block;
     margin-top: 3px;
-    color: #99a4c8;
+    color: var(--muted);
     font-size: 0.78rem;
   }
 
@@ -694,11 +731,12 @@ const ActionIcon = styled.div<{ $tone: "blue" | "green" }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: ${(props) => (props.$tone === "green" ? "#8fe5d0" : "#bdd0ff")};
+  color: ${(props) =>
+    props.$tone === "green" ? "var(--accent-soft)" : "var(--primary-soft)"};
   background: ${(props) =>
     props.$tone === "green"
-      ? "rgba(41, 170, 139, 0.12)"
-      : "rgba(73, 104, 236, 0.16)"};
+      ? "rgba(var(--accent-rgb), 0.12)"
+      : "rgba(var(--primary-strong-rgb), 0.16)"};
 
   svg {
     font-size: 1.18rem;
@@ -713,22 +751,22 @@ const ContinueGrid = styled.section`
 const ContinueCard = styled.article`
   padding: 16px;
   border-radius: 24px;
-  border: 1px solid rgba(76, 85, 125, 0.42);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.24);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 38%),
-    rgba(24, 27, 40, 0.88);
+    var(--glass-bg);
   box-shadow: 0 18px 36px rgba(7, 10, 20, 0.18);
 
   h2 {
     margin-top: 14px;
-    color: #f5f7ff;
+    color: var(--text);
     font-size: 1.14rem;
     line-height: 1.25;
   }
 
   p {
     margin-top: 8px;
-    color: #99a4c8;
+    color: var(--muted);
     font-size: 0.86rem;
     line-height: 1.62;
   }
@@ -741,7 +779,7 @@ const CardTop = styled.div`
   gap: 10px;
 
   span {
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.72rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -755,8 +793,8 @@ const LevelBadge = styled.span`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(73, 104, 236, 0.16);
-  color: #bdd0ff !important;
+  background: rgba(var(--primary-strong-rgb), 0.16);
+  color: var(--primary-soft) !important;
   font-size: 0.74rem !important;
   text-transform: none !important;
 `;
@@ -770,7 +808,7 @@ const CardButton = styled(Link)`
   justify-content: center;
   gap: 9px;
   width: 100%;
-  background: linear-gradient(135deg, #29aa8b, #8fe5d0);
-  color: #07121b;
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  color: var(--bg);
   font-weight: 800;
 `;

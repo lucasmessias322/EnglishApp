@@ -104,7 +104,8 @@ const Header = styled.header<StyledHeaderProps>`
   position: ${(props) => (props.$fixed ? "fixed" : "relative")};
   z-index: ${(props) => (props.$fixed ? "9999" : "20")};
   top: 0;
-  border-bottom: 1px solid rgba(76, 85, 125, 0.35);
+  border-bottom: 1px solid rgba(var(--primary-strong-rgb), 0.2);
+  background: var(--appbar-bg);
   font-weight: bold;
   text-align: left;
   // background: ${(props) => props.$bgcolor || "rgba(18, 20, 30, 0.78)"};
@@ -162,19 +163,20 @@ const LogoLink = styled(Link)`
   gap: 10px;
   padding: 8px 14px;
   border-radius: 999px;
-  border: 1px solid rgba(76, 85, 125, 0.55);
-  background: rgba(33, 36, 51, 0.76);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.28);
+  background: var(--control-bg);
   box-shadow: 0 12px 28px rgba(7, 10, 20, 0.28);
   flex-shrink: 0;
 
   h2 {
+    color: var(--text);
     font-size: 20px;
     letter-spacing: 0.02em;
     font-family: "Google Sans", "Poppins", sans-serif;
   }
 
   b {
-    color: #29aa8b;
+    color: var(--accent);
   }
   .brand-logo {
     display: block;
@@ -198,9 +200,9 @@ const LogoLink = styled(Link)`
 const UserPill = styled.span`
   padding: 10px 14px;
   border-radius: 999px;
-  border: 1px solid rgba(76, 85, 125, 0.45);
-  background: rgba(27, 31, 45, 0.72);
-  color: #cfd7f6;
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
+  background: var(--control-bg);
+  color: var(--text);
   font-size: 14px;
 `;
 
@@ -223,8 +225,8 @@ const LoginSignin = styled.div`
     min-width: 92px;
     padding: 10px 16px;
     border-radius: 999px;
-    border: 1px solid rgba(76, 85, 125, 0.45);
-    color: white;
+    border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
+    color: var(--text);
     font-size: 15px;
     transition:
       transform 0.2s ease,
@@ -234,15 +236,16 @@ const LoginSignin = styled.div`
 
   a span:hover {
     transform: translateY(-1px);
-    border-color: rgba(110, 136, 204, 0.75);
+    border-color: rgba(var(--primary-strong-rgb), 0.75);
   }
 
   .login {
-    background: rgba(41, 41, 68, 0.82);
+    background: var(--control-bg);
   }
 
   .register {
-    background: linear-gradient(135deg, #4968ec, #6e88cc);
+    background: linear-gradient(135deg, var(--primary-strong), var(--primary));
+    color: var(--bg);
   }
 
   @media (max-width: 480px) {
@@ -266,10 +269,10 @@ const LoginSignin = styled.div`
 const BackBtn = styled.button`
   width: 44px;
   height: 44px;
-  border: 1px solid rgba(76, 85, 125, 0.45);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   border-radius: 16px;
-  background: rgba(24, 27, 40, 0.86);
-  color: #f5f7ff;
+  background: var(--glass-bg);
+  color: var(--text);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -281,7 +284,7 @@ const Title = styled.div`
 
   span {
     display: block;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.68rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -290,7 +293,7 @@ const Title = styled.div`
   strong {
     display: block;
     margin-top: 2px;
-    color: #f5f7ff;
+    color: var(--text);
     font-size: 0.96rem;
     line-height: 1.15;
     white-space: nowrap;

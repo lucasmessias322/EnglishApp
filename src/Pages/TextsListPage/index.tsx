@@ -206,8 +206,8 @@ export default function TextsListPage() {
                   visible
                   height="100"
                   width="100"
-                  color="#a0bbdb"
-                  secondaryColor="#29aa8b"
+                  color="var(--primary-soft)"
+                  secondaryColor="var(--accent)"
                   radius="12.5"
                   ariaLabel="mutating-dots-loading"
                 />
@@ -242,7 +242,7 @@ const SectionHeader = styled.div`
   span {
     display: inline-flex;
     margin-bottom: 8px;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.82rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -274,11 +274,11 @@ const TextItem = styled.li<{ $completed?: boolean }>`
     border: 1px solid
       ${(props) =>
         props.$completed
-          ? "rgba(41, 170, 139, 0.55)"
-          : "rgba(76, 85, 125, 0.45)"};
+          ? "rgba(var(--accent-rgb), 0.55)"
+          : "rgba(var(--primary-strong-rgb), 0.26)"};
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 45%),
-      rgba(24, 27, 40, 0.86);
+      linear-gradient(180deg, rgba(var(--primary-strong-rgb), 0.08), transparent 45%),
+      var(--glass-bg);
     box-shadow: 0 22px 45px rgba(7, 10, 20, 0.2);
     transition:
       transform 0.2s ease,
@@ -288,18 +288,18 @@ const TextItem = styled.li<{ $completed?: boolean }>`
 
   a:hover {
     transform: translateY(-4px);
-    border-color: rgba(110, 136, 204, 0.7);
+    border-color: rgba(var(--primary-strong-rgb), 0.7);
     box-shadow: 0 28px 50px rgba(7, 10, 20, 0.28);
   }
 
   h3 {
     font-size: 1.3rem;
     line-height: 1.3;
-    color: #eef1ff;
+    color: var(--text);
   }
 
   p {
-    color: #9ea9cc;
+    color: var(--muted);
     line-height: 1.7;
     flex: 1;
   }
@@ -328,8 +328,8 @@ const LevelBadge = styled.span`
   width: fit-content;
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(73, 104, 236, 0.15);
-  color: #bdd0ff;
+  background: rgba(var(--primary-strong-rgb), 0.15);
+  color: var(--primary-soft);
   font-size: 0.86rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -342,8 +342,10 @@ const AudioBadge = styled.span<{ $hasAudio: boolean }>`
   padding: 8px 12px;
   border-radius: 999px;
   background: ${(props) =>
-    props.$hasAudio ? "rgba(73, 104, 236, 0.15)" : "rgba(128, 139, 170, 0.12)"};
-  color: ${(props) => (props.$hasAudio ? "#bdd0ff" : "#aeb7d4")};
+    props.$hasAudio
+      ? "rgba(var(--primary-strong-rgb), 0.15)"
+      : "rgba(128, 139, 170, 0.12)"};
+  color: ${(props) => (props.$hasAudio ? "var(--primary-soft)" : "var(--muted)")};
   font-size: 0.84rem;
   white-space: nowrap;
 `;
@@ -355,8 +357,10 @@ const QuizBadge = styled.span<{ $hasQuiz: boolean }>`
   padding: 8px 12px;
   border-radius: 999px;
   background: ${(props) =>
-    props.$hasQuiz ? "rgba(253, 190, 85, 0.15)" : "rgba(128, 139, 170, 0.12)"};
-  color: ${(props) => (props.$hasQuiz ? "#ffd38a" : "#aeb7d4")};
+    props.$hasQuiz
+      ? "rgba(var(--accent-rgb), 0.14)"
+      : "rgba(128, 139, 170, 0.12)"};
+  color: ${(props) => (props.$hasQuiz ? "var(--accent-soft)" : "var(--muted)")};
   font-size: 0.84rem;
   white-space: nowrap;
 `;
@@ -367,8 +371,8 @@ const CompletedBadge = styled.span`
   gap: 8px;
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(41, 170, 139, 0.12);
-  color: #8fe5d0;
+  background: rgba(var(--accent-rgb), 0.12);
+  color: var(--accent-soft);
   font-size: 0.84rem;
 `;
 
@@ -377,14 +381,14 @@ const CardFooter = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  color: #d7def9;
+  color: var(--text);
 
   span {
     font-weight: 600;
   }
 
   small {
-    color: #8390b7;
+    color: var(--muted);
   }
 `;
 
@@ -396,6 +400,6 @@ const LoadingWrapper = styled.div`
   align-items: center;
   gap: 6px;
   padding: 28px 0 8px;
-  color: #99a4c8;
+  color: var(--muted);
   text-align: center;
 `;

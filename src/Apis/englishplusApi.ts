@@ -129,6 +129,20 @@ export async function getSingleUser(userId: string, token: string) {
   return await get;
 }
 
+export async function deleteUser(userId: string, token: string) {
+  if (!userId || !token) return null;
+
+  const del = engleshPlusApi
+    .delete(`/api/user/${userId}`, authConfig(token))
+    .then((response) => {
+      invalidateCache(["user:", "memorizes:", "memo:", "user-memorizes:"]);
+      return response.data;
+    })
+    .catch(logAndReturn(null));
+
+  return await del;
+}
+
 export async function postLogin(data: unknown) {
   return engleshPlusApi
     .post("/auth/login", data)

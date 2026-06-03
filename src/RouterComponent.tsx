@@ -9,6 +9,7 @@ import LoginSigning from "./Pages/LoginSigning";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import LearnPage from "./Pages/LearnPage";
 import Admin from "./Pages/Admin";
+import SettingsPage from "./Pages/SettingsPage";
 
 export default function RouterComponent() {
   return (
@@ -19,6 +20,7 @@ export default function RouterComponent() {
           <Route path="/memorizelists" element={<MemorizeLists />} />
           <Route path="/memolist/:memoid" element={<MemoList />} />
           <Route path="/learn/:memoid" element={<LearnPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
         </Route>
 
         <Route path="/" element={<Dashboard />} />
