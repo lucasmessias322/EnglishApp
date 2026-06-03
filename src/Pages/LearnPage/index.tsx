@@ -3,9 +3,11 @@ import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
 import { getOneEspecific } from "../../Apis/englishplusApi";
 import { AuthContext } from "../../Context/AuthContext";
-import { FaBook, FaWindowClose } from "react-icons/fa";
+import { FaBook } from "react-icons/fa";
 import { HiSpeakerWave } from "react-icons/hi2";
+import { IoIosArrowBack } from "react-icons/io";
 import handleTextToSpeech from "../../utils/TextToSpeech";
+import HeaderComponent from "../../Components/HeaderComponent";
 
 interface Flashcard {
   frontContent: string;
@@ -140,6 +142,12 @@ export default function LearnPage() {
   };
 
   const totalCards = memo?.flashcards.length ?? 0;
+  const answeredCards = finishedAllRounds
+    ? totalCards
+    : Math.min(currentCardIndex + (isCorrect !== null ? 1 : 0), totalCards);
+  const overallProgress =
+    totalCards > 0 ? Math.round((answeredCards / totalCards) * 100) : 0;
+  const activeRoundStep = Math.min(roundProgress + 1, cardsPerRound);
   const currentFrontContent =
     memo && memo.flashcards[currentCardIndex]
       ? memo.flashcards[currentCardIndex].frontContent
@@ -148,55 +156,60 @@ export default function LearnPage() {
   return (
     <Container>
       <PageHeader>
-        <HeaderBadge>
-          <FaBook className="icon" />
-          Aprender
-        </HeaderBadge>
-
-        <RoundBadge>
-          {currentRound > 0 ? `Rodada ${currentRound}` : "Treino concluido"}
-        </RoundBadge>
-
-        <CloseLink to={`/memolist/${memoid}`}>
-          <FaWindowClose />
+        <CloseLink to={`/memolist/${memoid}`} title="Voltar para o deck">
+          <IoIosArrowBack size={25} />
         </CloseLink>
+        <RoundBadge>
+          {currentRound > 0 ? `Round ${currentRound}` : "Fim"}
+        </RoundBadge>
+        <HeaderTitle>
+          <span>Aprender</span>
+          <strong>{memo?.title || "Preparando treino"}</strong>
+        </HeaderTitle>
       </PageHeader>
 
       <SectionWrapper>
-        <IntroCard>
-          <div className="copy">
-            <span className="eyebrow">Treino guiado</span>
-            <h1>{memo?.title || "Preparando atividade"}</h1>
-            <p>
-              Escute a palavra, escolha a traducao certa e avance em rodadas
-              curtas para manter o estudo leve.
-            </p>
-          </div>
+        <StudyStatus>
+          <StatusTop>
+            <div>
+              <span className="eyebrow">Treino guiado</span>
+              <strong>
+                {answeredCards}/{totalCards || 0} cards
+              </strong>
+            </div>
+            <ProgressValue>{overallProgress}%</ProgressValue>
+          </StatusTop>
 
-          <ProgressGrid>
-            <ProgressCard>
-              <strong>{totalCards}</strong>
-              <span>cards no deck</span>
-            </ProgressCard>
-            <ProgressCard>
+          <ProgressTrack aria-hidden="true">
+            <ProgressFill $progress={overallProgress} />
+          </ProgressTrack>
+
+          <QuickStats>
+            <span>
               <strong>{correctAnswers}</strong>
-              <span>acertos na rodada</span>
-            </ProgressCard>
-            <ProgressCard>
+              Acertos
+            </span>
+            <span>
               <strong>{incorrectAnswers}</strong>
-              <span>erros na rodada</span>
-            </ProgressCard>
-          </ProgressGrid>
-        </IntroCard>
+              Erros
+            </span>
+            <span>
+              <strong>{totalCards}</strong>
+              Deck
+            </span>
+          </QuickStats>
+        </StudyStatus>
 
         {!roundFinished && !finishedAllRounds && memo && totalCards > 0 && (
           <TrainingCard>
             <PromptCard>
               <PromptTop>
-                <span>Palavra da vez</span>
+                <span>
+                  <FaBook size={13} />
+                  Palavra da vez
+                </span>
                 <small>
-                  Card {currentCardIndex + 1} de {totalCards} -{" "}
-                  {Math.min(roundProgress + 1, cardsPerRound)}/{cardsPerRound}
+                  {activeRoundStep}/{cardsPerRound}
                 </small>
               </PromptTop>
 
@@ -211,7 +224,7 @@ export default function LearnPage() {
             </PromptCard>
 
             <AnswerOptionsContainer>
-              <span>Selecione a traducao correspondente:</span>
+              <span>Escolha a traducao</span>
               <ul>
                 {answerOptions.map((option, index) => (
                   <AnswerOption
@@ -234,10 +247,20 @@ export default function LearnPage() {
           </TrainingCard>
         )}
 
+        {memo && totalCards === 0 && (
+          <EmptyState>
+            <span className="eyebrow">Deck vazio</span>
+            <h2>Nenhum card para treinar ainda.</h2>
+            <Link to={`/memolist/${memoid}`}>Voltar para o deck</Link>
+          </EmptyState>
+        )}
+
         {showNextButton && (
-          <NextButton type="button" onClick={handleNextCard}>
-            Proximo card
-          </NextButton>
+          <ActionDock>
+            <NextButton type="button" onClick={handleNextCard}>
+              Proximo card
+            </NextButton>
+          </ActionDock>
         )}
 
         {roundFinished && (
@@ -323,141 +346,197 @@ interface AnswerOptionProps {
 const Container = styled.div`
   width: 100%;
   min-height: 100vh;
-  padding: 20px 16px 48px;
+  padding: calc(env(safe-area-inset-top) + 76px) 12px 96px;
 `;
 
 const PageHeader = styled.header`
   width: 100%;
-  max-width: 1080px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 0 18px;
-  flex-wrap: wrap;
-`;
-
-const HeaderBadge = styled.h2`
-  display: inline-flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  display: grid;
+  grid-template-columns: minmax(44px, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: 10px;
-  padding: 12px 16px;
-  border-radius: 18px;
-  background: rgba(33, 36, 51, 0.88);
-  border: 1px solid rgba(76, 85, 125, 0.45);
-  font-size: 1rem;
+  padding: calc(env(safe-area-inset-top) + 10px) 12px 10px;
+  border-bottom: 1px solid rgba(76, 85, 125, 0.24);
 
-  .icon {
-    color: #29aa8b;
+  backdrop-filter: blur(16px);
+`;
+
+const CloseLink = styled(Link)`
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(24, 27, 40, 0.86);
+  border: 1px solid rgba(76, 85, 125, 0.45);
+  color: #f5f7ff;
+`;
+
+const HeaderTitle = styled.div`
+  min-width: 0;
+  justify-self: end;
+  text-align: right;
+
+  span {
+    display: block;
+    color: #8fe5d0;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  strong {
+    display: block;
+    margin-top: 2px;
+    color: #f5f7ff;
+    font-size: 0.96rem;
+    line-height: 1.15;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
 const RoundBadge = styled.span`
-  padding: 12px 16px;
-  border-radius: 18px;
-  background: rgba(73, 104, 236, 0.14);
-  border: 1px solid rgba(110, 136, 204, 0.32);
-  color: #d7def9;
-  font-weight: 600;
-`;
-
-const CloseLink = styled(Link)`
-  width: 48px;
-  height: 48px;
-  border-radius: 18px;
-  display: flex;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 12px;
+  border-radius: 16px;
+  justify-self: center;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(33, 36, 51, 0.88);
-  border: 1px solid rgba(76, 85, 125, 0.45);
-  color: #29aa8b;
-  font-size: 1.6rem;
+  background: rgba(73, 104, 236, 0.14);
+  border: 1px solid rgba(110, 136, 204, 0.32);
+  color: #bdd0ff;
+  font-size: 0.86rem;
+  font-weight: 800;
 `;
 
 const SectionWrapper = styled.main`
   width: 100%;
-  max-width: 1080px;
+  max-width: 430px;
   margin: 0 auto;
+  display: grid;
+  gap: 14px;
 `;
 
-const IntroCard = styled.section`
-  padding: 28px;
-  border-radius: 32px;
+const StudyStatus = styled.section`
+  padding: 16px;
+  border-radius: 24px;
   border: 1px solid rgba(76, 85, 125, 0.45);
   background:
-    linear-gradient(145deg, rgba(73, 104, 236, 0.12), transparent 40%),
+    linear-gradient(145deg, rgba(41, 170, 139, 0.12), transparent 40%),
     rgba(24, 27, 40, 0.9);
-  box-shadow: 0 26px 52px rgba(7, 10, 20, 0.28);
+  box-shadow: 0 18px 36px rgba(7, 10, 20, 0.22);
 
-  .copy .eyebrow {
-    display: inline-flex;
-    margin-bottom: 10px;
+  .eyebrow {
+    display: block;
     color: #8fe5d0;
-    font-size: 0.88rem;
+    font-size: 0.72rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .copy h1 {
-    font-size: clamp(2rem, 4vw, 3rem);
-    line-height: 1.08;
-    font-family: "Google Sans", "Poppins", sans-serif;
-  }
-
-  .copy p {
-    max-width: 620px;
-    margin-top: 12px;
-    color: #a9b4d8;
-    line-height: 1.8;
   }
 `;
 
-const ProgressGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 24px;
-
-  @media (max-width: 720px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const ProgressCard = styled.div`
-  padding: 18px;
-  border-radius: 22px;
-  background: rgba(33, 36, 51, 0.76);
-  border: 1px solid rgba(76, 85, 125, 0.38);
+const StatusTop = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
 
   strong {
     display: block;
-    font-size: 1.6rem;
+    margin-top: 4px;
+    color: #f5f7ff;
+    font-size: 1.05rem;
+    line-height: 1.2;
   }
+`;
+
+const ProgressValue = styled.span`
+  min-width: 52px;
+  height: 38px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 18, 28, 0.56);
+  color: #bdd0ff;
+  font-size: 0.9rem;
+  font-weight: 800;
+`;
+
+const ProgressTrack = styled.div`
+  height: 8px;
+  margin-top: 14px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(76, 85, 125, 0.34);
+`;
+
+const ProgressFill = styled.div<{ $progress: number }>`
+  width: ${(props) => Math.min(100, Math.max(0, props.$progress))}%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #29aa8b, #8fe5d0);
+  transition: width 0.2s ease;
+`;
+
+const QuickStats = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 14px;
 
   span {
+    min-width: 0;
+    min-height: 58px;
+    border: 1px solid rgba(76, 85, 125, 0.32);
+    border-radius: 18px;
+    padding: 9px 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
     color: #99a4c8;
-    font-size: 0.95rem;
+    background: rgba(33, 36, 51, 0.64);
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  strong {
+    color: #f5f7ff;
+    font-size: 1.05rem;
   }
 `;
 
 const TrainingCard = styled.section`
-  margin-top: 28px;
-  padding: 24px;
-  border-radius: 32px;
+  padding: 0;
+  border-radius: 26px;
   border: 1px solid rgba(76, 85, 125, 0.42);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 25%),
     rgba(24, 27, 40, 0.88);
-  box-shadow: 0 26px 52px rgba(7, 10, 20, 0.24);
+  box-shadow: 0 18px 36px rgba(7, 10, 20, 0.2);
+  overflow: hidden;
 `;
 
 const PromptCard = styled.div`
-  padding: 22px;
-  border-radius: 26px;
-  border: 1px solid rgba(76, 85, 125, 0.4);
+  padding: 18px;
+  border-bottom: 1px solid rgba(76, 85, 125, 0.36);
   background:
-    radial-gradient(circle at top right, rgba(41, 170, 139, 0.14), transparent 34%),
+    radial-gradient(
+      circle at top right,
+      rgba(41, 170, 139, 0.14),
+      transparent 34%
+    ),
     rgba(33, 36, 51, 0.88);
 `;
 
@@ -469,59 +548,76 @@ const PromptTop = styled.div`
   flex-wrap: wrap;
 
   span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
     color: #8fe5d0;
     text-transform: uppercase;
-    font-size: 0.82rem;
-    letter-spacing: 0.06em;
+    font-size: 0.72rem;
+    font-weight: 800;
   }
 
   small {
+    min-width: 52px;
+    min-height: 30px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 18, 28, 0.48);
     color: #9ea9cc;
+    font-weight: 800;
   }
 `;
 
 const FrontContent = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
   align-items: center;
-  gap: 14px;
-  margin-top: 22px;
+  gap: 12px;
+  margin-top: 18px;
 
   .speaker {
-    color: #eef1ff;
+    width: 54px;
+    height: 54px;
+    padding: 14px;
+    border-radius: 19px;
+    color: #07121b;
+    background: linear-gradient(135deg, #29aa8b, #8fe5d0);
     cursor: pointer;
+    box-shadow: 0 14px 28px rgba(41, 170, 139, 0.18);
   }
 
   h2 {
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    min-width: 0;
+    color: #f5f7ff;
+    font-size: 2rem;
     line-height: 1.15;
+    overflow-wrap: anywhere;
   }
 `;
 
 const AnswerOptionsContainer = styled.div`
-  margin-top: 24px;
+  padding: 18px;
 
   span {
     color: #d7def9;
-    font-weight: 600;
+    font-size: 0.88rem;
+    font-weight: 800;
   }
 
   ul {
     list-style: none;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    padding: 18px 0 0;
-  }
-
-  @media (max-width: 720px) {
-    ul {
-      grid-template-columns: 1fr;
-    }
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px 0 0;
   }
 `;
 
 const AnswerOption = styled.li<AnswerOptionProps>`
-  padding: 16px 18px;
+  min-height: 58px;
+  padding: 14px 16px;
   border-radius: 18px;
   border: 1px solid
     ${(props) =>
@@ -541,6 +637,12 @@ const AnswerOption = styled.li<AnswerOptionProps>`
           ? "rgba(117, 131, 255, 0.12)"
           : "rgba(33, 36, 51, 0.76)"};
   color: #eef1ff;
+  display: flex;
+  align-items: center;
+  overflow-wrap: anywhere;
+  font-size: 0.96rem;
+  font-weight: 700;
+  line-height: 1.35;
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   transition:
     transform 0.2s ease,
@@ -554,46 +656,55 @@ const AnswerOption = styled.li<AnswerOptionProps>`
   }
 `;
 
+const ActionDock = styled.div`
+  position: fixed;
+  left: 50%;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  z-index: 30;
+  width: min(100% - 24px, 430px);
+  transform: translateX(-50%);
+`;
+
 const NextButton = styled.button`
-  margin-top: 18px;
+  width: 100%;
+  min-height: 56px;
   border: none;
-  background: linear-gradient(135deg, #29aa8b, #6eccba);
-  color: white;
-  font-weight: 700;
+  background: linear-gradient(135deg, #29aa8b, #8fe5d0);
+  color: #07121b;
+  font-weight: 800;
   font-size: 0.98rem;
-  border-radius: 18px;
+  border-radius: 19px;
   padding: 14px 22px;
   cursor: pointer;
   box-shadow: 0 18px 32px rgba(41, 170, 139, 0.24);
 `;
 
 const RoundSummary = styled.section`
-  margin-top: 28px;
   display: grid;
-  gap: 20px;
+  gap: 14px;
 `;
 
 const ResultsContainer = styled.div`
-  padding: 28px;
-  border-radius: 32px;
+  padding: 22px 18px;
+  border-radius: 26px;
   border: 1px solid rgba(76, 85, 125, 0.42);
   background:
     linear-gradient(145deg, rgba(41, 170, 139, 0.08), transparent 38%),
     rgba(24, 27, 40, 0.88);
-  box-shadow: 0 26px 52px rgba(7, 10, 20, 0.24);
+  box-shadow: 0 18px 36px rgba(7, 10, 20, 0.2);
   text-align: center;
 
   .eyebrow {
     display: inline-flex;
     margin-bottom: 10px;
     color: #8fe5d0;
-    font-size: 0.88rem;
+    font-size: 0.76rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
   }
 
   h3 {
-    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-size: 1.45rem;
   }
 
   p {
@@ -604,7 +715,6 @@ const ResultsContainer = styled.div`
 
 const ResultPill = styled.span`
   display: block;
-  max-width: 320px;
   margin: 14px auto 0;
   padding: 12px 18px;
   border-radius: 999px;
@@ -622,28 +732,29 @@ const ResultPill = styled.span`
 `;
 
 const NextRoundButton = styled.button`
-  width: fit-content;
+  width: 100%;
+  min-height: 54px;
   border: none;
   padding: 14px 20px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #4968ec, #6e88cc);
-  color: white;
-  font-weight: 700;
+  border-radius: 19px;
+  background: linear-gradient(135deg, #29aa8b, #8fe5d0);
+  color: #07121b;
+  font-weight: 800;
   cursor: pointer;
 `;
 
 const ReviewedList = styled.div`
-  padding: 26px;
-  border-radius: 32px;
+  padding: 18px;
+  border-radius: 26px;
   border: 1px solid rgba(76, 85, 125, 0.42);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 25%),
     rgba(24, 27, 40, 0.88);
-  box-shadow: 0 26px 52px rgba(7, 10, 20, 0.24);
+  box-shadow: 0 18px 36px rgba(7, 10, 20, 0.2);
 
   h3 {
-    margin-bottom: 18px;
-    font-size: 1.2rem;
+    margin-bottom: 14px;
+    font-size: 1.05rem;
   }
 
   ul {
@@ -654,8 +765,9 @@ const ReviewedList = styled.div`
   }
 
   li {
-    padding: 16px 18px;
-    border-radius: 20px;
+    min-height: 58px;
+    padding: 13px 14px;
+    border-radius: 18px;
     border: 1px solid rgba(76, 85, 125, 0.4);
     background: rgba(33, 36, 51, 0.76);
     display: flex;
@@ -682,31 +794,29 @@ const ReviewedList = styled.div`
 `;
 
 const FinishedCard = styled.div`
-  margin-top: 28px;
-  padding: 30px;
-  border-radius: 32px;
+  padding: 24px 18px;
+  border-radius: 26px;
   border: 1px solid rgba(76, 85, 125, 0.42);
   background:
     linear-gradient(145deg, rgba(73, 104, 236, 0.1), transparent 38%),
     rgba(24, 27, 40, 0.88);
-  box-shadow: 0 26px 52px rgba(7, 10, 20, 0.24);
+  box-shadow: 0 18px 36px rgba(7, 10, 20, 0.2);
   text-align: center;
 
   .eyebrow {
     display: inline-flex;
     margin-bottom: 10px;
     color: #8fe5d0;
-    font-size: 0.88rem;
+    font-size: 0.76rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
   }
 
   h2 {
-    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-size: 1.5rem;
   }
 
   p {
-    max-width: 620px;
     margin: 14px auto 0;
     color: #a9b4d8;
     line-height: 1.8;
@@ -714,17 +824,20 @@ const FinishedCard = styled.div`
 `;
 
 const ActionsRow = styled.div`
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 12px;
-  flex-wrap: wrap;
   margin-top: 24px;
 
   a,
   button {
-    padding: 12px 18px;
-    border-radius: 16px;
-    font-weight: 600;
+    min-height: 52px;
+    padding: 14px 18px;
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
   }
 
   a {
@@ -735,8 +848,41 @@ const ActionsRow = styled.div`
 
   button {
     border: none;
-    background: linear-gradient(135deg, #29aa8b, #6eccba);
-    color: white;
+    background: linear-gradient(135deg, #29aa8b, #8fe5d0);
+    color: #07121b;
     cursor: pointer;
+  }
+`;
+
+const EmptyState = styled.div`
+  padding: 24px 18px;
+  border-radius: 26px;
+  border: 1px solid rgba(76, 85, 125, 0.42);
+  background: rgba(24, 27, 40, 0.88);
+  text-align: center;
+
+  .eyebrow {
+    color: #8fe5d0;
+    font-size: 0.76rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin-top: 10px;
+    font-size: 1.4rem;
+  }
+
+  a {
+    min-height: 52px;
+    margin-top: 18px;
+    padding: 14px 18px;
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #29aa8b, #8fe5d0);
+    color: #07121b;
+    font-weight: 800;
   }
 `;

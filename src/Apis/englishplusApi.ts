@@ -8,7 +8,7 @@ export const engleshPlusBaseApi =
   (import.meta.env.DEV ? engleshPlusBaseApiLocal : engleshPlusBaseApiProduction);
 
 export const engleshPlusApi = axios.create({
-  baseURL: engleshPlusBaseApi,
+  baseURL: engleshPlusBaseApiProduction,
 });
 
 const CACHE_TTL = {

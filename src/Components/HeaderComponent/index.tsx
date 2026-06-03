@@ -12,7 +12,8 @@ interface HeaderProps {
   admin?: boolean;
   bgcolor?: string;
   showlogo?: boolean;
-  showBackButton?: boolean;
+  showBackButton?: string;
+  title?: string;
 }
 
 export default function HeaderComponent({
@@ -24,7 +25,7 @@ export default function HeaderComponent({
   bgcolor,
   showlogo,
   showBackButton,
-  
+  title,
 }: HeaderProps) {
   const { token, logout, userData } = useContext(AuthContext);
   const firstName = userData?.name?.split(" ")[0];
@@ -36,7 +37,7 @@ export default function HeaderComponent({
           <BackBtn
             type="button"
             className="backbtn"
-            onClick={() => navigate("/")}
+            onClick={() => navigate(showBackButton)}
             title="Voltar para textos"
           >
             <IoIosArrowBack size={25} />
@@ -50,6 +51,7 @@ export default function HeaderComponent({
               </h2>
             </LogoLink>
           )}
+          {title && <Title>{title}</Title>}
 
           {token && firstName && !loginSignin && !showBackButton && (
             <UserPill>Ola, {firstName}</UserPill>
@@ -100,6 +102,8 @@ const Header = styled.header<StyledHeaderProps>`
   z-index: ${(props) => (props.$fixed ? "9999" : "20")};
   top: 0;
   border-bottom: 1px solid rgba(76, 85, 125, 0.35);
+  font-weight: bold;
+  text-align: left;
   // background: ${(props) => props.$bgcolor || "rgba(18, 20, 30, 0.78)"};
   backdrop-filter: blur(16px);
 
@@ -267,4 +271,27 @@ const BackBtn = styled.button`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+`;
+
+const Title = styled.div`
+  min-width: 0;
+
+  span {
+    display: block;
+    color: #8fe5d0;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  strong {
+    display: block;
+    margin-top: 2px;
+    color: #f5f7ff;
+    font-size: 0.96rem;
+    line-height: 1.15;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;

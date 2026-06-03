@@ -140,7 +140,7 @@ export default function TextsListPage() {
 
   return (
     <Container>
-      <HeaderComponent showBackButton fixed />
+      <HeaderComponent showBackButton="/" fixed />
 
       <Content>
         <SectionHeader>
