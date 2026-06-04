@@ -105,7 +105,7 @@ const Header = styled.header<StyledHeaderProps>`
   z-index: ${(props) => (props.$fixed ? "9999" : "20")};
   top: 0;
   border-bottom: 1px solid rgba(var(--primary-strong-rgb), 0.2);
-  background: var(--appbar-bg);
+ // background: var(--appbar-bg);
   font-weight: bold;
   text-align: left;
   

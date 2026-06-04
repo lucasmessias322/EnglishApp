@@ -7,7 +7,6 @@ import { FaBook } from "react-icons/fa";
 import { HiSpeakerWave } from "react-icons/hi2";
 import { IoIosArrowBack } from "react-icons/io";
 import handleTextToSpeech from "../../utils/TextToSpeech";
-import HeaderComponent from "../../Components/HeaderComponent";
 
 interface Flashcard {
   frontContent: string;
@@ -50,7 +49,17 @@ export default function LearnPage() {
 
     getOneEspecific(memoid, token).then((res) => {
       if (isCancelled) return;
-      setMemo(res[0]);
+      const fetchedMemo = res[0];
+
+      if (!fetchedMemo) {
+        setMemo(null);
+        return;
+      }
+
+      setMemo({
+        ...fetchedMemo,
+        flashcards: shuffleArray(fetchedMemo.flashcards),
+      });
     });
 
     return () => {
