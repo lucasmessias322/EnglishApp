@@ -1,9 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+
+type TextParagraph = {
+  paragraph: string;
+  translation?: string;
+  audiotexturl: string;
+};
 
 interface Text {
   title: string;
-  content: { paragraph: string; audiotexturl: string }[];
+  content: TextParagraph[];
 }
 
 interface TextWrapperComponentProps {
@@ -11,7 +17,7 @@ interface TextWrapperComponentProps {
   handleClickWord?: (word: string) => void;
   handleTextToSpeech: (word: string) => void;
   audioIndex: number;
-  dataTextoAudio: { paragraph: string; audiotexturl: string }[];
+  dataTextoAudio: TextParagraph[];
   hasAudio: boolean;
 }
 
@@ -23,10 +29,14 @@ export default function TextWrapperComponent({
   dataTextoAudio,
   hasAudio,
 }: TextWrapperComponentProps) {
+  const [showTranslation, setShowTranslation] = useState(false);
   const dataLen = dataTextoAudio.length - 1;
   const calc = audioIndex - 1;
   const title = text?.title?.replace("(Sem Audio)", "").trim();
   const paragraphCount = text?.content.length || 0;
+  const hasTranslation = Boolean(
+    text?.content.some((paragraph) => paragraph.translation?.trim()),
+  );
   const audioProgress =
     paragraphCount > 0 ? ((audioIndex + 1) / paragraphCount) * 100 : 0;
   const shouldUseAudioHighlight =
@@ -84,7 +94,17 @@ export default function TextWrapperComponent({
         <ReadingMeta>
           <MetaPill>{paragraphCount} parágrafos</MetaPill>
           <MetaPill>{hasAudio ? "Áudio disponível" : "Leitura silenciosa"}</MetaPill>
+          {hasTranslation && <MetaPill>Traducao disponivel</MetaPill>}
         </ReadingMeta>
+
+        {hasTranslation && (
+          <TranslationToggle
+            type="button"
+            onClick={() => setShowTranslation((current) => !current)}
+          >
+            {showTranslation ? "Ocultar traducao" : "Mostrar traducao"}
+          </TranslationToggle>
+        )}
       </TitleBlock>
 
       <ReadingCard>
@@ -95,26 +115,35 @@ export default function TextWrapperComponent({
         )}
 
         {text?.content.map((paragraph, index) => (
-          <Paragraph
-            key={index}
-            id={`${index}`}
-            className={
-              shouldUseAudioHighlight && index === audioIndex ? "SelectedP" : ""
-            }
-          >
-            {paragraph.paragraph.split(/\s+/).map((word, wordIndex) => (
-              <WordContainer
-                className="word"
-                key={`${word}-${wordIndex}`}
-                onClick={() => {
-                  handleClickWord?.(word);
-                  handleTextToSpeech(word);
-                }}
-              >
-                {word}{" "}
-              </WordContainer>
-            ))}
-          </Paragraph>
+          <ParagraphGroup key={index}>
+            <Paragraph
+              id={`${index}`}
+              className={
+                shouldUseAudioHighlight && index === audioIndex
+                  ? "SelectedP"
+                  : ""
+              }
+            >
+              {paragraph.paragraph.split(/\s+/).map((word, wordIndex) => (
+                <WordContainer
+                  className="word"
+                  key={`${word}-${wordIndex}`}
+                  onClick={() => {
+                    handleClickWord?.(word);
+                    handleTextToSpeech(word);
+                  }}
+                >
+                  {word}{" "}
+                </WordContainer>
+              ))}
+            </Paragraph>
+
+            {showTranslation && paragraph.translation?.trim() && (
+              <TranslationParagraph>
+                {paragraph.translation}
+              </TranslationParagraph>
+            )}
+          </ParagraphGroup>
         ))}
       </ReadingCard>
     </Container>
@@ -189,6 +218,24 @@ const MetaPill = styled.small`
   font-weight: 600;
 `;
 
+const TranslationToggle = styled.button`
+  min-height: 38px;
+  margin-top: 14px;
+  border: 1px solid rgba(var(--accent-rgb), 0.36);
+  border-radius: 14px;
+  padding: 9px 13px;
+  color: var(--accent-soft);
+  background: rgba(var(--accent-rgb), 0.1);
+  font-size: 0.84rem;
+  font-weight: 800;
+  cursor: pointer;
+
+  &:hover {
+    border-color: rgba(var(--accent-rgb), 0.58);
+    background: rgba(var(--accent-rgb), 0.15);
+  }
+`;
+
 const ReadingCard = styled.article`
   overflow: hidden;
   padding: 12px;
@@ -225,9 +272,17 @@ const AudioTimelineFill = styled.div<{ $progress: number }>`
   transition: width 0.24s ease;
 `;
 
+const ParagraphGroup = styled.div`
+  margin-top: 8px;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+`;
+
 const Paragraph = styled.p`
   padding: 18px 16px;
-  margin-top: 8px;
+  margin: 0;
   border: 1px solid transparent;
   border-radius: 18px;
   color: var(--text);
@@ -237,10 +292,6 @@ const Paragraph = styled.p`
     background-color 0.2s ease,
     border-color 0.2s ease,
     color 0.2s ease;
-
-  &:first-child {
-    margin-top: 0;
-  }
 
   &.SelectedP {
     background: rgba(var(--primary-strong-rgb), 0.14);
@@ -253,7 +304,6 @@ const Paragraph = styled.p`
 
   @media (max-width: 560px) {
     padding: 14px 12px;
-    margin-top: 6px;
     border-radius: 14px;
     font-size: 1rem;
     line-height: 1.78;
@@ -263,6 +313,23 @@ const Paragraph = styled.p`
     padding: 12px 8px;
     font-size: 0.95rem;
     line-height: 1.8;
+  }
+`;
+
+const TranslationParagraph = styled.p`
+  margin: 8px 0 0;
+  padding: 14px 16px;
+  border-left: 3px solid rgba(var(--accent-rgb), 0.52);
+  border-radius: 14px;
+  color: var(--muted);
+  background: rgba(var(--accent-rgb), 0.08);
+  font-size: 0.98rem;
+  line-height: 1.75;
+
+  @media (max-width: 560px) {
+    padding: 12px;
+    font-size: 0.94rem;
+    line-height: 1.65;
   }
 `;
 

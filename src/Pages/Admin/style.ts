@@ -8,7 +8,7 @@ export const LoadingWrapper = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 20px;
-  color: #99a4c8;
+  color: var(--muted);
 `;
 
 export const Container = styled.div`
@@ -42,11 +42,11 @@ export const TextItem = styled.li`
   list-style: none;
   min-height: 148px;
   padding: 18px;
-  border: 1px solid rgba(76, 85, 125, 0.42);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.24);
   border-radius: 22px;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 45%),
-    rgba(24, 27, 40, 0.84);
+    linear-gradient(180deg, rgba(var(--primary-strong-rgb), 0.04), transparent 45%),
+    var(--glass-bg);
   box-shadow: 0 18px 36px rgba(7, 10, 20, 0.16);
   cursor: pointer;
   display: flex;
@@ -60,7 +60,7 @@ export const TextItem = styled.li`
 
   &:hover {
     transform: translateY(-3px);
-    border-color: rgba(110, 136, 204, 0.68);
+    border-color: rgba(var(--primary-strong-rgb), 0.52);
     box-shadow: 0 24px 44px rgba(7, 10, 20, 0.24);
   }
 
@@ -73,14 +73,14 @@ export const TextItem = styled.li`
 
     h4 {
       font-size: 1.05rem;
-      color: #eef1ff;
+      color: var(--text);
       font-weight: 700;
       line-height: 1.35;
     }
 
     span {
       font-size: 14px;
-      color: #99a4c8;
+      color: var(--muted);
       line-height: 1.55;
       display: -webkit-box;
       -webkit-line-clamp: 3;
@@ -98,11 +98,11 @@ export const TextItem = styled.li`
       width: 40px;
       height: 40px;
       border-radius: 14px;
-      border: 1px solid rgba(76, 85, 125, 0.36);
-      background: rgba(33, 36, 51, 0.72);
+      border: 1px solid rgba(var(--primary-strong-rgb), 0.24);
+      background: var(--control-bg);
       cursor: pointer;
       font-size: 16px;
-      color: #cfd4ff;
+      color: var(--primary);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -112,9 +112,9 @@ export const TextItem = styled.li`
         border-color 0.2s ease;
 
       &:hover {
-        color: #8fe5d0;
-        border-color: rgba(143, 229, 208, 0.45);
-        background: rgba(41, 170, 139, 0.1);
+        color: var(--accent-soft);
+        border-color: rgba(var(--accent-rgb), 0.45);
+        background: rgba(var(--accent-rgb), 0.1);
       }
     }
   }
@@ -140,9 +140,9 @@ export const Searchbar = styled.div`
     min-height: 48px;
     padding: 12px 15px;
     border-radius: 16px;
-    background-color: rgba(18, 20, 30, 0.82);
-    border: 1px solid rgba(76, 85, 125, 0.62);
-    color: #f5f7ff;
+    background-color: var(--control-bg);
+    border: 1px solid rgba(var(--primary-strong-rgb), 0.32);
+    color: var(--text);
     font-size: 14px;
     outline: none;
     transition:
@@ -152,9 +152,9 @@ export const Searchbar = styled.div`
   }
 
   input:focus {
-    border-color: rgba(143, 229, 208, 0.62);
-    background-color: rgba(18, 20, 30, 0.96);
-    box-shadow: 0 0 0 3px rgba(41, 170, 139, 0.12);
+    border-color: rgba(var(--accent-rgb), 0.62);
+    background-color: var(--control-bg-strong);
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.12);
   }
 `;
 
@@ -177,11 +177,11 @@ export const PopUpContent = styled.div`
   width: min(440px, 100%);
   padding: 24px;
   border-radius: 24px;
-  border: 1px solid rgba(76, 85, 125, 0.46);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   background:
     linear-gradient(145deg, rgba(255, 107, 107, 0.08), transparent 42%),
-    rgba(24, 27, 40, 0.96);
-  color: #f5f7ff;
+    var(--glass-bg-strong);
+  color: var(--text);
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -196,7 +196,7 @@ export const PopUpContent = styled.div`
   p {
     font-size: 14px;
     line-height: 1.7;
-    color: #aab5d8;
+    color: var(--muted);
   }
 
   .buttons {
@@ -219,8 +219,8 @@ export const PopUpContent = styled.div`
       }
 
       &:last-child {
-        background-color: rgba(76, 85, 125, 0.36);
-        color: #eef1ff;
+        background-color: var(--control-bg);
+        color: var(--text);
       }
     }
   }
@@ -232,11 +232,11 @@ export const EditPopupContent = styled.div`
   overflow: auto;
   padding: 8px;
   border-radius: 26px;
-  border: 1px solid rgba(76, 85, 125, 0.46);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 40%),
-    rgba(18, 20, 30, 0.98);
-  color: #f5f7ff;
+    linear-gradient(180deg, rgba(var(--primary-strong-rgb), 0.04), transparent 40%),
+    var(--glass-bg-strong);
+  color: var(--text);
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -269,13 +269,13 @@ export const EditPopupContent = styled.div`
       font-weight: 800;
 
       &:first-child {
-        background: linear-gradient(135deg, #29aa8b, #8fe5d0);
-        color: #07121b;
+        background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+        color: var(--bg);
       }
 
       &:last-child {
-        background-color: rgba(76, 85, 125, 0.36);
-        color: #eef1ff;
+        background-color: var(--control-bg);
+        color: var(--text);
       }
     }
   }
@@ -294,7 +294,7 @@ export const EditForm = styled.form`
 `;
 
 export const Title = styled.h2`
-  color: #eef1ff;
+  color: var(--text);
   font-family: "Google Sans", "Poppins", sans-serif;
   font-size: clamp(1.45rem, 3vw, 2rem);
   line-height: 1.15;
@@ -302,9 +302,9 @@ export const Title = styled.h2`
 
 export const Section = styled.div`
   padding: 18px;
-  border: 1px solid rgba(76, 85, 125, 0.38);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.24);
   border-radius: 22px;
-  background: rgba(24, 27, 40, 0.76);
+  background: var(--glass-bg);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -319,7 +319,7 @@ export const Field = styled.div<{ flexDirection?: string }>`
   min-width: 0;
 
   label {
-    color: #cfd4ff;
+    color: var(--text);
     font-size: 14px;
     flex-shrink: 0;
   }
@@ -331,9 +331,9 @@ export const Field = styled.div<{ flexDirection?: string }>`
     min-width: 0;
     padding: 12px 14px;
     border-radius: 14px;
-    border: 1px solid rgba(76, 85, 125, 0.62);
-    background-color: rgba(18, 20, 30, 0.82);
-    color: #f5f7ff;
+    border: 1px solid rgba(var(--primary-strong-rgb), 0.32);
+    background-color: var(--control-bg);
+    color: var(--text);
     outline: none;
     font-size: 14px;
     transition:
@@ -345,9 +345,9 @@ export const Field = styled.div<{ flexDirection?: string }>`
   input:focus,
   select:focus,
   textarea:focus {
-    border-color: rgba(143, 229, 208, 0.62);
-    background-color: rgba(18, 20, 30, 0.96);
-    box-shadow: 0 0 0 3px rgba(41, 170, 139, 0.12);
+    border-color: rgba(var(--accent-rgb), 0.62);
+    background-color: var(--control-bg-strong);
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.12);
   }
 
   textarea {
@@ -356,7 +356,7 @@ export const Field = styled.div<{ flexDirection?: string }>`
   }
 
   select option {
-    background-color: #2e3553;
+    background-color: var(--surface-strong);
   }
 
   @media (max-width: 680px) {
@@ -371,15 +371,15 @@ export const SubmitButton = styled.button`
   min-height: 48px;
   padding: 12px 22px;
   border-radius: 16px;
-  background: linear-gradient(135deg, #29aa8b, #8fe5d0);
-  color: #0f1b16;
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  color: var(--bg);
   border: none;
   cursor: pointer;
   font-size: 14px;
   font-weight: 800;
 
   &:hover {
-    background: linear-gradient(135deg, #23a383, #72dac6);
+    filter: brightness(1.05);
   }
 `;
 
@@ -392,10 +392,10 @@ export const ParagraphsContainer = styled.div`
 `;
 
 export const ParagraphCard = styled.div`
-  border: 1px solid rgba(76, 85, 125, 0.42);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.24);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 44%),
-    rgba(24, 27, 40, 0.84);
+    linear-gradient(180deg, rgba(var(--primary-strong-rgb), 0.04), transparent 44%),
+    var(--glass-bg);
   border-radius: 22px;
   padding: 18px;
   display: flex;
@@ -409,7 +409,7 @@ export const ParagraphHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  color: #eef1ff;
+  color: var(--text);
   font-weight: 700;
 `;
 
@@ -418,16 +418,18 @@ export const AudioPreviewBox = styled.div<{ $empty?: boolean }>`
   padding: 12px;
   border: 1px solid
     ${(props) =>
-      props.$empty ? "rgba(76, 85, 125, 0.34)" : "rgba(143, 229, 208, 0.34)"};
+      props.$empty
+        ? "rgba(var(--primary-strong-rgb), 0.24)"
+        : "rgba(var(--accent-rgb), 0.34)"};
   border-radius: 16px;
   background: ${(props) =>
-    props.$empty ? "rgba(33, 36, 51, 0.56)" : "rgba(41, 170, 139, 0.08)"};
+    props.$empty ? "var(--control-bg)" : "rgba(var(--accent-rgb), 0.08)"};
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 10px;
 
   span {
-    color: ${(props) => (props.$empty ? "#8f9bc1" : "#cfd7f6")};
+    color: ${(props) => (props.$empty ? "var(--muted)" : "var(--text)")};
     font-size: 0.84rem;
     font-weight: 700;
     line-height: 1.35;
@@ -439,7 +441,7 @@ export const AudioPreviewBox = styled.div<{ $empty?: boolean }>`
   }
 `;
 
-export const RemoveButton = styled.div`
+export const RemoveButton = styled.button`
   width: 38px;
   height: 38px;
   border-radius: 14px;
@@ -463,14 +465,14 @@ export const RemoveButton = styled.div`
   }
 `;
 
-export const AddParagraphButton = styled.div`
+export const AddParagraphButton = styled.button`
   align-self: center;
   min-height: 46px;
   padding: 10px 18px;
   border-radius: 16px;
-  background: rgba(73, 104, 236, 0.15);
-  color: #dce5ff;
-  border: 1px solid rgba(110, 136, 204, 0.42);
+  background: rgba(var(--primary-strong-rgb), 0.15);
+  color: var(--text);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.42);
   cursor: pointer;
   font-size: 14px;
   font-weight: 700;
@@ -479,7 +481,7 @@ export const AddParagraphButton = styled.div`
   gap: 8px;
 
   &:hover {
-    background: rgba(73, 104, 236, 0.24);
-    border-color: rgba(143, 229, 208, 0.44);
+    background: rgba(var(--primary-strong-rgb), 0.24);
+    border-color: rgba(var(--accent-rgb), 0.44);
   }
 `;

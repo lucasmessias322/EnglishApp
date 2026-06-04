@@ -10,16 +10,18 @@ import { toast, ToastContainer } from "react-toastify";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import { MutatingDots } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../../Context/ThemeContext";
 // Definindo a tipagem correta para os textos
 interface Text {
   _id: string;
   level: string;
   title: string;
   resume: string;
-  content: { paragraph: string; audiotexturl: string }[]; // Array de objetos com parágrafos e audioUrl
+  content: { paragraph: string; translation?: string; audiotexturl: string }[]; // Array de objetos com parágrafos e audioUrl
 }
 type Paragraph = {
   paragraph: string;
+  translation: string;
   audiotexturl: string | null; // base64
   audioPreviewUrl?: string | null;
 };
@@ -53,6 +55,7 @@ function getAudioSource(audio: string | null) {
 }
 
 export default function EditText({ token }: { token: string }) {
+  const { currentTheme } = useTheme();
   // Tipando o estado de levels como um array de Text
   const [isLoading, setIsLoading] = useState(true);
   const [levels, setLevels] = useState<Text[]>([]);
@@ -74,7 +77,7 @@ export default function EditText({ token }: { token: string }) {
   const [level, setLevel] = useState<Level>("A1");
 
   const [paragraphs, setParagraphs] = useState<Paragraph[]>([
-    { paragraph: "", audiotexturl: null },
+    { paragraph: "", translation: "", audiotexturl: null },
   ]);
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [openEditPopup, setOpenEditPopup] = useState(false);
@@ -179,6 +182,7 @@ export default function EditText({ token }: { token: string }) {
       setParagraphs(
         res[0].content.map((para: Paragraph) => ({
           paragraph: para.paragraph,
+          translation: para.translation || "",
           audiotexturl: para.audiotexturl || null,
           audioPreviewUrl: null,
         })),
@@ -204,6 +208,7 @@ export default function EditText({ token }: { token: string }) {
     try {
       const content = paragraphs.map((p) => ({
         paragraph: p.paragraph,
+        translation: p.translation,
         audiotexturl: p.audiotexturl, // base64 ou string antiga
       }));
 
@@ -252,7 +257,11 @@ export default function EditText({ token }: { token: string }) {
         closeOnClick
         pauseOnHover
         draggable
-        theme="dark"
+        theme={
+          ["paper", "sepia", "mint"].includes(currentTheme.id)
+            ? "light"
+            : "dark"
+        }
       />
       <>
         <C.LevelWrapper>
@@ -297,8 +306,8 @@ export default function EditText({ token }: { token: string }) {
                   visible={true}
                   height="100"
                   width="100"
-                  color=" #a0bbdb"
-                  secondaryColor=" #a0bbdb"
+                  color="var(--primary)"
+                  secondaryColor="var(--accent)"
                   radius="12.5"
                   ariaLabel="mutating-dots-loading"
                   wrapperStyle={{}}
@@ -396,7 +405,10 @@ function EditPopUp({
   onClose,
 }: EditPopUpProps) {
   const addParagraph = () =>
-    setParagraphs((prev) => [...prev, { paragraph: "", audiotexturl: null }]);
+    setParagraphs((prev) => [
+      ...prev,
+      { paragraph: "", translation: "", audiotexturl: null },
+    ]);
 
   const removeParagraph = (index: number) => {
     if (paragraphs.length === 1) return;
@@ -406,6 +418,12 @@ function EditPopUp({
   const updateParagraphText = (index: number, value: string) => {
     const updated = [...paragraphs];
     updated[index].paragraph = value;
+    setParagraphs(updated);
+  };
+
+  const updateParagraphTranslation = (index: number, value: string) => {
+    const updated = [...paragraphs];
+    updated[index].translation = value;
     setParagraphs(updated);
   };
 
@@ -501,17 +519,32 @@ function EditPopUp({
               <C.ParagraphCard key={i}>
                 <C.ParagraphHeader>
                   <span>Parágrafo {i + 1}</span>
-                  <C.RemoveButton onClick={() => removeParagraph(i)}>
+                  <C.RemoveButton type="button" onClick={() => removeParagraph(i)}>
                     <FaTrash />
                   </C.RemoveButton>
                 </C.ParagraphHeader>
                 <C.Field>
+                  <label>Texto do paragrafo</label>
                   <textarea
                     required
                     value={p.paragraph}
                     onChange={(e) => updateParagraphText(i, e.target.value)}
                   />
+                </C.Field>
 
+                <C.Field>
+                  <label>Traducao do paragrafo</label>
+                  <textarea
+                    value={p.translation}
+                    onChange={(e) =>
+                      updateParagraphTranslation(i, e.target.value)
+                    }
+                    placeholder="Digite a traducao deste paragrafo"
+                  />
+                </C.Field>
+
+                <C.Field>
+                  <label>Audio do paragrafo</label>
                   <input
                     type="file"
                     accept="audio/*"
@@ -537,7 +570,7 @@ function EditPopUp({
             ))}
           </C.ParagraphsContainer>
 
-          <C.AddParagraphButton onClick={addParagraph}>
+          <C.AddParagraphButton type="button" onClick={addParagraph}>
             <FaPlus />
             Adicionar Parágrafo
           </C.AddParagraphButton>
@@ -546,7 +579,7 @@ function EditPopUp({
             <C.ParagraphCard key={i}>
               <C.ParagraphHeader>
                 <span>Quiz {i + 1}</span>
-                <C.RemoveButton onClick={() => removeQuiz(i)}>
+                <C.RemoveButton type="button" onClick={() => removeQuiz(i)}>
                   <FaTrash />
                 </C.RemoveButton>
               </C.ParagraphHeader>
@@ -587,7 +620,7 @@ function EditPopUp({
             </C.ParagraphCard>
           ))}
 
-          <C.AddParagraphButton onClick={addQuiz}>
+          <C.AddParagraphButton type="button" onClick={addQuiz}>
             <FaPlus /> Adicionar Quiz
           </C.AddParagraphButton>
 

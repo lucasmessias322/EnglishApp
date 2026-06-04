@@ -3,9 +3,11 @@ import styled from "styled-components";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { postText } from "../../Apis/englishplusApi";
 import { toast, ToastContainer } from "react-toastify";
+import { useTheme } from "../../Context/ThemeContext";
 
 type Paragraph = {
   paragraph: string;
+  translation: string;
   audiotexturl: File | string | null;
 };
 
@@ -78,17 +80,21 @@ function AudioPreview({ audio }: { audio: File | string | null }) {
 }
 
 function AddText({ token }: AddTextProps) {
+  const { currentTheme } = useTheme();
   const [title, setTitle] = useState("");
   const [resume, setresume] = useState("");
   const [level, setLevel] = useState<Level>("A1");
 
   const [paragraphs, setParagraphs] = useState<Paragraph[]>([
-    { paragraph: "", audiotexturl: null },
+    { paragraph: "", translation: "", audiotexturl: null },
   ]);
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
 
   const addParagraph = () => {
-    setParagraphs((prev) => [...prev, { paragraph: "", audiotexturl: null }]);
+    setParagraphs((prev) => [
+      ...prev,
+      { paragraph: "", translation: "", audiotexturl: null },
+    ]);
   };
 
   const removeParagraph = (index: number) => {
@@ -99,6 +105,12 @@ function AddText({ token }: AddTextProps) {
   const updateParagraphText = (index: number, value: string) => {
     const updated = [...paragraphs];
     updated[index].paragraph = value;
+    setParagraphs(updated);
+  };
+
+  const updateParagraphTranslation = (index: number, value: string) => {
+    const updated = [...paragraphs];
+    updated[index].translation = value;
     setParagraphs(updated);
   };
 
@@ -129,6 +141,7 @@ function AddText({ token }: AddTextProps) {
       const contentWithBase64 = await Promise.all(
         paragraphs.map(async (p) => ({
           paragraph: p.paragraph,
+          translation: p.translation,
           audiotexturl:
             p.audiotexturl instanceof File
               ? await fileToBase64(p.audiotexturl)
@@ -160,7 +173,8 @@ function AddText({ token }: AddTextProps) {
       setTitle("");
       setresume("");
       setLevel("A1");
-      setParagraphs([{ paragraph: "", audiotexturl: null }]);
+      setParagraphs([{ paragraph: "", translation: "", audiotexturl: null }]);
+      setQuizzes([]);
     } catch (error) {
       console.error(error);
       toast.error("Erro ao cadastrar o texto. Tente novamente.");
@@ -274,6 +288,17 @@ function AddText({ token }: AddTextProps) {
             </Field>
 
             <Field>
+              <label>Traducao do paragrafo</label>
+              <textarea
+                value={paragraph.translation}
+                onChange={(e) =>
+                  updateParagraphTranslation(index, e.target.value)
+                }
+                placeholder="Digite a traducao deste paragrafo"
+              />
+            </Field>
+
+            <Field>
               <label>Áudio do parágrafo</label>
               <input
                 type="file"
@@ -365,7 +390,11 @@ function AddText({ token }: AddTextProps) {
         closeOnClick
         pauseOnHover
         draggable
-        theme="dark"
+        theme={
+          ["paper", "sepia", "mint"].includes(currentTheme.id)
+            ? "light"
+            : "dark"
+        }
       />
     </div>
   );
@@ -391,7 +420,7 @@ const FormHeader = styled.div`
   span {
     display: inline-flex;
     margin-bottom: 8px;
-    color: #8fe5d0;
+    color: var(--accent-soft);
     font-size: 0.78rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -401,13 +430,13 @@ const FormHeader = styled.div`
   p {
     max-width: 620px;
     margin-top: 8px;
-    color: #99a4c8;
+    color: var(--muted);
     line-height: 1.7;
   }
 `;
 
 const Title = styled.h2`
-  color: #eef1ff;
+  color: var(--text);
   font-family: "Google Sans", "Poppins", sans-serif;
   font-size: clamp(1.6rem, 3vw, 2.25rem);
   line-height: 1.15;
@@ -415,9 +444,9 @@ const Title = styled.h2`
 
 const Section = styled.div`
   padding: 18px;
-  border: 1px solid rgba(76, 85, 125, 0.38);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.24);
   border-radius: 22px;
-  background: rgba(24, 27, 40, 0.76);
+  background: var(--glass-bg);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -429,7 +458,7 @@ const Field = styled.div`
   gap: 6px;
 
   label {
-    color: #cfd4ff;
+    color: var(--text);
     font-size: 14px;
   }
 
@@ -439,9 +468,9 @@ const Field = styled.div`
     width: 100%;
     padding: 12px 14px;
     border-radius: 14px;
-    border: 1px solid rgba(76, 85, 125, 0.62);
-    background-color: rgba(18, 20, 30, 0.82);
-    color: #f5f7ff;
+    border: 1px solid rgba(var(--primary-strong-rgb), 0.32);
+    background-color: var(--control-bg);
+    color: var(--text);
     outline: none;
     font-size: 14px;
     transition:
@@ -453,9 +482,9 @@ const Field = styled.div`
   input:focus,
   select:focus,
   textarea:focus {
-    border-color: rgba(143, 229, 208, 0.62);
-    background-color: rgba(18, 20, 30, 0.96);
-    box-shadow: 0 0 0 3px rgba(41, 170, 139, 0.12);
+    border-color: rgba(var(--accent-rgb), 0.62);
+    background-color: var(--control-bg-strong);
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.12);
   }
 
   textarea {
@@ -464,7 +493,7 @@ const Field = styled.div`
   }
 
   select option {
-    background-color: #2e3553;
+    background-color: var(--surface-strong);
   }
 `;
 
@@ -474,24 +503,24 @@ const SubmitButton = styled.button`
   min-height: 48px;
   padding: 12px 22px;
   border-radius: 16px;
-  background: linear-gradient(135deg, #29aa8b, #8fe5d0);
-  color: #07121b;
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  color: var(--bg);
   border: none;
   cursor: pointer;
   font-size: 14px;
   font-weight: 800;
-  box-shadow: 0 16px 30px rgba(41, 170, 139, 0.18);
+  box-shadow: 0 16px 30px rgba(var(--accent-rgb), 0.18);
 
   &:hover {
-    background: linear-gradient(135deg, #23a383, #72dac6);
+    filter: brightness(1.05);
   }
 `;
 
 const ParagraphCard = styled.div`
-  border: 1px solid rgba(76, 85, 125, 0.42);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.24);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 44%),
-    rgba(24, 27, 40, 0.84);
+    linear-gradient(180deg, rgba(var(--primary-strong-rgb), 0.04), transparent 44%),
+    var(--glass-bg);
   border-radius: 22px;
   padding: 18px;
   display: flex;
@@ -505,7 +534,7 @@ const ParagraphHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  color: #eef1ff;
+  color: var(--text);
   font-weight: 700;
 `;
 
@@ -514,16 +543,18 @@ const AudioPreviewBox = styled.div<{ $empty?: boolean }>`
   padding: 12px;
   border: 1px solid
     ${(props) =>
-      props.$empty ? "rgba(76, 85, 125, 0.34)" : "rgba(143, 229, 208, 0.34)"};
+      props.$empty
+        ? "rgba(var(--primary-strong-rgb), 0.24)"
+        : "rgba(var(--accent-rgb), 0.34)"};
   border-radius: 16px;
   background: ${(props) =>
-    props.$empty ? "rgba(33, 36, 51, 0.56)" : "rgba(41, 170, 139, 0.08)"};
+    props.$empty ? "var(--control-bg)" : "rgba(var(--accent-rgb), 0.08)"};
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 10px;
 
   span {
-    color: ${(props) => (props.$empty ? "#8f9bc1" : "#cfd7f6")};
+    color: ${(props) => (props.$empty ? "var(--muted)" : "var(--text)")};
     font-size: 0.84rem;
     font-weight: 700;
     line-height: 1.35;
@@ -564,9 +595,9 @@ const AddParagraphButton = styled.button`
   min-height: 46px;
   padding: 10px 18px;
   border-radius: 16px;
-  background: rgba(73, 104, 236, 0.15);
-  color: #dce5ff;
-  border: 1px solid rgba(110, 136, 204, 0.42);
+  background: rgba(var(--primary-strong-rgb), 0.15);
+  color: var(--text);
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.42);
   cursor: pointer;
   font-size: 14px;
   font-weight: 700;
@@ -575,7 +606,7 @@ const AddParagraphButton = styled.button`
   gap: 8px;
 
   &:hover {
-    background: rgba(73, 104, 236, 0.24);
-    border-color: rgba(143, 229, 208, 0.44);
+    background: rgba(var(--primary-strong-rgb), 0.24);
+    border-color: rgba(var(--accent-rgb), 0.44);
   }
 `;

@@ -108,7 +108,7 @@ const Header = styled.header<StyledHeaderProps>`
   background: var(--appbar-bg);
   font-weight: bold;
   text-align: left;
-  // background: ${(props) => props.$bgcolor || "rgba(18, 20, 30, 0.78)"};
+  
   backdrop-filter: blur(16px);
 
   @media (max-width: 480px) {

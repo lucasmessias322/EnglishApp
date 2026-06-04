@@ -21,7 +21,7 @@ interface Text {
   _id: string;
   title: string;
   hasAudios: boolean;
-  content: { paragraph: string; audiotexturl: string }[];
+  content: { paragraph: string; translation?: string; audiotexturl: string }[];
 }
 
 interface translatedWordtype {
@@ -94,7 +94,7 @@ export default function TextPage() {
     _id: "",
     title: "",
     hasAudios: false,
-    content: [{ paragraph: "", audiotexturl: "" }],
+    content: [{ paragraph: "", translation: "", audiotexturl: "" }],
   });
 
   const [audioIndex, setAudioIndex] = useState(0);
