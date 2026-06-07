@@ -37,6 +37,18 @@ export const TextListWrapper = styled.ul`
   }
 `;
 
+export const EmptySearchState = styled.div`
+  width: 100%;
+  padding: 26px;
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.24);
+  border-radius: 20px;
+  background: var(--control-bg);
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+`;
+
 export const TextItem = styled.li`
   width: 100%;
   list-style: none;

@@ -5,8 +5,15 @@ import {
   PutMemorize,
   getUserMemorizes,
   getSingleText,
+  getTexts,
 } from "../../Apis/englishplusApi";
-import { FaCheck, FaPause, FaPlay } from "react-icons/fa";
+import {
+  FaCheck,
+  FaChevronLeft,
+  FaChevronRight,
+  FaPause,
+  FaPlay,
+} from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 
 import WordPopUpComponent from "../../Components/TextPageComponents/WordPopUp";
@@ -22,6 +29,11 @@ interface Text {
   title: string;
   hasAudios: boolean;
   content: { paragraph: string; translation?: string; audiotexturl: string }[];
+}
+
+interface TextSummary {
+  _id: string;
+  title: string;
 }
 
 interface translatedWordtype {
@@ -129,6 +141,9 @@ export default function TextPage() {
 
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
+  const [previousText, setPreviousText] = useState<TextSummary | null>(null);
+  const [nextText, setNextText] = useState<TextSummary | null>(null);
+  const [isNavigationLoading, setIsNavigationLoading] = useState(false);
 
   useEffect(() => {
     if (isPlaying) {
@@ -159,6 +174,12 @@ export default function TextPage() {
 
     let isCancelled = false;
     setIsLoading(true);
+    setIsPlaying(false);
+    setAudioIndex(0);
+    setSelectedWord("");
+    setAnswers({});
+    setSubmitted(false);
+    setScore(0);
 
     getSingleText(currentTextIndex).then((res) => {
       if (isCancelled) return;
@@ -177,6 +198,88 @@ export default function TextPage() {
       isCancelled = true;
     };
   }, [currentTextIndex]);
+
+  useEffect(() => {
+    if (!currentTextIndex) return;
+
+    let isCancelled = false;
+    const pageLimit = 50;
+
+    async function loadTextNavigation() {
+      setIsNavigationLoading(true);
+      setPreviousText(null);
+      setNextText(null);
+
+      let page = 1;
+      let lastTextFromPreviousPage: TextSummary | null = null;
+
+      try {
+        while (!isCancelled) {
+          const res = await getTexts({ page, limit: pageLimit });
+          const texts: TextSummary[] = res.data || [];
+          const currentIndex = texts.findIndex(
+            (item) => item._id === currentTextIndex,
+          );
+
+          if (currentIndex >= 0) {
+            const previous =
+              currentIndex > 0
+                ? texts[currentIndex - 1]
+                : lastTextFromPreviousPage;
+            let next = texts[currentIndex + 1] || null;
+
+            const hasMorePages =
+              typeof res.totalPages === "number"
+                ? page < res.totalPages
+                : texts.length === pageLimit;
+
+            if (!next && hasMorePages) {
+              const nextPageRes = await getTexts({
+                page: page + 1,
+                limit: pageLimit,
+              });
+              next = nextPageRes.data?.[0] || null;
+            }
+
+            if (!isCancelled) {
+              setPreviousText(previous);
+              setNextText(next);
+            }
+
+            return;
+          }
+
+          if (!texts.length) return;
+
+          lastTextFromPreviousPage = texts[texts.length - 1];
+
+          const hasMorePages =
+            typeof res.totalPages === "number"
+              ? page < res.totalPages
+              : texts.length === pageLimit;
+
+          if (!hasMorePages) return;
+
+          page++;
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsNavigationLoading(false);
+        }
+      }
+    }
+
+    loadTextNavigation();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [currentTextIndex]);
+
+  function navigateToText(textId?: string) {
+    if (!textId) return;
+    navigate(`/text/${textId}`);
+  }
 
   const handleClickWord = (word: string) => {
     if (!getTranslationCacheKey(word)) return;
@@ -500,6 +603,34 @@ export default function TextPage() {
           )}
 
           <CompletionDock>
+            <TextNavigationControls>
+              <TextNavigationButton
+                type="button"
+                onClick={() => navigateToText(previousText?._id)}
+                disabled={!previousText || isNavigationLoading}
+                title={
+                  previousText
+                    ? `Texto anterior: ${previousText.title}`
+                    : "Nao ha texto anterior"
+                }
+              >
+                <FaChevronLeft />
+                <span>Anterior</span>
+              </TextNavigationButton>
+              <TextNavigationButton
+                type="button"
+                onClick={() => navigateToText(nextText?._id)}
+                disabled={!nextText || isNavigationLoading}
+                title={
+                  nextText
+                    ? `Proximo texto: ${nextText.title}`
+                    : "Nao ha proximo texto"
+                }
+              >
+                <span>Proximo</span>
+                <FaChevronRight />
+              </TextNavigationButton>
+            </TextNavigationControls>
             <CompletionButton
               type="button"
               onClick={toggleCompleted}
@@ -860,7 +991,7 @@ const AudioButton = styled.button`
 `;
 
 const CompletionDock = styled.div`
-  position: sticky;
+  //position: sticky;
   bottom: 12px;
   width: 100%;
   max-width: 680px;
@@ -870,6 +1001,59 @@ const CompletionDock = styled.div`
 
   @media (max-width: 560px) {
     padding: 0 10px;
+  }
+`;
+
+const TextNavigationControls = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 10px;
+`;
+
+const TextNavigationButton = styled.button`
+  min-width: 0;
+  min-height: 48px;
+  border: 1px solid rgba(var(--primary-strong-rgb), 0.26);
+  border-radius: 17px;
+  padding: 10px 14px;
+  color: var(--text);
+  background: var(--control-bg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 14px 28px rgba(7, 10, 20, 0.14);
+  transition:
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    opacity 0.18s ease;
+
+  span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  svg {
+    flex: 0 0 auto;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: rgba(var(--primary-strong-rgb), 0.62);
+  }
+
+  &:disabled {
+    color: #8993b3;
+    background: var(--subtle-bg);
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 0.76;
   }
 `;
 

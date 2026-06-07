@@ -59,6 +59,7 @@ export default function EditText({ token }: { token: string }) {
   // Tipando o estado de levels como um array de Text
   const [isLoading, setIsLoading] = useState(true);
   const [levels, setLevels] = useState<Text[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   const [hasMore, setHasMore] = useState(true);
@@ -82,6 +83,13 @@ export default function EditText({ token }: { token: string }) {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [openEditPopup, setOpenEditPopup] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const normalizedSearchTerm = searchTerm.trim().toLocaleLowerCase("pt-BR");
+  const isSearching = normalizedSearchTerm.length > 0;
+  const visibleTexts = isSearching
+    ? levels.filter((text) =>
+        text.title.toLocaleLowerCase("pt-BR").includes(normalizedSearchTerm),
+      )
+    : levels;
 
   useEffect(() => {
     if (!hasMore || isFetchingRef.current) return;
@@ -123,6 +131,12 @@ export default function EditText({ token }: { token: string }) {
       isFetchingRef.current = false;
     };
   }, [currentPage, hasMore]);
+
+  useEffect(() => {
+    if (!isSearching || !hasMore || isLoading || isFetchingRef.current) return;
+
+    setCurrentPage((prev) => prev + 1);
+  }, [isSearching, hasMore, isLoading, levels.length]);
 
   useEffect(() => {
     if (!loaderRef.current || !hasMore) return;
@@ -266,39 +280,50 @@ export default function EditText({ token }: { token: string }) {
       <>
         <C.LevelWrapper>
           <C.Searchbar>
-            <input type="text" placeholder="Search texts..." />
+            <input
+              type="search"
+              placeholder="Pesquisar texto pelo titulo..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </C.Searchbar>
-          <C.TextListWrapper>
-            {levels.map((text) => (
-              <C.TextItem key={text._id}>
-                <div className="text-info">
-                  <h4 onClick={() => navigate(`/text/${text._id}`)}>
-                    {text.title} - {text.level}
-                  </h4>
-                  <span>{text.resume}</span>
-                </div>
-                <div className="editToolsIcons">
-                  <div className="icon">
-                    <FaEdit
-                      onClick={() => !isSubmitting && HandleEdit(text._id)}
-                      style={{
-                        opacity: isSubmitting ? 0.4 : 1,
-                        pointerEvents: isSubmitting ? "none" : "auto",
-                      }}
-                    />
+          {visibleTexts.length === 0 && !isLoading && !hasMore ? (
+            <C.EmptySearchState>
+              Nenhum texto encontrado com esse titulo.
+            </C.EmptySearchState>
+          ) : (
+            <C.TextListWrapper>
+              {visibleTexts.map((text) => (
+                <C.TextItem key={text._id}>
+                  <div className="text-info">
+                    <h4 onClick={() => navigate(`/text/${text._id}`)}>
+                      {text.title} - {text.level}
+                    </h4>
+                    <span>{text.resume}</span>
                   </div>
-                  <div className="icon">
-                    <FaTrash
-                      onClick={() => {
-                        setTextToDelete(text._id);
-                        setShowPopUp(true);
-                      }}
-                    />
+                  <div className="editToolsIcons">
+                    <div className="icon">
+                      <FaEdit
+                        onClick={() => !isSubmitting && HandleEdit(text._id)}
+                        style={{
+                          opacity: isSubmitting ? 0.4 : 1,
+                          pointerEvents: isSubmitting ? "none" : "auto",
+                        }}
+                      />
+                    </div>
+                    <div className="icon">
+                      <FaTrash
+                        onClick={() => {
+                          setTextToDelete(text._id);
+                          setShowPopUp(true);
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
-              </C.TextItem>
-            ))}
-          </C.TextListWrapper>
+                </C.TextItem>
+              ))}
+            </C.TextListWrapper>
+          )}
           {hasMore && (
             <C.LoadingWrapper ref={loaderRef}>
               {isLoading && (
